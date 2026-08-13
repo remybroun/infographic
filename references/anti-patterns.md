@@ -40,8 +40,8 @@ a sequence is a `process`; items with a before and an after are a `dumbbell`;
 counts per named thing are a `bar` or a `lollipop`. Keep the table when the
 reader genuinely needs to look a value up.
 Caught by: `text-heavy` counts authored tables (the twins stay exempt),
-`text-heavy-mix` counts `ig-table` as a text block, and `text-only-section`
-fires on a section that never draws anything.
+`text-heavy-mix` counts `ig-table` as a text block, and `undrawn-section`
+fires on a section carried by tables or prose with nothing drawn in it.
 
 **❌ Reaching for `--density report` because the text did not fit.**
 Why: the budget is the design constraint, not an obstacle to it. Report density
@@ -51,6 +51,31 @@ Instead: rewrite to the cap, or draw the idea. If report density really is
 right, say why in the document.
 
 ---
+
+**❌ A diagram labelled in the system's own identifiers.** Nodes reading
+`skipped_bucket`, `is_active`, `AccountPrimary`, `provider_email_sends`.
+Why: it is what the word budget selects for. Under a 6-word label cap the
+identifier is the cheapest possible label, and it is accurate, which makes it
+feel rigorous rather than lazy. The document then passes every check in this
+skill while being readable only by the person who wrote the code. The measured
+version: 30 distinct identifiers across 1,034 words, one undefined term every
+33 words, and no `definitions` block.
+The tell: you chose a name because it was short and true, and you have not
+asked whether the reader has ever seen it.
+Instead: label the mark in words and demote the identifier to the table twin,
+where it stays exact and reachable without being the only thing on offer. When
+the term itself is the subject, define it in `definitions` **before** the
+section that uses it.
+Caught by: `undefined-vocabulary`, which counts identifier-shaped tokens outside
+footnotes and twins. It cannot see an ordinary word you have redefined, and
+"bucket", "audience" and "category" are how that failure usually looks.
+
+**❌ Vocabulary invented in the document and never defined in it.** A word from
+ordinary English, given a private meaning, then used forty times.
+Why: it never looks like jargon, so no reviewer flags it and no linter can. The
+worst cases are words whose everyday sense actively misleads: an "audience" that
+is not the people who read it but the rule for computing an address.
+Instead: name it in step 2, and either define it or rename it to what it is.
 
 ## The document
 

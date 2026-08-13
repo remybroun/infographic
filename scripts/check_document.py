@@ -221,6 +221,43 @@ def check(html_path: str, pdf_path: str = None):
                 "at report density a chart usually wants a sentence; at graphic "
                 "density this is correct and expected")
 
+    # -- comprehension ----------------------------------------------------
+    # "Will a reader understand this" is mostly unmeasurable, but one part of it
+    # is not: identifiers have a syntax. A document labelled in snake_case,
+    # CamelCase and `::` is labelled in the system's own names rather than in
+    # words, and the reader is being asked to already know the codebase.
+    #
+    # This check exists because the word budget pushes the other way. Under a
+    # 6-word label cap, `skipped_bucket` costs one word and "the recipient
+    # switched that group off" costs six, so the identifier is always the
+    # cheapest way to say the thing and jargon wins by construction. Nothing
+    # else in this skill pushes back.
+    #
+    # Footnotes and table twins are excluded deliberately: naming a constant in
+    # the method block is correct and citable, and the twin is a duplicate of a
+    # graphic that has already been counted.
+    prose_body = re.sub(r"<details\b.*?</details>", " ", body, flags=re.S | re.I)
+    prose_body = re.sub(r'<[^>]*class="ig-footnotes.*', " ", prose_body, flags=re.S)
+    visible = re.sub(r"&[a-z]+;|&#\d+;", " ",
+                     re.sub(r"<[^>]+>", " ", prose_body))
+    identifiers = set()
+    for pattern in (r"\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b",     # snake_case
+                    r"\b(?:[A-Z][a-z0-9]+){2,}\b",            # CamelCase
+                    r"\b\w+(?:::\w+|\(\))"):                  # Foo::bar, baz()
+        identifiers |= set(re.findall(pattern, visible))
+    # `ig-defs` is the arrowhead <defs>, so match the class exactly.
+    defined = _count(r'class="ig-def"', body)
+    # Six, for the same reason a donut stops at six segments: it is where a
+    # reader stops being able to hold the set. A document may introduce more
+    # than six new names, but not silently.
+    if len(identifiers) > 6 and defined == 0:
+        sample = ", ".join(sorted(identifiers)[:5])
+        add("warn", "undefined-vocabulary",
+            f"{len(identifiers)} identifiers on the page and no definitions "
+            f"block ({sample}…)",
+            "add `definitions` before the first section that uses them, or "
+            "label the marks in words and demote the identifiers to the twin")
+
     heroes = _count(r'class="ig-hero-figure"', body)
     if heroes > 1:
         add("warn", "two-heroes", f"{heroes} hero figures; there should be exactly one per view",

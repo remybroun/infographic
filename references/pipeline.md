@@ -25,11 +25,30 @@ recalled figures as if they came from a document.
 
 → [extraction.md](extraction.md)
 
-## 2 · Write the claim
+## 2 · Name the reader, then write the claim
 
-One sentence the reader should believe by the end. Not a topic, a claim. This
-becomes the `hero.title`, and if you cannot write it, nothing downstream will
-rescue the document.
+**Who reads this, and what do they already know?** One line, written down, before
+the claims. "A provider-operations lead who has never seen the codebase" produces
+a different document from "the engineer who wrote the branch", and the difference
+is not tone, it is which words are allowed to appear at all.
+
+Then, in the same breath: **list the terms this document will use that the reader
+does not already have.** Domain nouns, invented vocabulary, and anything shaped
+like an identifier. That list has exactly two legal destinations, and picking one
+is not optional:
+
+- a `definitions` block, placed **before** the first section that uses the term;
+- a rewrite of the label into words, with the identifier demoted to the table twin.
+
+Skip this and the word budget will decide for you, in favour of jargon: under a
+6-word label cap `skipped_bucket` costs one word and "the recipient switched that
+group off" costs six. The cheapest label is almost always the one only you can
+read. `undefined-vocabulary` catches the worst of it, but it counts identifiers,
+and it cannot see a plain English word you have quietly redefined.
+
+Now the claim: one sentence the reader should believe by the end. Not a topic, a
+claim. This becomes the `hero.title`, and if you cannot write it, nothing
+downstream will rescue the document.
 
 Then write the three to six supporting claims. Each one becomes a block or a
 section. **This list is the document.** Everything after it is execution.

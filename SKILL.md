@@ -129,6 +129,12 @@ holding, a blast spreading), it is a `figure`.
   the `subtitle`, stated flatly. A vague topic title is equally wrong: the fix is
   always **more specific, never more clever**.
   → [anti-patterns.md](references/anti-patterns.md#titles)
+- **Name the reader before the claim, and list what they will not know.** Every
+  such term is either defined in `definitions` before it is used, or rewritten
+  into words with the identifier demoted to the table twin. **An identifier is
+  not a free word:** the budget makes `skipped_bucket` cost one and "recipient
+  opted out" cost three, so jargon wins unless you spend against it.
+  → [pipeline.md](references/pipeline.md) step 2
 - **At most three authored figures.** Not a budget, a ranking exercise: which
   two or three images does this live or die by? Everything else goes on rails.
 - **A figure keeps every guarantee.** `alt` required, `encodes` required,

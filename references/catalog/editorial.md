@@ -160,17 +160,26 @@ misleads.
 
 Put this **before** the argument that depends on the terms, not in an appendix.
 
-## `footnotes`: sources and method
+## `footnotes`: sources, method, and terms
 
 ```json
 {"type": "footnotes", "title": "Method",
- "items": ["Source: support platform export.", "Medians, not means."]}
+ "items": ["Source: support platform export.", "Medians, not means.",
+           "PMS: the property management system a provider runs their inventory in."]}
 ```
 
 **Every document carrying numbers needs one.** Where the data came from, what
 period, what was excluded, and what the reader should not conclude. This is the
 block that makes the difference between an infographic and a poster of
 assertions.
+
+**It is also the right home for a term the document uses once.** `footnotes` is
+exempt from the word budget, so a gloss here is free, and free is what a
+one-off term is worth: expanding an acronym inline costs label space on every
+mark that carries it. Use `definitions` when the reader needs the term to follow
+the argument at all, and put it before the argument; use a footnote when they
+need it only to read one label. Neither is an appendix for vocabulary you could
+not be bothered to explain.
 
 ## `image`: `divider`, `spacer`, `raw`
 

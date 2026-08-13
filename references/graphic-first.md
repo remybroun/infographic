@@ -133,6 +133,13 @@ Rewrite, never truncate. These are the four moves that actually work:
 - **Cut the justification.** Documents explain *what*, not *why we are allowed
   to say it*. If the caveat is load-bearing, it belongs in `footnotes`, which is
   exempt from the budget for exactly this reason.
+- **Expand the term, cut the sentence.** The one move that runs against the
+  count, and the one to make anyway. **An identifier is not a free word.**
+  `skipped_bucket` costs one word and buys nothing from a reader who does not
+  have the codebase; "recipient opted out" costs three and is the actual
+  meaning. When the budget is tight, the sentence explaining a label is what to
+  cut, and the label itself is what to spend on. A page nobody outside the team
+  can read has not passed the budget, it has evaded it.
 
 ## What this does not license
 
@@ -164,3 +171,17 @@ blocks outnumbering graphics), `near-empty-page` (measured ink coverage) and
 
 If it does not, the graphics are decoration and the words are the document. Go
 back to step two.
+
+Then run it the other way, because the first test cannot fail on jargon:
+
+> **Cover the graphics. Can a reader outside the team define every word left on
+> the page?**
+
+A diagram labelled `skipped_cooldown`, `is_active`, `AccountPrimary` passes the
+first test perfectly. The shapes really do carry the argument, so covering the
+text really does leave something that teaches. The reader simply has no idea
+what any node is called. That failure is invisible to every check in this file
+except this one, because the words are few, correct, and unreadable.
+
+If a term survives the second test only because *you* know it, it is not a label,
+it is a lookup key. Define it or rename it.
