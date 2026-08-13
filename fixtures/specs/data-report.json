@@ -1,0 +1,345 @@
+{
+  "meta": {
+    "title": "Support ticket volume and handling hours, H1",
+    "theme": "rentos",
+    "page": "a4",
+    "date": "H1 review",
+    "footer_left": "Support load, H1",
+    "footer_right": "Internal review"
+  },
+  "blocks": [
+    {
+      "type": "hero",
+      "tone": "panel",
+      "kicker": "Half-year review",
+      "title": "Support ticket volume and total handling hours, H1 against H2",
+      "subtitle": "Fewer tickets arrived, but each one took longer to close, so total handling hours were flat.",
+      "stats": [
+        {
+          "label": "Tickets received",
+          "value": 18420,
+          "compact": true,
+          "delta": -14.2,
+          "delta_period": "vs H2",
+          "up_is_good": false
+        },
+        {
+          "label": "Median time to close",
+          "value": 31,
+          "unit": "h",
+          "compact": false,
+          "delta": 22.0,
+          "delta_period": "vs H2",
+          "up_is_good": false
+        },
+        {
+          "label": "Total handling hours",
+          "value": 9310,
+          "compact": true,
+          "delta": 0.8,
+          "delta_period": "vs H2",
+          "up_is_good": false
+        },
+        {
+          "label": "First-contact resolution",
+          "value": 61,
+          "unit": "%",
+          "compact": false,
+          "delta": -9.0,
+          "delta_period": "vs H2"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "number": "01",
+      "title": "Which categories account for the decline",
+      "lede": "The decline is concentrated in two categories, both of which shipped self-serve flows in March."
+    },
+    {
+      "type": "dumbbell",
+      "span": 12,
+      "title": "Tickets by category, H2 to H1",
+      "from_label": "H2",
+      "to_label": "H1",
+      "compact": true,
+      "items": [
+        {
+          "label": "Password & access",
+          "from": 5120,
+          "to": 1880
+        },
+        {
+          "label": "Billing questions",
+          "from": 4310,
+          "to": 2240
+        },
+        {
+          "label": "Booking changes",
+          "from": 3980,
+          "to": 4110
+        },
+        {
+          "label": "Property issues",
+          "from": 3450,
+          "to": 3620
+        },
+        {
+          "label": "Payouts",
+          "from": 2610,
+          "to": 3180
+        },
+        {
+          "label": "Everything else",
+          "from": 2010,
+          "to": 3390
+        }
+      ],
+      "note": "Two categories fell sharply; four rose. A single 'total tickets' number hides that entirely."
+    },
+    {
+      "type": "column",
+      "span": 7,
+      "title": "Ticket arrivals by month",
+      "categories": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun"
+      ],
+      "values": [
+        3910,
+        3640,
+        3120,
+        2680,
+        2590,
+        2480
+      ],
+      "emphasis": "Mar",
+      "compact": true,
+      "note": "March is highlighted because that is when the self-serve flows shipped. Emphasis, not eight hues."
+    },
+    {
+      "type": "meter",
+      "span": 5,
+      "title": "Queue against staffed capacity",
+      "label": "Open tickets vs comfortable ceiling",
+      "value": 840,
+      "max": 1000,
+      "compact": true,
+      "thresholds": [
+        {
+          "at": 70,
+          "status": "warning",
+          "label": "70%"
+        },
+        {
+          "at": 90,
+          "status": "critical",
+          "label": "90%"
+        }
+      ],
+      "note": "Capacity is unchanged since H2; the queue is fuller despite fewer arrivals."
+    },
+    {
+      "type": "section",
+      "number": "02",
+      "title": "Why handling time per ticket rose",
+      "lede": "The categories that declined were the fastest to handle, so the remaining mix is slower."
+    },
+    {
+      "type": "share_bar",
+      "span": 12,
+      "title": "Handling time by complexity band",
+      "subtitle": "Share of total agent hours, H1.",
+      "parts": [
+        {
+          "label": "Under 1 hour",
+          "value": 9
+        },
+        {
+          "label": "1 to 8 hours",
+          "value": 24
+        },
+        {
+          "label": "1 to 3 days",
+          "value": 38
+        },
+        {
+          "label": "Over 3 days",
+          "value": 29
+        }
+      ],
+      "ordinal": true,
+      "value_label": "% of hours",
+      "note": "Ordered bands take the one-hue ramp: order should read in the colour."
+    },
+    {
+      "type": "funnel",
+      "span": 12,
+      "title": "Complex ticket outcomes, from opened to closed within SLA",
+      "stages": [
+        {
+          "label": "Opened",
+          "value": 4180
+        },
+        {
+          "label": "Triaged same day",
+          "value": 3020
+        },
+        {
+          "label": "Owner assigned",
+          "value": 2140
+        },
+        {
+          "label": "Resolved without escalation",
+          "value": 980
+        },
+        {
+          "label": "Closed within SLA",
+          "value": 610
+        }
+      ],
+      "compact": false,
+      "note": "The largest single loss is between triage and ownership: 880 tickets sit triaged with nobody assigned."
+    },
+    {
+      "type": "heatmap",
+      "span": 12,
+      "title": "Arrivals by weekday and hour band",
+      "rows": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+      ],
+      "cols": [
+        "00-06",
+        "06-10",
+        "10-14",
+        "14-18",
+        "18-24"
+      ],
+      "values": [
+        [
+          41,
+          210,
+          340,
+          290,
+          120
+        ],
+        [
+          38,
+          195,
+          355,
+          310,
+          128
+        ],
+        [
+          36,
+          188,
+          349,
+          305,
+          131
+        ],
+        [
+          40,
+          201,
+          361,
+          322,
+          140
+        ],
+        [
+          44,
+          219,
+          388,
+          351,
+          168
+        ],
+        [
+          52,
+          128,
+          196,
+          184,
+          149
+        ],
+        [
+          58,
+          111,
+          172,
+          166,
+          141
+        ]
+      ],
+      "note": "Staffing follows a flat weekday rota. Friday afternoon and the weekend evenings are where the queue builds."
+    },
+    {
+      "type": "section",
+      "number": "03",
+      "title": "Three options against staffing constraints",
+      "lede": "Three options, scored against what we can actually staff this quarter."
+    },
+    {
+      "type": "matrix",
+      "span": 12,
+      "title": "Options against constraints",
+      "cols": [
+        "No new headcount",
+        "Ships this quarter",
+        "Cuts handling hours",
+        "Reversible"
+      ],
+      "rows": [
+        {
+          "label": "Assign owner at triage",
+          "cells": [
+            true,
+            true,
+            "partial",
+            true
+          ]
+        },
+        {
+          "label": "Weekend evening cover",
+          "cells": [
+            false,
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "label": "Self-serve for payouts",
+          "cells": [
+            true,
+            false,
+            true,
+            false
+          ]
+        }
+      ],
+      "note": "No option wins every column. That is why it is a matrix, not a ranking."
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "One caveat on the median",
+      "text": "Time to close is a median, so the long tail does not move it. The mean rose faster."
+    },
+    {
+      "type": "footnotes",
+      "span": 12,
+      "items": [
+        "Source: support platform export, 1 Jan to 30 Jun.",
+        "H2 comparison covers the equivalent prior six months.",
+        "Handling hours are agent-logged, excluding wait time.",
+        "Figures are illustrative fixture data for the infographic skill."
+      ]
+    }
+  ]
+}

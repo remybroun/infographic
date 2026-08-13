@@ -1,0 +1,139 @@
+{
+  "name": "rentos",
+  "label": "RentRemote / RentOS olive editorial",
+  "note": "Olive editorial brand. Headings are Instrument Serif at weight 400, never bold. Olive leads and terracotta is the warm secondary, exactly as the charter says, but a chart needs eight separable identities, so slots 2 and 4+ are companions chosen by enumerating orderings and keeping only those that clear every gate (min adjacent CVD dE 11.3, min adjacent normal dE 15.8). Brand olive and terracotta are deliberately NOT adjacent slots: that pair measures CVD dE 4.5 and normal dE 14.5, so a protanope cannot separate them. If a brief insists on olive-beside-terracotta, direct-label both. Re-run validate_theme.py after any edit.",
+  "surface": {
+    "page": "#FAFAF8",
+    "card": "#FFFFFF",
+    "sunken": "#F4F7ED",
+    "inverse": "#1A1A18"
+  },
+  "ink": {
+    "primary": "#1A1A18",
+    "secondary": "#4A4A44",
+    "muted": "#6E6E66",
+    "inverse": "#FAFAF8",
+    "on_fill_light": "#1A1A18",
+    "on_fill_dark": "#FFFFFF",
+    "accent_text": "#5C6B2E"
+  },
+  "rule": {
+    "grid": "#E4E7DC",
+    "axis": "#D8DDD0",
+    "border": "#D8DDD0",
+    "hairline": "#E4E7DC"
+  },
+  "series": [
+    "#5C6B2E",
+    "#2a78d6",
+    "#B06A3F",
+    "#8c4f86",
+    "#8A9E50",
+    "#c0392b",
+    "#1b9e8a",
+    "#c98f1f"
+  ],
+  "series_names": [
+    "olive",
+    "blue",
+    "terracotta",
+    "plum",
+    "olive-mid",
+    "red",
+    "aqua",
+    "gold"
+  ],
+  "waivers": {
+    "chroma_floor": {
+      "colors": [
+        "#5C6B2E"
+      ],
+      "reason": "brand olive measures OKLCH C 0.087 against a 0.10 floor. It is the single defining brand color and cannot be re-stepped; the shortfall is marginal and every other gate passes."
+    }
+  },
+  "deemphasis": "#8A9576",
+  "accent": "#5C6B2E",
+  "sequential": {
+    "hue": "olive",
+    "steps": [
+      "#F4F7ED",
+      "#E8F0D4",
+      "#DAE5C0",
+      "#CBDAAB",
+      "#BCCF96",
+      "#ADC482",
+      "#9EB96D",
+      "#8A9E50",
+      "#77893F",
+      "#657434",
+      "#5C6B2E",
+      "#4A5624",
+      "#3D4A1A"
+    ],
+    "ordinal_steps": [
+      "#9EB96D",
+      "#8A9E50",
+      "#77893F",
+      "#657434",
+      "#4A5624"
+    ]
+  },
+  "sequential_alt": {
+    "hue": "terracotta",
+    "steps": [
+      "#F7EBE3",
+      "#F0D9C9",
+      "#E9C7AF",
+      "#E2B595",
+      "#DBA37B",
+      "#D49161",
+      "#C97F4D",
+      "#B06A3F",
+      "#985A35",
+      "#804A2C",
+      "#683B23",
+      "#502D1B",
+      "#3A2013"
+    ],
+    "ordinal_steps": [
+      "#DBA37B",
+      "#C97F4D",
+      "#B06A3F",
+      "#804A2C",
+      "#502D1B"
+    ]
+  },
+  "diverging": {
+    "low": "#5C6B2E",
+    "low_soft": "#CBDAAB",
+    "mid": "#EAE9E3",
+    "high_soft": "#E9C7AF",
+    "high": "#B06A3F"
+  },
+  "status": {
+    "good": "#5C6B2E",
+    "warning": "#D49161",
+    "serious": "#B06A3F",
+    "critical": "#A63A28",
+    "good_text": "#3D4A1A",
+    "critical_text": "#8E3020"
+  },
+  "type": {
+    "sans": "\"Inter\", -apple-system, BlinkMacSystemFont, system-ui, sans-serif",
+    "display": "\"Instrument Serif\", Georgia, \"Times New Roman\", serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, monospace",
+    "display_weight": 400,
+    "display_tracking": "-0.005em",
+    "heading_case": "none"
+  },
+  "geometry": {
+    "radius": 3,
+    "bar_max_thickness": 24,
+    "line_width": 2,
+    "marker_radius": 4.5,
+    "surface_gap": 2,
+    "hairline": 1
+  },
+  "fonts_dir": "SKILL:../rentos-brand/fonts",
+  "fonts_css": "@font-face{font-family:'Instrument Serif';src:url('{FONTS}/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}@font-face{font-family:'Instrument Serif';src:url('{FONTS}/InstrumentSerif-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:block}@font-face{font-family:'Inter';src:url('{FONTS}/Inter-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}@font-face{font-family:'Inter';src:url('{FONTS}/Inter-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:block}@font-face{font-family:'Inter';src:url('{FONTS}/Inter-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:block}@font-face{font-family:'Inter';src:url('{FONTS}/Inter-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:block}"
+}

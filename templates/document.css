@@ -1,0 +1,1016 @@
+/* ==========================================================================
+   Infographic document stylesheet, print first.
+
+   Every color and face arrives as a custom property written by build.py from
+   the active theme, so this file never names a brand. The two rules that make
+   or break the PDF are at the top: exact color reproduction, and block-level
+   break avoidance. Chrome silently drops backgrounds when printing unless
+   print-color-adjust is forced.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Paper.
+
+   Verified Chrome behavior: the canvas background paints the @page CONTENT BOX
+   and stops at the margins, whichever element carries it. There is no way to
+   tint the margin area while keeping per-page margins, because `@page{margin:0}`
+   plus padding gives a top margin on the first page only. So paper is an
+   explicit three-way choice rather than something we pretend to control:
+
+     paper: panel  (default) tinted content box inside a white margin frame
+     paper: none             nothing painted; the printer's own paper shows
+     paper: bleed            @page margin 0, margins simulated as padding, full-bleed colour, correct on ONE page only, which
+                             is exactly the single-sheet poster case.
+
+   See references/print-pdf.md. */
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  background: var(--ig-page);
+}
+
+/* The paper class is stamped on BOTH <html> and <body>: the background lives on
+   <html>, while `.ig-paper-bleed .ig-doc` needs an ancestor selector. */
+html.ig-paper-none { background: transparent; }
+
+body {
+  margin: 0;
+  background: transparent;
+  color: var(--ig-ink);
+  font-family: var(--ig-sans);
+  font-size: var(--ig-body-size);
+  line-height: 1.62;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------------------------------------------- page ---- */
+
+/* The `@page` rule is emitted by build.py, not here: @page cannot be scoped by a
+   class, and custom properties are unreliable inside it, so size and margins are
+   written as literals per document. */
+
+.ig-doc {
+  max-width: var(--ig-content-width);
+  margin: 0 auto;
+  padding: var(--ig-margin-top) var(--ig-margin-side) var(--ig-margin-bottom);
+}
+
+@media print {
+  .ig-doc { padding: 0; max-width: none; }
+  .ig-screen-only { display: none !important; }
+
+  .ig-paper-bleed .ig-doc {
+    padding: var(--ig-margin-top) var(--ig-margin-side) var(--ig-margin-bottom);
+  }
+}
+
+/* Running furniture.
+
+   Chrome repeats a `position: fixed` element on every printed page, which is
+   the only way to get a per-page footer without shipping a pagination library.
+   It has one sharp edge: the element is OUT OF FLOW, so content will run
+   underneath it unless space is reserved. We reserve that space with
+   padding-bottom on the document rather than by pushing the footer into the
+   @page margin, a negative offset there lands unpredictably and can surface at
+   the top of later pages. */
+.ig-running-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 8pt;
+  line-height: 1.2;
+  color: var(--ig-muted);
+  background: var(--ig-page);
+  border-top: 1px solid var(--ig-hairline);
+  padding-top: 5px;
+}
+@media screen { .ig-running-footer { display: none; } }
+@media print {
+  .ig-has-footer .ig-doc { padding-bottom: 10mm; }
+}
+
+/* --------------------------------------------------------------- grid ---- */
+
+/* Row spacing is a block margin, NOT `row-gap`, and that is load-bearing.
+
+   A grid row-gap is unbreakable: when one lands on a page boundary Chrome
+   spends an entire page on it, and a `break: before` on the next block then
+   adds its own page on top. The result is a sheet carrying nothing but the
+   running footer. Measured on the architecture fixture: row-gap gave 5 pages
+   with page 4 blank, the margin gives 4 pages with none blank, and the visible
+   spacing is identical because every block in a row carries the same margin.
+   Verify with `page_ink()` in check_document.py if you ever change this back. */
+.ig-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--ig-gutter);
+  row-gap: 0;
+  align-items: start;
+}
+
+.ig-block {
+  grid-column: span 12;
+  min-width: 0;
+  margin-bottom: var(--ig-row-gap);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.ig-grid > .ig-block:last-child { margin-bottom: 0; }
+
+.ig-span-1  { grid-column: span 1; }  .ig-span-2  { grid-column: span 2; }
+.ig-span-3  { grid-column: span 3; }  .ig-span-4  { grid-column: span 4; }
+.ig-span-5  { grid-column: span 5; }  .ig-span-6  { grid-column: span 6; }
+.ig-span-7  { grid-column: span 7; }  .ig-span-8  { grid-column: span 8; }
+.ig-span-9  { grid-column: span 9; }  .ig-span-10 { grid-column: span 10; }
+.ig-span-11 { grid-column: span 11; } .ig-span-12 { grid-column: span 12; }
+
+.ig-break-before { break-before: page; page-break-before: always; }
+.ig-break-after  { break-after: page;  page-break-after: always; }
+.ig-allow-break  { break-inside: auto; page-break-inside: auto; }
+
+/* Framed blocks read as objects on the page; unframed ones read as the page. */
+.ig-block-framed {
+  background: var(--ig-card);
+  border: 1px solid var(--ig-border);
+  border-radius: calc(var(--ig-radius) * 2.5);
+  padding: 18px 18px 14px;
+}
+
+.ig-block-tinted {
+  background: var(--ig-sunken);
+  border-radius: calc(var(--ig-radius) * 2.5);
+  padding: 18px 18px 14px;
+}
+
+/* ---------------------------------------------------------- block head ---- */
+
+.ig-block-title {
+  margin: 0 0 2px;
+  font-size: calc(var(--ig-body-size) * 1.08);
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  color: var(--ig-ink);
+}
+
+.ig-block-sub {
+  margin: 0 0 12px;
+  font-size: calc(var(--ig-body-size) * 0.88);
+  color: var(--ig-secondary);
+  max-width: 62ch;
+}
+
+.ig-block-title + .ig-block-sub { margin-top: 1px; }
+
+.ig-note,
+.ig-block-note {
+  margin: 9px 0 0;
+  font-size: calc(var(--ig-body-size) * 0.8);
+  color: var(--ig-muted);
+  max-width: 74ch;
+}
+
+.ig-svg { max-width: 100%; }
+
+/* ---------------------------------------------------------------- hero ---- */
+
+.ig-hero { padding: 4px 0 20px; }
+
+.ig-hero-tinted,
+.ig-hero-panel {
+  background: var(--ig-sunken);
+  border-radius: calc(var(--ig-radius) * 3);
+  padding: 34px 32px 30px;
+}
+
+.ig-kicker {
+  margin: 0 0 12px;
+  font-size: calc(var(--ig-body-size) * 0.78);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ig-accent-text);
+}
+
+.ig-hero-title {
+  margin: 0;
+  font-family: var(--ig-display);
+  font-weight: var(--ig-display-weight);
+  font-size: var(--ig-hero-size);
+  line-height: 1.04;
+  letter-spacing: var(--ig-display-tracking);
+  text-wrap: balance;
+  color: var(--ig-ink);
+}
+
+.ig-hero-subtitle {
+  margin: 14px 0 0;
+  font-size: calc(var(--ig-body-size) * 1.24);
+  line-height: 1.42;
+  color: var(--ig-secondary);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+.ig-hero-lede { margin-top: 16px; max-width: 68ch; color: var(--ig-secondary); }
+.ig-hero-lede p { margin: 0 0 9px; }
+
+.ig-hero-meta {
+  margin: 22px 0 0;
+  font-size: calc(var(--ig-body-size) * 0.8);
+  color: var(--ig-muted);
+}
+
+.ig-hero .ig-kpi { margin-top: 26px; }
+
+/* ------------------------------------------------------------- section ---- */
+
+.ig-section-head {
+  padding-top: 10px;
+  border-top: 2px solid var(--ig-ink);
+  margin-bottom: 4px;
+}
+
+.ig-section-number {
+  display: block;
+  font-size: calc(var(--ig-body-size) * 0.82);
+  font-weight: 700;
+  color: var(--ig-accent-text);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 6px;
+}
+
+.ig-section-title {
+  margin: 0;
+  font-family: var(--ig-display);
+  font-weight: var(--ig-display-weight);
+  font-size: var(--ig-section-size);
+  line-height: 1.14;
+  letter-spacing: var(--ig-display-tracking);
+  text-wrap: balance;
+}
+
+.ig-section-lede {
+  margin: 9px 0 0;
+  font-size: calc(var(--ig-body-size) * 1.05);
+  color: var(--ig-secondary);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.ig-heading {
+  margin: 0 0 6px;
+  font-size: calc(var(--ig-body-size) * 1.16);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* --------------------------------------------------------------- prose ---- */
+
+.ig-prose { max-width: 68ch; color: var(--ig-secondary); }
+.ig-prose p { margin: 0 0 10px; }
+.ig-prose p:last-child { margin-bottom: 0; }
+.ig-prose-lead { font-size: calc(var(--ig-body-size) * 1.14); line-height: 1.55; color: var(--ig-ink); }
+.ig-cols-2 { columns: 2; column-gap: 30px; max-width: none; }
+.ig-cols-3 { columns: 3; column-gap: 26px; max-width: none; }
+.ig-cols-2 p, .ig-cols-3 p { break-inside: avoid; }
+
+.ig-prose strong { color: var(--ig-ink); font-weight: 600; }
+.ig-prose code, .ig-bullets code {
+  font-family: var(--ig-mono);
+  font-size: 0.9em;
+  background: var(--ig-sunken);
+  padding: 0.08em 0.34em;
+  border-radius: 3px;
+}
+a { color: var(--ig-accent-text); text-underline-offset: 2px; }
+
+.ig-bullets { margin: 0; padding-left: 1.15em; max-width: 68ch; color: var(--ig-secondary); }
+.ig-bullets li { margin-bottom: 6px; }
+.ig-bullets li::marker { color: var(--ig-accent); }
+
+/* --------------------------------------------------------------- quote ---- */
+
+.ig-quote {
+  margin: 0;
+  padding: 4px 0 4px 22px;
+  border-left: 2px solid var(--ig-accent);
+  max-width: 60ch;
+}
+.ig-quote p {
+  margin: 0;
+  font-family: var(--ig-display);
+  font-weight: var(--ig-display-weight);
+  font-size: calc(var(--ig-body-size) * 1.5);
+  line-height: 1.32;
+  letter-spacing: var(--ig-display-tracking);
+  color: var(--ig-ink);
+  text-wrap: pretty;
+}
+.ig-quote-attr {
+  margin-top: 12px;
+  font-size: calc(var(--ig-body-size) * 0.84);
+  color: var(--ig-muted);
+}
+
+/* ------------------------------------------------------------- callout ---- */
+
+.ig-callout {
+  display: flex;
+  gap: 13px;
+  padding: 15px 17px;
+  border-radius: calc(var(--ig-radius) * 2.5);
+  background: var(--ig-sunken);
+  font-size: calc(var(--ig-body-size) * 0.95);
+  color: var(--ig-secondary);
+  max-width: 78ch;
+}
+.ig-callout p { margin: 0 0 6px; }
+.ig-callout p:last-child { margin-bottom: 0; }
+.ig-callout-title { font-weight: 600; color: var(--ig-ink); }
+
+.ig-callout-icon {
+  flex: 0 0 20px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 700; line-height: 1;
+  color: #fff;
+  background: var(--ig-accent);
+  margin-top: 1px;
+}
+.ig-callout-key    { background: var(--ig-accent-wash); }
+.ig-callout-key    .ig-callout-icon { background: var(--ig-accent); }
+.ig-callout-note   .ig-callout-icon { background: var(--ig-muted); }
+.ig-callout-warn   { background: var(--ig-warn-wash); }
+.ig-callout-warn   .ig-callout-icon { background: var(--ig-warn); color: var(--ig-ink); }
+.ig-callout-danger { background: var(--ig-danger-wash); }
+.ig-callout-danger .ig-callout-icon { background: var(--ig-danger); }
+
+/* --------------------------------------------------------------- stats ---- */
+
+.ig-kpi {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--ig-kpi-n, 4), minmax(0, 1fr));
+  gap: 0;
+}
+.ig-kpi > li {
+  padding: 2px 20px;
+  border-left: 1px solid var(--ig-border);
+  min-width: 0;
+}
+.ig-kpi > li:first-child { padding-left: 0; border-left: 0; }
+
+/* Stacked: the divider becomes horizontal, because a left rule between rows
+   would point the wrong way. */
+.ig-kpi-stacked > li {
+  padding: 11px 0;
+  border-left: 0;
+  border-top: 1px solid var(--ig-border);
+}
+.ig-kpi-stacked > li:first-child { padding-top: 0; border-top: 0; }
+
+.ig-stat-label {
+  margin: 0 0 7px;
+  font-size: calc(var(--ig-body-size) * 0.82);
+  color: var(--ig-muted);
+  text-wrap: balance;
+  /* Two lines' worth of space always, so a label that wraps does not push its
+     value down and break the baseline the row is read along. */
+  min-height: calc(var(--ig-body-size) * 0.82 * 1.62 * 2);
+}
+.ig-kpi-stacked .ig-stat-label { min-height: 0; }
+.ig-stat-value {
+  margin: 0;
+  /* Deliberately NOT overflow-wrap: a figure that will not fit is shrunk by
+     blocks_editorial.stat(), which knows the tile's real width. Allowing a wrap
+     here stacks a number one character per line. */
+  white-space: nowrap;
+  font-size: calc(var(--ig-body-size) * 2.3);
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ig-ink);
+  /* proportional figures on purpose: tabular-nums makes 121 look loose here */
+}
+.ig-stat-delta { margin: 6px 0 0; font-size: calc(var(--ig-body-size) * 0.82); }
+.ig-stat-delta:empty { display: none; }
+.ig-delta { font-weight: 600; }
+.ig-delta-up   { color: var(--ig-good); }
+.ig-delta-down { color: var(--ig-danger-text); }
+.ig-delta-period { color: var(--ig-muted); }
+.ig-stat-note { margin: 7px 0 0; font-size: calc(var(--ig-body-size) * 0.78); color: var(--ig-muted); }
+.ig-spark { margin-top: 9px; max-width: 130px; }
+
+.ig-kpi-compact .ig-stat-value { font-size: calc(var(--ig-body-size) * 1.85); }
+
+.ig-hero-figure { padding: 2px 0; }
+.ig-hero-figure-value {
+  margin: 0;
+  font-family: var(--ig-sans);
+  font-size: var(--ig-figure-size);
+  font-weight: 650;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  color: var(--ig-accent);
+}
+.ig-hero-figure-label {
+  margin: 10px 0 0;
+  font-size: calc(var(--ig-body-size) * 1.02);
+  font-weight: 600;
+  color: var(--ig-ink);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+.ig-hero-figure-note {
+  margin: 6px 0 0;
+  font-size: calc(var(--ig-body-size) * 0.82);
+  color: var(--ig-muted);
+  max-width: 36ch;
+}
+
+/* -------------------------------------------------------------- legend ---- */
+
+.ig-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: calc(var(--ig-body-size) * 0.82);
+  color: var(--ig-secondary);
+}
+.ig-legend-item { display: flex; align-items: center; gap: 7px; }
+.ig-key { display: inline-block; flex: none; }
+.ig-key-rect { width: 11px; height: 11px; border-radius: 2px; }
+.ig-key-dot  { width: 10px; height: 10px; border-radius: 50%; }
+.ig-key-line { width: 15px; height: 3px;  border-radius: 2px; }
+
+.ig-scale-legend {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 12px;
+  font-size: calc(var(--ig-body-size) * 0.78);
+  color: var(--ig-muted);
+}
+.ig-scale-ramp { display: flex; height: 9px; border-radius: 2px; overflow: hidden; width: 132px; }
+.ig-scale-ramp span { flex: 1; }
+
+/* -------------------------------------------------------------- tables ---- */
+
+.ig-table, .ig-table-view {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: calc(var(--ig-body-size) * 0.86);
+  font-variant-numeric: tabular-nums;
+}
+.ig-table caption, .ig-table-view caption {
+  text-align: left;
+  font-size: calc(var(--ig-body-size) * 0.82);
+  color: var(--ig-muted);
+  padding-bottom: 7px;
+}
+.ig-table th, .ig-table-view th,
+.ig-table td, .ig-table-view td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--ig-hairline);
+}
+.ig-table thead th, .ig-table-view thead th {
+  font-weight: 600;
+  color: var(--ig-muted);
+  border-bottom: 1px solid var(--ig-axis);
+  font-variant-numeric: normal;
+}
+.ig-table tbody th, .ig-table-view tbody th { font-weight: 600; color: var(--ig-ink); }
+.ig-table td, .ig-table-view td { color: var(--ig-secondary); }
+.ig-table tbody tr:last-child td,
+.ig-table tbody tr:last-child th { border-bottom: 0; }
+
+/* The accessibility twin: collapsed on screen, always open in print so no
+   value is gated behind an interaction a sheet of paper cannot perform. */
+.ig-table-toggle { margin-top: 12px; }
+.ig-table-toggle > summary {
+  cursor: pointer;
+  font-size: calc(var(--ig-body-size) * 0.78);
+  color: var(--ig-muted);
+  list-style: none;
+}
+.ig-table-toggle > summary::-webkit-details-marker { display: none; }
+.ig-table-toggle > summary::before { content: "▸ "; }
+.ig-table-toggle[open] > summary::before { content: "▾ "; }
+.ig-table-toggle .ig-table-view { margin-top: 8px; }
+
+@media print {
+  .ig-table-toggle > summary { display: none; }
+  .ig-table-toggle > *:not(summary) { display: table !important; }
+}
+.ig-tables-hidden .ig-table-toggle { display: none; }
+
+/* ----------------------------------------------------------- checklist ---- */
+
+.ig-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.ig-check { padding: 15px 17px; border-radius: calc(var(--ig-radius) * 2.5); background: var(--ig-sunken); }
+.ig-check-do   { background: var(--ig-good-wash); }
+.ig-check-dont { background: var(--ig-danger-wash); }
+.ig-check-title {
+  margin: 0 0 9px;
+  font-size: calc(var(--ig-body-size) * 0.8);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.ig-check-do   .ig-check-title { color: var(--ig-good); }
+.ig-check-dont .ig-check-title { color: var(--ig-danger-text); }
+.ig-check ul { list-style: none; margin: 0; padding: 0; font-size: calc(var(--ig-body-size) * 0.92); }
+.ig-check li { display: flex; gap: 9px; margin-bottom: 7px; color: var(--ig-secondary); }
+.ig-check li span:first-child { font-weight: 700; flex: none; }
+.ig-check-do   li span:first-child { color: var(--ig-good); }
+.ig-check-dont li span:first-child { color: var(--ig-danger-text); }
+
+/* --------------------------------------------------------- definitions ---- */
+
+.ig-definitions { margin: 0; display: grid; gap: 0; }
+.ig-def {
+  display: grid;
+  grid-template-columns: minmax(120px, 24%) 1fr;
+  gap: 18px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--ig-hairline);
+  break-inside: avoid;
+}
+.ig-def:last-child { border-bottom: 0; }
+.ig-def dt { font-weight: 600; color: var(--ig-ink); font-size: calc(var(--ig-body-size) * 0.95); }
+.ig-def dd { margin: 0; color: var(--ig-secondary); font-size: calc(var(--ig-body-size) * 0.95); }
+
+/* The graphic-density form: a vocabulary laid out side by side rather than a
+   stack of term-and-sentence rows. The column count is set in Python from the
+   block's real width, because CSS cannot see how wide a grid column is. */
+.ig-definitions-grid {
+  grid-template-columns: repeat(var(--ig-def-n, 3), minmax(0, 1fr));
+  gap: 10px;
+}
+.ig-definitions-grid .ig-def {
+  display: block;
+  padding: 12px 14px;
+  border-bottom: 0;
+  border-radius: calc(var(--ig-radius) * 2);
+  background: var(--ig-sunken);
+  border-top: 2px solid var(--ig-accent);
+}
+.ig-definitions-grid .ig-def dt {
+  font-size: calc(var(--ig-body-size) * 0.74);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ig-accent-text);
+  margin-bottom: 5px;
+}
+.ig-definitions-grid .ig-def dd { font-size: calc(var(--ig-body-size) * 0.88); }
+
+/* --------------------------------------------------------------- chips ---- */
+
+/* The replacement for a bullet list. A chip that needs a sentence is not a
+   chip, which is the point: the form refuses the adjective. */
+.ig-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--ig-chip-n, 4), minmax(0, 1fr));
+  gap: 9px;
+}
+.ig-chip {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 10px 13px;
+  border-radius: calc(var(--ig-radius) * 2);
+  background: var(--ig-sunken);
+  border-left: 3px solid var(--ig-border);
+  break-inside: avoid;
+}
+.ig-chip-label {
+  font-size: calc(var(--ig-body-size) * 0.88);
+  font-weight: 600;
+  color: var(--ig-ink);
+}
+.ig-chip-value {
+  margin-left: auto;
+  font-size: calc(var(--ig-body-size) * 0.92);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ig-ink);
+}
+.ig-chip-note {
+  flex-basis: 100%;
+  font-size: calc(var(--ig-body-size) * 0.76);
+  color: var(--ig-muted);
+}
+.ig-chip-icon {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--ig-muted);
+  color: var(--ig-card);
+  align-self: center;
+}
+.ig-chip-good   { border-left-color: var(--ig-good); }
+.ig-chip-good   .ig-chip-icon { background: var(--ig-good); }
+.ig-chip-warn   { border-left-color: var(--ig-warn); background: var(--ig-warn-wash); }
+.ig-chip-warn   .ig-chip-icon { background: var(--ig-warn); color: #1a1300; }
+.ig-chip-danger { border-left-color: var(--ig-danger); background: var(--ig-danger-wash); }
+.ig-chip-danger .ig-chip-icon { background: var(--ig-danger); }
+.ig-chip-accent { border-left-color: var(--ig-accent); background: var(--ig-accent-wash); }
+.ig-chip-accent .ig-chip-icon { background: var(--ig-accent); }
+.ig-chip-mute   { background: transparent; border: 1px solid var(--ig-hairline); border-left-width: 3px; }
+.ig-chip-mute .ig-chip-label { color: var(--ig-secondary); font-weight: 500; }
+
+/* ---------------------------------------------------------- comparison ---- */
+
+.ig-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+.ig-compare-side { padding: 17px 19px; border-radius: calc(var(--ig-radius) * 2.5); }
+.ig-compare-left  { background: var(--ig-sunken); }
+.ig-compare-right { background: var(--ig-accent-wash); }
+.ig-compare-label {
+  margin: 0 0 8px;
+  font-size: calc(var(--ig-body-size) * 0.76);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ig-muted);
+}
+.ig-compare-right .ig-compare-label { color: var(--ig-accent-text); }
+.ig-compare-headline {
+  margin: 0 0 11px;
+  font-size: calc(var(--ig-body-size) * 1.16);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ig-ink);
+  text-wrap: balance;
+}
+.ig-compare-side ul {
+  margin: 0; padding-left: 1.05em;
+  font-size: calc(var(--ig-body-size) * 0.9);
+  color: var(--ig-secondary);
+}
+.ig-compare-side li { margin-bottom: 5px; }
+.ig-compare-vs {
+  align-self: center;
+  font-size: calc(var(--ig-body-size) * 0.78);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ig-muted);
+}
+
+/* ------------------------------------------------------------ callouts ---- */
+
+.ig-callouts {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 11px 20px;
+  font-size: calc(var(--ig-body-size) * 0.86);
+  color: var(--ig-secondary);
+}
+.ig-callouts li { display: flex; gap: 9px; break-inside: avoid; }
+.ig-callout-num {
+  flex: none;
+  width: 19px; height: 19px;
+  border-radius: 50%;
+  background: var(--ig-accent);
+  color: #fff;
+  font-size: 10.5px; font-weight: 700;
+  display: grid; place-items: center;
+  margin-top: 1px;
+}
+.ig-callouts strong { color: var(--ig-ink); font-weight: 600; }
+
+/* -------------------------------------------------------------- images ---- */
+
+.ig-image { margin: 0; position: relative; }
+.ig-image img {
+  width: 100%; height: 100%;
+  display: block;
+  border-radius: calc(var(--ig-radius) * 2);
+}
+.ig-image figcaption {
+  margin-top: 7px;
+  font-size: calc(var(--ig-body-size) * 0.78);
+  color: var(--ig-muted);
+}
+
+/* ----------------------------------------------------------- footnotes ---- */
+
+.ig-footnotes {
+  border-top: 1px solid var(--ig-hairline);
+  padding-top: 13px;
+  font-size: calc(var(--ig-body-size) * 0.76);
+  color: var(--ig-muted);
+}
+.ig-footnotes-title {
+  margin: 0 0 7px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-size: calc(var(--ig-body-size) * 0.72);
+}
+.ig-footnotes ol { margin: 0; padding-left: 1.2em; columns: 2; column-gap: 28px; }
+.ig-footnotes li { margin-bottom: 4px; break-inside: avoid; }
+
+.ig-divider { border: 0; border-top: 1px solid var(--ig-hairline); margin: 4px 0; }
+.ig-spacer { width: 100%; }
+
+/* ------------------------------------------------------------- density ---- */
+
+/* `graphic` is the default and the reason this skill exists: the picture makes
+   the point, the words label it. The text-budget in `density.py` enforces the
+   word counts; these rules make the surviving text LOOK like labelling rather
+   than like prose that happens to be short, so the register is consistent. */
+
+.ig-density-graphic .ig-block-sub,
+.ig-density-graphic .ig-section-lede {
+  max-width: 52ch;
+  font-size: calc(var(--ig-body-size) * 0.94);
+}
+.ig-density-graphic .ig-block-note {
+  font-size: calc(var(--ig-body-size) * 0.74);
+  letter-spacing: 0.01em;
+}
+/* Titles do more work when there is less around them, so they get more air and
+   a tighter measure than the report-density defaults. */
+.ig-density-graphic .ig-block-title {
+  font-size: calc(var(--ig-body-size) * 1.12);
+  max-width: 46ch;
+}
+.ig-density-graphic .ig-hero-lede { max-width: 56ch; }
+
+/* The do/don't columns become two chip stacks: same information, no sentences,
+   and the ✓/✕ carries the polarity so colour is never the only channel. */
+.ig-density-graphic .ig-check li {
+  align-items: center;
+  padding: 7px 9px;
+  margin-bottom: 5px;
+  border-radius: var(--ig-radius);
+  background: var(--ig-card);
+  font-size: calc(var(--ig-body-size) * 0.86);
+}
+.ig-density-graphic .ig-compare-side ul { font-size: calc(var(--ig-body-size) * 0.88); }
+
+@media print {
+  /* Nothing here is decoration, so nothing here is allowed to be cropped. */
+  .ig-density-graphic .ig-chips,
+  .ig-density-graphic .ig-definitions-grid { break-inside: avoid; }
+}
+
+/* ------------------------------------------------------- the drawing kit ---- */
+
+/* Everything an authored `figure` needs, so hand-drawing is not from-scratch
+   work. This matters more than it looks: a figure block with no kit means every
+   drawing starts by re-deriving what a node looks like, which is slow enough
+   that the author quietly goes back to picking the nearest catalog block. That
+   reflex is the thing `figure` exists to break.
+
+   All of it is class-based rather than attribute-based on purpose. The figure
+   validator refuses colour literals in authored markup, so the kit has to
+   provide a themed way to say every ordinary thing: a box, an edge, a label, a
+   de-emphasised region, one of the eight categorical slots. See
+   references/drawing.md for the vocabulary. */
+
+.ig-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.ig-figure { max-width: 100%; overflow: visible; }
+
+.ig-fig-arrowhead        { fill: var(--ig-axis); }
+.ig-fig-arrowhead-accent { fill: var(--ig-accent); }
+.ig-fig-arrowhead-mute   { fill: var(--ig-muted); }
+.ig-fig-arrowhead-danger { fill: var(--ig-danger); }
+
+/* Containers. A node is a thing; a field is a region that contains things. */
+.ig-fig-node {
+  fill: var(--ig-card);
+  stroke: var(--ig-border);
+  stroke-width: 1;
+}
+.ig-fig-node-strong { fill: var(--ig-accent-wash); stroke: var(--ig-accent); stroke-width: 1.4; }
+.ig-fig-node-mute   { fill: var(--ig-sunken); stroke: none; }
+.ig-fig-field       { fill: var(--ig-sunken); stroke: var(--ig-hairline); stroke-width: 1; }
+.ig-fig-field-accent{ fill: var(--ig-accent-wash); stroke: var(--ig-accent); stroke-width: 1; }
+.ig-fig-field-danger{ fill: var(--ig-danger-wash); stroke: var(--ig-danger); stroke-width: 1; }
+.ig-fig-solid       { fill: var(--ig-ink); stroke: none; }
+.ig-fig-solid-accent{ fill: var(--ig-accent); stroke: none; }
+.ig-fig-solid-good  { fill: var(--ig-good); stroke: none; }
+.ig-fig-solid-danger{ fill: var(--ig-danger); stroke: none; }
+
+/* Rings and outlines. Separated from the fills because a spreading blast, a
+   containment boundary and a highlight are all "stroke, no fill", and writing
+   `fill="none"` on every one of them is the sort of friction that sends an
+   author back to the catalog. */
+.ig-fig-ring        { fill: none; stroke: var(--ig-axis); stroke-width: 2; }
+.ig-fig-ring-accent { fill: none; stroke: var(--ig-accent); stroke-width: 2; }
+.ig-fig-ring-good   { fill: none; stroke: var(--ig-good); stroke-width: 2; }
+.ig-fig-ring-danger { fill: none; stroke: var(--ig-danger); stroke-width: 2; }
+
+/* Connections. Dashed is reserved: it means "conditional / failure path", never
+   decoration, which is the same rule the linter enforces on gridlines. */
+.ig-fig-edge {
+  fill: none;
+  stroke: var(--ig-axis);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ig-fig-edge-strong { stroke: var(--ig-accent); stroke-width: 2.4; }
+.ig-fig-edge-mute   { stroke: var(--ig-hairline); stroke-width: 1.2; }
+.ig-fig-edge-danger { stroke: var(--ig-danger); stroke-width: 1.8; }
+.ig-fig-edge-dashed { stroke-dasharray: 5 4; }
+.ig-fig-rule        { fill: none; stroke: var(--ig-hairline); stroke-width: 1; }
+
+/* Text. Sizes are absolute in the drawing's own user units, because a figure
+   scales as a whole: setting them in `em` would make a wide drawing's labels
+   shrink relative to its shapes. */
+.ig-fig-title {
+  fill: var(--ig-ink);
+  font-family: var(--ig-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ig-fig-label {
+  fill: var(--ig-secondary);
+  font-family: var(--ig-sans);
+  font-size: 12px;
+  font-weight: 500;
+}
+.ig-fig-mute {
+  fill: var(--ig-muted);
+  font-family: var(--ig-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+.ig-fig-kicker {
+  fill: var(--ig-muted);
+  font-family: var(--ig-sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ig-fig-figure {
+  fill: var(--ig-ink);
+  font-family: var(--ig-sans);
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+.ig-fig-accent { fill: var(--ig-accent-text); }
+.ig-fig-good   { fill: var(--ig-good); }
+.ig-fig-warn   { fill: var(--ig-warn); }
+.ig-fig-danger { fill: var(--ig-danger-text); }
+.ig-fig-mono   { font-family: var(--ig-mono); font-size: 11px; }
+
+/* The eight categorical slots, so a drawing paints from the same validated
+   palette every chart uses instead of inventing hues. */
+.ig-fig-s0 { fill: var(--ig-series-0); } .ig-fig-s1 { fill: var(--ig-series-1); }
+.ig-fig-s2 { fill: var(--ig-series-2); } .ig-fig-s3 { fill: var(--ig-series-3); }
+.ig-fig-s4 { fill: var(--ig-series-4); } .ig-fig-s5 { fill: var(--ig-series-5); }
+.ig-fig-s6 { fill: var(--ig-series-6); } .ig-fig-s7 { fill: var(--ig-series-7); }
+.ig-fig-stroke-s0 { fill: none; stroke: var(--ig-series-0); stroke-width: 2; }
+.ig-fig-stroke-s1 { fill: none; stroke: var(--ig-series-1); stroke-width: 2; }
+.ig-fig-stroke-s2 { fill: none; stroke: var(--ig-series-2); stroke-width: 2; }
+
+/* Inverted: a drawing on a dark field. Ink and surfaces swap so the same kit
+   classes keep working inside it rather than every shape needing an override. */
+.ig-fig-invert {
+  --ig-ink: var(--ig-page);
+  --ig-secondary: var(--ig-page);
+  --ig-muted: var(--ig-border);
+  --ig-card: #ffffff1a;
+  --ig-sunken: #ffffff12;
+  --ig-border: #ffffff40;
+  --ig-hairline: #ffffff26;
+  --ig-axis: #ffffff5c;
+}
+.ig-fig-invert .ig-fig-label { opacity: 0.86; }
+
+/* ------------------------------------------------------- continuous doc ---- */
+
+/* `page: scroll`. The non-paginated target exists because a page box cannot
+   give you a full-bleed section, and a full-bleed section is often the single
+   move that makes a document read as designed rather than as laid out.
+
+   Nothing here fights the print rules: they are scoped to `.ig-paginated`
+   wherever they would conflict, and a scroll document still carries a sane
+   @page for whoever prints it anyway. */
+
+.ig-continuous .ig-doc {
+  max-width: var(--ig-content-width);
+  padding: var(--ig-margin-top) var(--ig-margin-side) var(--ig-margin-bottom);
+}
+.ig-continuous .ig-block { break-inside: auto; page-break-inside: auto; }
+
+/* A bleed block escapes the measure and runs the full viewport width. The
+   margin trick is the one that survives an ancestor with padding, unlike
+   `width: 100vw`, which overflows by the scrollbar width and gives the whole
+   document a horizontal scrollbar. */
+.ig-continuous .ig-bleed {
+  grid-column: 1 / -1;
+  width: auto;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 64px max(var(--ig-margin-side), calc(50vw - var(--ig-content-width) / 2 + var(--ig-margin-side)));
+  margin-bottom: var(--ig-row-gap);
+}
+.ig-continuous .ig-bleed-dark {
+  background: var(--ig-ink);
+  color: var(--ig-page);
+}
+.ig-bleed-dark .ig-block-title,
+.ig-bleed-dark .ig-section-title,
+.ig-bleed-dark .ig-hero-title,
+.ig-bleed-dark .ig-stat-value { color: var(--ig-page); }
+.ig-bleed-dark .ig-block-sub,
+.ig-bleed-dark .ig-section-lede,
+.ig-bleed-dark .ig-hero-subtitle { color: var(--ig-border); }
+.ig-bleed-dark .ig-block-note,
+.ig-bleed-dark .ig-stat-label { color: var(--ig-axis); }
+/* The accessibility twin has to survive the dark field too, or the values are
+   reachable in theory and invisible in practice. */
+.ig-bleed-dark .ig-table-toggle > summary { color: var(--ig-border); }
+.ig-bleed-dark .ig-table-view th,
+.ig-bleed-dark .ig-table-view td { color: var(--ig-border); border-color: var(--ig-axis); }
+.ig-bleed-dark .ig-table-view tbody th { color: var(--ig-page); }
+
+/* Screen reading gets more vertical air than paper: there is no sheet to fill,
+   and the cost of a scroll is much lower than the cost of a page turn. */
+.ig-continuous .ig-section-head { padding-top: 22px; margin-bottom: 10px; }
+.ig-continuous .ig-hero { padding: 12px 0 34px; }
+
+@media print {
+  /* A printed scroll document has no viewport to bleed into. Pull the block
+     back inside the page box rather than letting the negative margins run off
+     the edge, which crops the content instead of the decoration. */
+  .ig-continuous .ig-bleed {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .ig-continuous .ig-doc { padding: 0; max-width: none; }
+}
+
+@media screen and (max-width: 1180px) {
+  .ig-continuous .ig-doc { padding-left: 24px; padding-right: 24px; }
+  .ig-continuous .ig-bleed { padding-left: 24px; padding-right: 24px; }
+}
+@media screen and (max-width: 860px) {
+  /* Below this the 12-column grid is doing damage rather than work: a 4-span
+     tile is 180px wide and its labels stop fitting. */
+  .ig-continuous .ig-block { grid-column: span 12 !important; }
+}
+
+/* -------------------------------------------------------------- screen ---- */
+
+@media screen {
+  body { padding: 26px 0 60px; }
+  .ig-doc {
+    background: var(--ig-card);
+    box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 12px 34px rgba(0,0,0,.07);
+    border-radius: 4px;
+  }
+  /* The continuous target is a page, not a sheet of paper sitting on a desk. */
+  .ig-continuous body,
+  body.ig-continuous { padding: 0; }
+  .ig-continuous .ig-doc {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  html.ig-continuous { background: var(--ig-page); }
+}

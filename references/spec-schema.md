@@ -1,0 +1,138 @@
+# The document spec
+
+The spec is the contract between deciding and drawing. It is plain JSON, so it
+can be diffed, reviewed, regenerated and re-themed without touching a renderer.
+
+```bash
+python3 scripts/ig.py new out/spec.json        # starter
+python3 scripts/ig.py render out/spec.json     # spec -> HTML -> PDF -> lint
+```
+
+---
+
+## Shape
+
+```json
+{
+  "meta":    { ... },
+  "options": { ... },
+  "blocks":  [ { "type": "...", ... } ]
+}
+```
+
+## `meta`
+
+| Key | Default | Meaning |
+|---|---|---|
+| `title` | `"Infographic"` | browser/PDF title; a literal description of the subject and scope, never a slogan |
+| `theme` | `"default"` | `default` · `rentos` · `mono`, or a path to a theme JSON |
+| `page` | `"a4"` | `a4` `a4-land` `letter` `letter-land` `a3` `a3-land` `slide` `poster` |
+| `density` | `"graphic"` | `graphic` enforces the text budget and refuses body prose; `report` allows it. See [graphic-first.md](graphic-first.md) |
+| `paper` | `"panel"` | `panel` · `none` · `bleed`, see [print-pdf.md](print-pdf.md) |
+| `lang` | `"en"` | document language, for screen readers and hyphenation |
+| `tables` | `true` | emit table-view twins |
+| `texture` | `false` | turn on the texture channel for CVD / mono print |
+| `footer_left` | `title` | running footer, left |
+| `footer_right` | `date` | running footer, right |
+| `date`, `author`, `source` | none | available to `hero` |
+
+Page choice is not cosmetic: type scale, margins, gutters and default block
+heights all derive from it. A poster is not an A4 document printed larger.
+
+## `options`
+
+Free-form object merged into every block's `options`, then overridden by that
+block's own `options`. Use it for document-wide formatting defaults.
+
+## `blocks`
+
+An ordered list. Each entry names a `type` from the
+[catalog](catalog/README.md) and carries that type's payload plus the shared
+keys documented in [catalog/README.md](catalog/README.md#shared-payload-keys).
+
+Blocks flow through a 12-column grid in order. A block occupies `span` columns
+and the next one continues on the same row if it fits.
+
+```json
+{"type": "line",  "span": 8, "title": "Trend",  "x": [...], "series": [...]},
+{"type": "kpi",   "span": 4, "items": [...]},
+{"type": "prose", "span": 12, "text": "What the chart above means."}
+```
+
+## Worked minimum
+
+```json
+{
+  "meta": {"title": "Enquiry conversion by first-reply time", "theme": "default", "page": "a4"},
+  "blocks": [
+    {"type": "hero",
+     "kicker": "Analysis",
+     "title": "Enquiry conversion by first-reply time, 214 operators, H1",
+     "subtitle": "Operators replying within an hour convert at 9.1%, against 1.4% after 24 hours."},
+
+    {"type": "kpi", "items": [
+      {"label": "Median first reply", "value": 19, "unit": "h", "compact": false},
+      {"label": "Enquiries never answered", "value": 33, "unit": "%", "compact": false},
+      {"label": "Conversion under 1h", "value": 9.1, "unit": "%", "decimals": 1,
+       "compact": false, "delta": 210, "delta_period": "vs 24h+"}
+    ]},
+
+    {"type": "prose", "span": 12,
+     "text": "Price sensitivity is real but second order. The chart below holds "
+             "price constant and varies only reply time."},
+
+    {"type": "bar", "span": 8,
+     "title": "Bookings per 100 enquiries by first-reply time",
+     "subtitle": "Conversion more than halves between the 1-4h and 4-24h bands.",
+     "categories": ["Under 1h", "1-4h", "4-24h", "Over 24h"],
+     "values": [9.1, 7.8, 3.2, 1.4],
+     "unit": "%", "decimals": 1, "sort": null,
+     "ordinal": true, "ordinal_reverse": true,
+     "note": "Bookings per 100 enquiries. Same price band throughout."},
+
+    {"type": "callout", "span": 4, "tone": "key",
+     "title": "What this does not say",
+     "text": "Fast repliers may simply be better operators overall. This is a "
+             "correlation across 214 operators, not a controlled test."},
+
+    {"type": "footnotes",
+     "items": ["Source: platform enquiry log, H1.",
+               "Excludes enquiries auto-declined for unavailable dates."]}
+  ]
+}
+```
+
+## Validation
+
+The compiler fails loudly on an unknown `type`, `theme`, `page` or `paper`, and
+warns (without failing) on the design problems it can detect:
+
+- more series than the palette has slots;
+- a scatter with more than three series;
+- a donut past six segments, a venn past three sets;
+- KPI tiles that will not fit the block's width;
+- `paper: bleed` on a document that looks multi-page.
+
+Warnings print to stderr and are surfaced by `ig.py render`. They are advice from
+the checks, not the design review, that is still yours.
+
+## Programmatic use
+
+```python
+import sys; sys.path.insert(0, "scripts")
+from build import build
+
+spec = {"meta": {...}, "blocks": [...]}
+html, warnings = build(spec, "out/doc.html", theme="rentos")
+```
+
+`build()` accepts a path or a dict, so a spec can be generated in code without
+ever touching disk. Individual blocks render standalone too:
+
+```python
+from lib.registry import render_block
+from lib.theme import Ctx, Theme
+
+svg = render_block({"type": "bar", "categories": ["A"], "values": [1]},
+                   Ctx(Theme.load("default"), width=672))
+```

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="{{LANG}}" class="{{BODY_CLASS}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}}</title>
+<style>{{FONTS}}</style>
+<style>{{TOKENS}}</style>
+<style>{{CSS}}</style>
+</head>
+<body class="{{BODY_CLASS}}">
+
+<!-- The drawing kit's shared defs.
+
+     Arrowheads have to live in the document rather than inside each `figure`,
+     because `marker-end="url(#ig-arrow)"` resolves against the document, and an
+     authored drawing should not have to carry a copy of the same three markers
+     every time. They are filled by CSS class, not by a `fill` attribute:
+     `var()` inside a presentation attribute is not reliable across renderers,
+     while a class is just CSS and always is.
+
+     `overflow: visible` on markers is Chrome's default for `markerUnits`
+     userSpaceOnUse paths of this size, but stating it costs nothing and stops a
+     head being clipped to its 10x10 box.
+
+     The class rather than an inline style is not cosmetic: the linter treats an
+     inline `overflow:hidden` in the body as a mark being cropped instead of
+     fixed, and it is right to. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" class="ig-defs">
+  <defs>
+    <marker id="ig-arrow" viewBox="0 0 10 10" refX="8.5" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse" overflow="visible">
+      <path d="M0,1.2 L9,5 L0,8.8 Z" class="ig-fig-arrowhead"/>
+    </marker>
+    <marker id="ig-arrow-accent" viewBox="0 0 10 10" refX="8.5" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse" overflow="visible">
+      <path d="M0,1.2 L9,5 L0,8.8 Z" class="ig-fig-arrowhead-accent"/>
+    </marker>
+    <marker id="ig-arrow-mute" viewBox="0 0 10 10" refX="8.5" refY="5"
+            markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse" overflow="visible">
+      <path d="M0,1.2 L9,5 L0,8.8 Z" class="ig-fig-arrowhead-mute"/>
+    </marker>
+    <marker id="ig-arrow-danger" viewBox="0 0 10 10" refX="8.5" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse" overflow="visible">
+      <path d="M0,1.2 L9,5 L0,8.8 Z" class="ig-fig-arrowhead-danger"/>
+    </marker>
+    <marker id="ig-dot" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="4.5" markerHeight="4.5" orient="auto">
+      <circle cx="5" cy="5" r="4" class="ig-fig-arrowhead"/>
+    </marker>
+  </defs>
+</svg>
+
+<main class="ig-doc">
+<div class="ig-grid">
+{{BLOCKS}}
+</div>
+</main>
+{{FOOTER}}
+</body>
+</html>

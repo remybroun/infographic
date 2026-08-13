@@ -1,0 +1,162 @@
+{
+  "name": "mono",
+  "label": "Grayscale / print-safe",
+  "note": "For photocopy, fax, single-ink print, or when the output must survive being printed in black and white. Identity cannot ride on hue here, so every block that uses more than one series MUST also carry direct labels or texture. Series slots are lightness-stepped, not hue-stepped.",
+  "surface": {
+    "page": "#ffffff",
+    "card": "#ffffff",
+    "sunken": "#f2f2f0",
+    "inverse": "#111111"
+  },
+  "ink": {
+    "primary": "#000000",
+    "secondary": "#3d3d3d",
+    "muted": "#6e6e6e",
+    "inverse": "#ffffff",
+    "on_fill_light": "#000000",
+    "on_fill_dark": "#ffffff",
+    "accent_text": "#1a1a1a"
+  },
+  "rule": {
+    "grid": "#dcdcdc",
+    "axis": "#9a9a9a",
+    "border": "#c8c8c8",
+    "hairline": "#dcdcdc"
+  },
+  "series": [
+    "#1a1a1a",
+    "#7d7d7d",
+    "#b4b4b4",
+    "#4d4d4d",
+    "#9a9a9a",
+    "#2e2e2e",
+    "#666666",
+    "#cccccc"
+  ],
+  "series_names": [
+    "ink",
+    "mid",
+    "light",
+    "dark-mid",
+    "silver",
+    "near-ink",
+    "gray",
+    "pale"
+  ],
+  "deemphasis": "#8f8f8f",
+  "accent": "#1a1a1a",
+  "sequential": {
+    "hue": "gray",
+    "steps": [
+      "#f2f2f0",
+      "#e6e6e4",
+      "#d9d9d7",
+      "#cccccc",
+      "#bfbfbf",
+      "#b0b0b0",
+      "#9a9a9a",
+      "#848484",
+      "#6e6e6e",
+      "#585858",
+      "#424242",
+      "#2c2c2c",
+      "#161616"
+    ],
+    "ordinal_steps": [
+      "#b0b0b0",
+      "#9a9a9a",
+      "#848484",
+      "#6e6e6e",
+      "#585858",
+      "#424242"
+    ]
+  },
+  "sequential_alt": {
+    "hue": "gray",
+    "steps": [
+      "#f2f2f0",
+      "#e6e6e4",
+      "#d9d9d7",
+      "#cccccc",
+      "#bfbfbf",
+      "#b0b0b0",
+      "#9a9a9a",
+      "#848484",
+      "#6e6e6e",
+      "#585858",
+      "#424242",
+      "#2c2c2c",
+      "#161616"
+    ],
+    "ordinal_steps": [
+      "#b0b0b0",
+      "#9a9a9a",
+      "#848484",
+      "#6e6e6e",
+      "#585858",
+      "#424242"
+    ]
+  },
+  "diverging": {
+    "low": "#1a1a1a",
+    "low_soft": "#9a9a9a",
+    "mid": "#ececea",
+    "high_soft": "#d0d0d0",
+    "high": "#6e6e6e"
+  },
+  "status": {
+    "good": "#2e2e2e",
+    "warning": "#8a8a8a",
+    "serious": "#5a5a5a",
+    "critical": "#000000",
+    "good_text": "#2e2e2e",
+    "critical_text": "#000000"
+  },
+  "type": {
+    "sans": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+    "display": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+    "mono": "ui-monospace, SFMono-Regular, Menlo, monospace",
+    "display_weight": 650,
+    "display_tracking": "-0.022em",
+    "heading_case": "none"
+  },
+  "geometry": {
+    "radius": 2,
+    "bar_max_thickness": 24,
+    "line_width": 2,
+    "marker_radius": 4.5,
+    "surface_gap": 2,
+    "hairline": 1
+  },
+  "force_texture": true,
+  "fonts_css": "",
+  "color_model": "grayscale",
+  "waivers": {
+    "chroma_floor": {
+      "colors": [
+        "#1a1a1a",
+        "#7d7d7d",
+        "#b4b4b4",
+        "#4d4d4d",
+        "#9a9a9a",
+        "#2e2e2e",
+        "#666666",
+        "#cccccc"
+      ],
+      "reason": "a grayscale theme has no chroma by definition. Identity cannot ride on hue here, which is exactly why force_texture is on and direct labels are mandatory."
+    },
+    "lightness_band": {
+      "colors": [
+        "#1a1a1a",
+        "#7d7d7d",
+        "#b4b4b4",
+        "#4d4d4d",
+        "#9a9a9a",
+        "#2e2e2e",
+        "#666666",
+        "#cccccc"
+      ],
+      "reason": "the band keeps eight HUES separable; a lightness-stepped gray palette must deliberately span wider so its steps stay apart."
+    }
+  }
+}

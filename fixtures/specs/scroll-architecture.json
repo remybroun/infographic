@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "title": "One application serving 500 provider domains",
+    "theme": "rentos",
+    "page": "scroll",
+    "density": "graphic",
+    "footer_left": "RentOS provider websites",
+    "footer_right": "Architecture"
+  },
+  "blocks": [
+    {
+      "type": "hero",
+      "kicker": "Architecture",
+      "title": "One application serving 500 provider domains",
+      "subtitle": "Every provider gets their own domain. None of them gets their own deployment."
+    },
+    {
+      "type": "figure",
+      "span": 12,
+      "id": "faces",
+      "title": "500 provider hostnames resolving to one application",
+      "viewbox": "0 0 1080 380",
+      "alt": "Five hundred provider hostnames fan in from the left, converge on a single routing door in the middle, and leave the right side as one deployment.",
+      "encodes": "concept",
+      "svg": "<text class=\"ig-fig-kicker\" x=\"0\" y=\"18\">500 hostnames</text><text class=\"ig-fig-kicker\" x=\"1080\" y=\"18\" text-anchor=\"end\">1 deployment</text><path class=\"ig-fig-edge-mute\" d=\"M0,54 C220,54 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,90 C220,90 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,126 C220,126 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,162 C220,162 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge\" d=\"M0,198 C220,198 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,234 C220,234 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,270 C220,270 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,306 C220,306 300,190 470,190\" fill=\"none\"/><path class=\"ig-fig-edge-mute\" d=\"M0,342 C220,342 300,190 470,190\" fill=\"none\"/><text class=\"ig-fig-mono ig-fig-mute\" x=\"8\" y=\"48\">stays.acme.com</text><text class=\"ig-fig-mono ig-fig-mute\" x=\"8\" y=\"120\">book.nordichomes.se</text><text class=\"ig-fig-mono ig-fig-mute\" x=\"8\" y=\"192\">live.urbannest.io</text><text class=\"ig-fig-mono ig-fig-mute\" x=\"8\" y=\"264\">rentals.casaluz.es</text><text class=\"ig-fig-mono ig-fig-mute\" x=\"8\" y=\"336\">+ 496 more</text><rect class=\"ig-fig-node-strong\" x=\"470\" y=\"140\" width=\"128\" height=\"100\" rx=\"12\"/><text class=\"ig-fig-title ig-fig-accent\" x=\"534\" y=\"180\" text-anchor=\"middle\">Host</text><text class=\"ig-fig-title ig-fig-accent\" x=\"534\" y=\"202\" text-anchor=\"middle\">header</text><text class=\"ig-fig-mute\" x=\"534\" y=\"224\" text-anchor=\"middle\">one door</text><line class=\"ig-fig-edge-strong\" x1=\"598\" y1=\"190\" x2=\"836\" y2=\"190\" marker-end=\"url(#ig-arrow-accent)\"/><rect class=\"ig-fig-node\" x=\"860\" y=\"128\" width=\"220\" height=\"124\" rx=\"12\"/><text class=\"ig-fig-title\" x=\"970\" y=\"172\" text-anchor=\"middle\">One codebase</text><text class=\"ig-fig-label\" x=\"970\" y=\"196\" text-anchor=\"middle\">one release</text><text class=\"ig-fig-label\" x=\"970\" y=\"216\" text-anchor=\"middle\">one patch surface</text>",
+      "note": "The domain is data. It is not a build target."
+    },
+    {
+      "type": "kpi",
+      "span": 12,
+      "items": [
+        {
+          "label": "Provider domains",
+          "value": 500
+        },
+        {
+          "label": "Deployments",
+          "value": 1
+        },
+        {
+          "label": "Requests reaching the core",
+          "value": 2,
+          "unit": "%"
+        },
+        {
+          "label": "Time to add a domain",
+          "value": 4,
+          "unit": " min"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "number": "01",
+      "title": "The cost of one deployment per provider",
+      "lede": "The dominant cost is patch surface under a breach, not hosting."
+    },
+    {
+      "type": "figure",
+      "span": 12,
+      "id": "blast",
+      "bleed": true,
+      "invert": true,
+      "title": "Blast radius of one compromised account, per-site against shared",
+      "viewbox": "0 0 1080 290",
+      "alt": "Left: two hundred separate hosting accounts, one compromised, with the reachable neighbours spreading outward through shared code. Right: the same foothold contained inside a single process boundary.",
+      "encodes": {
+        "columns": [
+          "Model",
+          "Accounts",
+          "Reachable from one foothold"
+        ],
+        "rows": [
+          [
+            "Site per provider",
+            200,
+            200
+          ],
+          [
+            "One tenant-aware app",
+            1,
+            1
+          ]
+        ]
+      },
+      "svg": "<text class=\"ig-fig-kicker\" x=\"0\" y=\"24\">A site each, 200 accounts</text><text class=\"ig-fig-kicker\" x=\"610\" y=\"24\">One app, 1 process</text><rect class=\"ig-fig-node\" x=\"0\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-solid-danger\" x=\"168\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"52\" opacity=\"0.9\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"94\" opacity=\"0.55\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"136\" opacity=\"0.28\"/><text class=\"ig-fig-figure ig-fig-danger\" x=\"0\" y=\"272\">200</text><text class=\"ig-fig-label\" x=\"66\" y=\"272\">reachable from one foothold</text><rect class=\"ig-fig-node\" x=\"610\" y=\"58\" width=\"470\" height=\"142\" rx=\"12\"/><rect class=\"ig-fig-ring-good\" x=\"646\" y=\"86\" width=\"398\" height=\"86\" rx=\"10\"/><circle class=\"ig-fig-solid-danger\" cx=\"845\" cy=\"129\" r=\"9\"/><circle class=\"ig-fig-ring-danger\" cx=\"845\" cy=\"129\" r=\"30\" opacity=\"0.9\"/><text class=\"ig-fig-mute\" x=\"845\" y=\"192\" text-anchor=\"middle\">process boundary</text><text class=\"ig-fig-figure ig-fig-good\" x=\"610\" y=\"272\">1</text><text class=\"ig-fig-label\" x=\"638\" y=\"272\">reachable from one foothold</text>"
+    },
+    {
+      "type": "comparison",
+      "span": 12,
+      "title": "Patch surface: a site each against one tenant-aware app",
+      "left": {
+        "label": "A site each",
+        "headline": "500 patch surfaces",
+        "points": [
+          "500 dependency trees",
+          "500 TLS renewals",
+          "Drift within weeks"
+        ]
+      },
+      "right": {
+        "label": "One tenant-aware app",
+        "headline": "1 patch surface",
+        "points": [
+          "One dependency tree",
+          "Certs issued on demand",
+          "No drift possible"
+        ]
+      }
+    },
+    {
+      "type": "section",
+      "number": "02",
+      "title": "Which layers a request reaches",
+      "lede": "2% of requests reach the core; the rest stop at the edge or the cache."
+    },
+    {
+      "type": "figure",
+      "span": 12,
+      "id": "beam",
+      "title": "Requests reaching each layer, per 100 entering",
+      "viewbox": "0 0 1080 300",
+      "alt": "A beam of 100 requests entering at the left narrows as it passes through the edge, the cache and the application, so that only 2 reach the core.",
+      "encodes": {
+        "columns": [
+          "Layer",
+          "Requests in",
+          "Requests through"
+        ],
+        "rows": [
+          [
+            "Edge",
+            100,
+            40
+          ],
+          [
+            "Cache",
+            40,
+            12
+          ],
+          [
+            "Application",
+            12,
+            2
+          ],
+          [
+            "Core",
+            2,
+            2
+          ]
+        ]
+      },
+      "svg": "<path class=\"ig-fig-s0\" d=\"M0,60 L270,96 L540,132 L810,146 L1080,148 L1080,152 L810,154 L540,168 L270,204 L0,240 Z\" opacity=\"0.85\"/><line class=\"ig-fig-rule\" x1=\"270\" y1=\"40\" x2=\"270\" y2=\"260\"/><line class=\"ig-fig-rule\" x1=\"540\" y1=\"40\" x2=\"540\" y2=\"260\"/><line class=\"ig-fig-rule\" x1=\"810\" y1=\"40\" x2=\"810\" y2=\"260\"/><text class=\"ig-fig-kicker\" x=\"8\" y=\"32\">Edge</text><text class=\"ig-fig-kicker\" x=\"278\" y=\"32\">Cache</text><text class=\"ig-fig-kicker\" x=\"548\" y=\"32\">Application</text><text class=\"ig-fig-kicker\" x=\"818\" y=\"32\">Core</text><text class=\"ig-fig-figure\" x=\"8\" y=\"288\">100</text><text class=\"ig-fig-figure\" x=\"278\" y=\"288\">40</text><text class=\"ig-fig-figure\" x=\"548\" y=\"288\">12</text><text class=\"ig-fig-figure ig-fig-accent\" x=\"818\" y=\"288\">2</text>",
+      "note": "Per 100 requests. Measured over one week."
+    },
+    {
+      "type": "stack",
+      "span": 12,
+      "title": "The three layers, edge to core",
+      "layers": [
+        {
+          "label": "Edge",
+          "meta": "80% stops here",
+          "items": [
+            "CDN + WAF",
+            "TLS / ACME",
+            "Full-page cache"
+          ]
+        },
+        {
+          "label": "Application",
+          "meta": "One deployment",
+          "items": [
+            "Host routing",
+            "Tenant scope",
+            "Render",
+            "SEO"
+          ]
+        },
+        {
+          "label": "Core",
+          "meta": "Source of truth",
+          "items": [
+            "Pricing",
+            "Booking",
+            "Database"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "number": "03",
+      "title": "How a custom domain is added and certified"
+    },
+    {
+      "type": "swimlane",
+      "span": 12,
+      "title": "Which actor performs each step of adding a domain",
+      "stages": [
+        "Add",
+        "Verify",
+        "Issue",
+        "Live"
+      ],
+      "lanes": [
+        {
+          "label": "Provider",
+          "cells": [
+            "Enters domain",
+            "Sets DNS",
+            null,
+            null
+          ]
+        },
+        {
+          "label": "System",
+          "cells": [
+            "Issues token",
+            "Polls DNS",
+            null,
+            "Publishes"
+          ]
+        },
+        {
+          "label": "Proxy",
+          "cells": [
+            null,
+            null,
+            "ACME cert",
+            "Routes by SNI"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "chips",
+      "span": 12,
+      "title": "The eight states a domain can hold",
+      "items": [
+        {
+          "label": "Draft",
+          "tone": "mute"
+        },
+        {
+          "label": "DNS pending",
+          "tone": "warn"
+        },
+        {
+          "label": "Verified",
+          "tone": "good"
+        },
+        {
+          "label": "Cert issued",
+          "tone": "good"
+        },
+        {
+          "label": "Live",
+          "tone": "accent"
+        },
+        {
+          "label": "Failed",
+          "tone": "danger",
+          "note": "retries for 24h"
+        },
+        {
+          "label": "Suspended",
+          "tone": "warn"
+        },
+        {
+          "label": "Archived",
+          "tone": "mute"
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "span": 12,
+      "tone": "key",
+      "title": "Tenant scope binds from the Host header",
+      "text": "Tenant scope is bound from the Host header, never from a request parameter."
+    },
+    {
+      "type": "footnotes",
+      "span": 12,
+      "items": [
+        "Request figures: edge logs, one full week, all provider hostnames.",
+        "Blast-radius comparison is structural, not measured: it counts what shared code makes reachable."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "title": "Provider website architecture: one application, many domains",
+    "theme": "rentos",
+    "page": "a4",
+    "density": "graphic",
+    "paper": "panel",
+    "footer_left": "RentOS provider websites",
+    "footer_right": "Architecture at a glance",
+    "date": "August 2026"
+  },
+  "blocks": [
+    {
+      "type": "hero",
+      "kicker": "Architecture explainer",
+      "title": "Provider website architecture: one application serving many domains",
+      "subtitle": "The tenant is resolved from the Host header, so every domain shares one deployment.",
+      "stats": [
+        {
+          "label": "Recommended option",
+          "value": "66/75"
+        },
+        {
+          "label": "Separate hosting",
+          "value": "28/75"
+        },
+        {
+          "label": "Target scale",
+          "value": "500+ sites"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "number": "01",
+      "title": "What a provider website has to deliver",
+      "lede": "A branded shell around parts RentRemote already owns, multiplied across tenants."
+    },
+    {
+      "type": "comparison",
+      "vs": "vs",
+      "left": {
+        "label": "Proposed",
+        "headline": "One hosting account per provider",
+        "points": [
+          "N environments to patch",
+          "Shared code, shared blast radius",
+          "Cost scales with tenants",
+          "No central control"
+        ]
+      },
+      "right": {
+        "label": "Recommended",
+        "headline": "One multi-tenant deployment",
+        "points": [
+          "One place to patch",
+          "One CDN edge",
+          "Cost flat in tenants",
+          "Tenant from the Host header"
+        ]
+      },
+      "note": "Separate hosting combines the cost of N environments with the blast radius of one."
+    },
+    {
+      "type": "definitions",
+      "title": "Terms used in this document",
+      "items": [
+        {
+          "term": "Tenant",
+          "text": "One provider website, keyed by website_id and provider_id."
+        },
+        {
+          "term": "Tenant resolution",
+          "text": "Host header looked up in a cached domains table."
+        },
+        {
+          "term": "Modular monolith",
+          "text": "One deployable, split internally by defined interfaces."
+        },
+        {
+          "term": "SSR + cache",
+          "text": "Blade server-side, held full-page in Redis and at the edge."
+        },
+        {
+          "term": "ACME / SNI",
+          "text": "Why thousands of domains need no thousands of IPs."
+        },
+        {
+          "term": "Read model",
+          "text": "Property and pricing data, consumed and never authored."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "key",
+      "title": "The provider website is never a second source of truth",
+      "text": "The provider website consumes RentOS data. It is never a second source of truth."
+    },
+    {
+      "type": "section",
+      "number": "02",
+      "title": "How responsibilities divide across the three layers",
+      "lede": "Three layers, one deployment, one database."
+    },
+    {
+      "type": "stack",
+      "title": "The three layers, edge to core",
+      "layers": [
+        {
+          "label": "Edge",
+          "meta": "80% of traffic stops here",
+          "items": [
+            "CDN + WAF",
+            "TLS / ACME",
+            "SNI",
+            "Full-page cache"
+          ]
+        },
+        {
+          "label": "Provider website app",
+          "meta": "One Laravel deployment",
+          "items": [
+            "Tenant resolution",
+            "Website config",
+            "Content",
+            "Render + cache",
+            "SEO",
+            "Media"
+          ]
+        },
+        {
+          "label": "RentOS core",
+          "meta": "Source of truth",
+          "items": [
+            "Property + pricing",
+            "Availability",
+            "Booking + payment",
+            "Shared database"
+          ]
+        }
+      ],
+      "note": "One database with provider_id and website_id keys, not database-per-tenant."
+    },
+    {
+      "type": "process",
+      "title": "The path of one request through the three layers",
+      "orientation": "vertical",
+      "steps": [
+        {
+          "title": "DNS to shared edge",
+          "text": "CNAME to the edge. All domains land on one CDN."
+        },
+        {
+          "title": "Edge cache check",
+          "text": "A hit returns HTML without touching the app."
+        },
+        {
+          "title": "TLS termination",
+          "text": "Wildcard or per-domain certificate, Host header intact."
+        },
+        {
+          "title": "ResolveTenant middleware",
+          "text": "Host to website_id, cached in Redis."
+        },
+        {
+          "title": "TenantContext bound",
+          "text": "Every later query is scoped, never client-supplied."
+        },
+        {
+          "title": "Render or serve cached",
+          "text": "Redis key site:{website_id}:page:{route_hash}."
+        },
+        {
+          "title": "Live call for the real-time slice",
+          "text": "Availability and payment bypass cache entirely."
+        }
+      ],
+      "note": "A miss at step four is a controlled 404, never a fallthrough to a default tenant."
+    },
+    {
+      "type": "section",
+      "number": "03",
+      "title": "Custom domains and TLS certificate issuance",
+      "lede": "The two highest-risk engineering surfaces.",
+      "break": "before"
+    },
+    {
+      "type": "swimlane",
+      "title": "Which actor performs each step of domain setup",
+      "stages": [
+        "Add domain",
+        "Verify",
+        "Issue cert",
+        "Go live",
+        "Suspend"
+      ],
+      "lanes": [
+        {
+          "label": "Provider",
+          "cells": [
+            "Adds domain in RentOS",
+            "Sets DNS records",
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "label": "RentOS",
+          "cells": [
+            "Issues token",
+            "Polls until match",
+            null,
+            "Flips to Published",
+            "Serves notice page"
+          ]
+        },
+        {
+          "label": "Proxy",
+          "cells": [
+            null,
+            null,
+            "ACME issues cert",
+            "Routes by SNI",
+            "Keeps cert warm"
+          ]
+        }
+      ],
+      "note": "No CMS login, no control panel, no FTP. Configuration happens inside RentOS."
+    },
+    {
+      "type": "chips",
+      "title": "The ten states a provider website can hold",
+      "items": [
+        {
+          "label": "Draft",
+          "tone": "mute"
+        },
+        {
+          "label": "Configuring",
+          "tone": "mute"
+        },
+        {
+          "label": "Domain pending",
+          "tone": "warn"
+        },
+        {
+          "label": "Verified",
+          "tone": "plain"
+        },
+        {
+          "label": "SSL pending",
+          "tone": "warn"
+        },
+        {
+          "label": "Ready for preview",
+          "tone": "plain"
+        },
+        {
+          "label": "Published",
+          "tone": "good"
+        },
+        {
+          "label": "Suspended",
+          "tone": "danger"
+        },
+        {
+          "label": "Failed",
+          "tone": "danger"
+        },
+        {
+          "label": "Archived",
+          "tone": "mute"
+        }
+      ],
+      "note": "Suspension degrades to a branded notice. DNS and certificate state are preserved."
+    },
+    {
+      "type": "checklist",
+      "title": "What the provider website may and may not do",
+      "do_title": "Enforced by design",
+      "dont_title": "Explicitly rejected",
+      "do": [
+        "Bookings execute in RentOS services",
+        "Double-booking prevented centrally",
+        "Idempotency keys on every write",
+        "Theming constrained to approved tokens",
+        "Analytics limited to allow-listed vendors",
+        "Every site carries a template_version"
+      ],
+      "dont": [
+        "A second payment surface",
+        "Per-website booking rules",
+        "Free-form HTML or JS from providers",
+        "Dedicated IPs as a default",
+        "Shared filesystem across accounts",
+        "Database-per-tenant"
+      ]
+    },
+    {
+      "type": "section",
+      "number": "04",
+      "title": "How the five candidate architectures scored",
+      "break": "before"
+    },
+    {
+      "type": "bar",
+      "title": "Total score of five candidate architectures, out of 75",
+      "subtitle": "Fifteen criteria scored 1 to 5 each. Judgement, not measurement.",
+      "items": [
+        {
+          "label": "E, Hybrid (recommended)",
+          "value": 66
+        },
+        {
+          "label": "B, Central Laravel multi-tenant",
+          "value": 62
+        },
+        {
+          "label": "C, Headless shared frontend",
+          "value": 55
+        },
+        {
+          "label": "D, Static site generation",
+          "value": 54
+        },
+        {
+          "label": "A, Separate hosting per provider",
+          "value": 28
+        }
+      ],
+      "emphasis": 0,
+      "unit": "/75",
+      "note": "The ranking is only as good as the criteria weighting, which is uniform here."
+    },
+    {
+      "type": "gauge",
+      "span": 4,
+      "value": 66,
+      "max": 75,
+      "label": "Hybrid",
+      "caption": "recommended"
+    },
+    {
+      "type": "gauge",
+      "span": 4,
+      "value": 62,
+      "max": 75,
+      "label": "Central multi-tenant",
+      "caption": "runner-up"
+    },
+    {
+      "type": "gauge",
+      "span": 4,
+      "value": 28,
+      "max": 75,
+      "label": "Separate hosting",
+      "caption": "the proposal"
+    },
+    {
+      "type": "footnotes",
+      "title": "Method",
+      "items": [
+        "Scores are judgement, 1-5 per criterion across 15 criteria, uniform weighting. They rank options against each other and are not a measurement of any deployed system.",
+        "Traffic split at the edge (80% cache hit) is a design target for the full-page cache, not an observed figure.",
+        "Tenant scale of 500+ sites is the planning target agreed for the first two years."
+      ]
+    }
+  ]
+}

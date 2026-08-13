@@ -1,0 +1,483 @@
+{
+  "meta": {
+    "title": "A booking from search to payout",
+    "theme": "default",
+    "page": "a3",
+    "paper": "panel",
+    "footer_left": "The life of a booking",
+    "footer_right": "One-page poster"
+  },
+  "blocks": [
+    {
+      "type": "hero",
+      "tone": "panel",
+      "kicker": "One page",
+      "title": "A booking from first search to operator payout",
+      "subtitle": "Where volume is lost at each step between search and payout."
+    },
+    {
+      "type": "hero_figure",
+      "span": 4,
+      "value": 3.1,
+      "decimals": 1,
+      "unit": "%",
+      "label": "of searches become a paid stay",
+      "note": "Read the rest of this page as an explanation of that number."
+    },
+    {
+      "type": "sankey",
+      "span": 8,
+      "title": "Search traffic split by outcome, per 1,000 searches",
+      "height": 260,
+      "links": [
+        {
+          "source": "Searches",
+          "target": "Viewed a listing",
+          "value": 1000
+        },
+        {
+          "source": "Searches",
+          "target": "Left immediately",
+          "value": 620
+        },
+        {
+          "source": "Viewed a listing",
+          "target": "Enquired",
+          "value": 140
+        },
+        {
+          "source": "Viewed a listing",
+          "target": "Abandoned",
+          "value": 240
+        },
+        {
+          "source": "Enquired",
+          "target": "Booked",
+          "value": 52
+        },
+        {
+          "source": "Enquired",
+          "target": "No reply",
+          "value": 88
+        }
+      ],
+      "note": "Splitting and merging is the point here. A simple decline would be a funnel."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "number": "01",
+      "title": "The nine steps of a booking, in order",
+      "lede": "Nine steps, three of which involve a human waiting for another human."
+    },
+    {
+      "type": "process",
+      "span": 12,
+      "orientation": "horizontal",
+      "steps": [
+        {
+          "title": "Search",
+          "text": "Dates, city, budget."
+        },
+        {
+          "title": "Shortlist",
+          "text": "Three to five listings saved."
+        },
+        {
+          "title": "Enquire",
+          "text": "The first message is sent."
+        },
+        {
+          "title": "Confirm",
+          "text": "The operator accepts."
+        },
+        {
+          "title": "Pay",
+          "text": "Deposit clears."
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "span": 6,
+      "title": "Elapsed time between the steps of a typical booking",
+      "orientation": "vertical",
+      "ordinal": true,
+      "events": [
+        {
+          "date": "Day 0",
+          "title": "Enquiry sent",
+          "text": "Guest messages three operators at once."
+        },
+        {
+          "date": "Day 0-2",
+          "title": "The silent window",
+          "text": "Median first reply 19 hours. A third never get one."
+        },
+        {
+          "date": "Day 2",
+          "title": "Terms agreed",
+          "text": "Dates and price settle in two or three messages."
+        },
+        {
+          "date": "Day 3",
+          "title": "Deposit paid",
+          "text": "Once paid, cancellation drops below 4%."
+        },
+        {
+          "date": "Day 30+",
+          "title": "Check-in",
+          "text": "The stay begins, on average 34 days after the search."
+        }
+      ]
+    },
+    {
+      "type": "cycle",
+      "span": 6,
+      "title": "The feedback loop between reply time and enquiry volume",
+      "center_label": "The reply loop",
+      "steps": [
+        {
+          "title": "Reply is slow"
+        },
+        {
+          "title": "Guest messages more operators"
+        },
+        {
+          "title": "Operators see more enquiries"
+        },
+        {
+          "title": "Each gets less attention"
+        }
+      ],
+      "note": "The last step feeds the first, which is what makes this a cycle rather than a chain."
+    },
+    {
+      "type": "section",
+      "number": "02",
+      "title": "Which steps lose the most volume",
+      "lede": "Two of the five steps account for most of the loss.",
+      "break": "before"
+    },
+    {
+      "type": "diverging",
+      "span": 6,
+      "title": "Conversion change by step, year on year",
+      "items": [
+        {
+          "label": "Search to listing",
+          "value": 4.2
+        },
+        {
+          "label": "Listing to enquiry",
+          "value": -1.8
+        },
+        {
+          "label": "Enquiry to reply",
+          "value": -11.4
+        },
+        {
+          "label": "Reply to agreement",
+          "value": 2.1
+        },
+        {
+          "label": "Agreement to deposit",
+          "value": 6.9
+        }
+      ],
+      "unit": "%",
+      "decimals": 1,
+      "sort": null,
+      "note": "One step got dramatically worse while the rest improved."
+    },
+    {
+      "type": "lollipop",
+      "span": 6,
+      "title": "Median first-reply time by operator size",
+      "categories": [
+        "1 property",
+        "2-5",
+        "6-20",
+        "21-50",
+        "51+"
+      ],
+      "values": [
+        7,
+        11,
+        19,
+        34,
+        52
+      ],
+      "unit": "h",
+      "sort": null,
+      "value_label": "Hours",
+      "note": "Reply time degrades with portfolio size, which is a staffing problem, not a motivation problem."
+    },
+    {
+      "type": "quadrant",
+      "span": 6,
+      "title": "Five initiatives by effort to build and effect on conversion",
+      "x_label": "Effort to build",
+      "y_label": "Effect on conversion",
+      "x_low": "Low",
+      "x_high": "High",
+      "quadrants": [
+        {
+          "label": "Do first",
+          "highlight": true
+        },
+        {
+          "label": "Big bets"
+        },
+        {
+          "label": "Skip"
+        },
+        {
+          "label": "Money pit"
+        }
+      ],
+      "items": [
+        {
+          "label": "Reply SLA nudge",
+          "x": 0.18,
+          "y": 0.82,
+          "emphasis": true
+        },
+        {
+          "label": "Auto-decline stale",
+          "x": 0.3,
+          "y": 0.66
+        },
+        {
+          "label": "Instant book",
+          "x": 0.86,
+          "y": 0.9
+        },
+        {
+          "label": "Better photos",
+          "x": 0.34,
+          "y": 0.3
+        },
+        {
+          "label": "Redesign search",
+          "x": 0.9,
+          "y": 0.24
+        }
+      ],
+      "note": "Positions are judgements, not measurements. The value of a 2x2 is that all four corners are named."
+    },
+    {
+      "type": "slope",
+      "span": 6,
+      "title": "Conversion by city, year on year",
+      "from_label": "Last year",
+      "to_label": "This year",
+      "unit": "%",
+      "decimals": 1,
+      "items": [
+        {
+          "label": "Lisbon",
+          "from": 4.1,
+          "to": 5.2
+        },
+        {
+          "label": "Madrid",
+          "from": 3.8,
+          "to": 3.1
+        },
+        {
+          "label": "Barcelona",
+          "from": 3.2,
+          "to": 4.4
+        },
+        {
+          "label": "Riga",
+          "from": 2.6,
+          "to": 2.2
+        }
+      ],
+      "note": "Two cities crossed. On a slope chart the crossing is the finding, not a defect."
+    },
+    {
+      "type": "section",
+      "number": "03",
+      "title": "How listings are distributed across operator sizes",
+      "lede": "Supply is far more concentrated than the number of operators suggests."
+    },
+    {
+      "type": "treemap",
+      "span": 7,
+      "title": "Listings by operator size band",
+      "height": 240,
+      "parts": [
+        {
+          "label": "51+ properties",
+          "value": 4120
+        },
+        {
+          "label": "21-50",
+          "value": 2380
+        },
+        {
+          "label": "6-20",
+          "value": 1640
+        },
+        {
+          "label": "2-5",
+          "value": 720
+        },
+        {
+          "label": "Single property",
+          "value": 310
+        }
+      ],
+      "value_label": "Listings"
+    },
+    {
+      "type": "venn",
+      "span": 5,
+      "title": "Attributes shared by converting listings",
+      "sets": [
+        {
+          "label": "Instant reply"
+        },
+        {
+          "label": "Photos over 12"
+        },
+        {
+          "label": "Flexible dates"
+        }
+      ],
+      "overlap": "9% of listings, 41% of bookings"
+    },
+    {
+      "type": "pyramid",
+      "span": 6,
+      "title": "Guest needs in priority order, availability to delight",
+      "levels": [
+        {
+          "title": "Availability",
+          "text": "The dates must actually be free"
+        },
+        {
+          "title": "Trust",
+          "text": "Photos, reviews, a real reply"
+        },
+        {
+          "title": "Fit",
+          "text": "Desk, light, neighbourhood"
+        },
+        {
+          "title": "Delight",
+          "text": "The reason they come back"
+        }
+      ]
+    },
+    {
+      "type": "tree",
+      "span": 6,
+      "title": "Booking steps grouped by owning function",
+      "root": {
+        "label": "Booking",
+        "children": [
+          {
+            "label": "Demand",
+            "children": [
+              {
+                "label": "Search"
+              },
+              {
+                "label": "Listing page"
+              }
+            ]
+          },
+          {
+            "label": "Supply",
+            "emphasis": true,
+            "children": [
+              {
+                "label": "Reply"
+              },
+              {
+                "label": "Accept"
+              }
+            ]
+          },
+          {
+            "label": "Money",
+            "children": [
+              {
+                "label": "Deposit"
+              },
+              {
+                "label": "Payout"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "likert",
+      "span": 12,
+      "title": "Operator survey: the reply burden",
+      "scale": [
+        "Strongly disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly agree"
+      ],
+      "items": [
+        {
+          "label": "I can reply within an hour",
+          "values": [
+            22,
+            31,
+            18,
+            19,
+            10
+          ]
+        },
+        {
+          "label": "Most enquiries are serious",
+          "values": [
+            8,
+            17,
+            24,
+            34,
+            17
+          ]
+        },
+        {
+          "label": "I would accept an SLA",
+          "values": [
+            6,
+            11,
+            21,
+            38,
+            24
+          ]
+        }
+      ],
+      "note": "Centred on the neutral bucket so agreement and disagreement grow away from a shared middle."
+    },
+    {
+      "type": "quote",
+      "span": 12,
+      "text": "We do not lose bookings because our apartments are wrong. We lose them because we answered on Tuesday.",
+      "attribution": "Operator, 30 properties, Madrid"
+    },
+    {
+      "type": "footnotes",
+      "span": 12,
+      "items": [
+        "Illustrative fixture data for the infographic skill; not a real market report.",
+        "Percentages are of the step above unless stated otherwise.",
+        "Survey figures are percentages of 214 responses."
+      ]
+    }
+  ]
+}
