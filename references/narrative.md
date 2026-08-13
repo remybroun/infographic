@@ -26,8 +26,23 @@ follow from it, a poster is not an A4 document printed larger.
    written down in the **subtitle**, plainly. The `title` above it stays a
    literal description of the subject and scope, never the claim dressed up as a
    slogan. See [anti-patterns.md](anti-patterns.md#titles).
-2. **Scale.** `kpi` or `hero_figure`. Two to four numbers that establish the size
-   of the thing. This is where the reader decides whether to keep reading.
+2. **Scale, and only when a number is itself the finding.** `hero_figure` for
+   the one number the document is about; `stat` when a single current value is
+   the whole message. **`kpi` is not a slot and this is not a step you owe the
+   template.** Four labelled integers above the fold are the cheapest block in
+   the catalog to write: they look like a summary, need no argument, and get
+   added by reflex. Before writing one, answer this, out loud:
+
+   > **Does the document explain any of these numbers properly further down?**
+
+   If it does, the tile is that fact with its denominator, its comparison and
+   its shape removed, printed first. Cut it. A row of four is the strongest tell,
+   because four numbers cannot each be the finding. `leading-numbers` measures
+   this and warns, and it fired on two of the five fixtures shipped in this
+   repo, which is how the habit spread in the first place.
+
+   The honest version of "scale" is usually one number nothing else in the
+   document says, or no block at all.
 3. **Mechanism.** `process`, `cycle`, `tree`, or prose plus one chart. *How* the
    thing works. Concept documents live here; reports often skip straight to 4.
 4. **Evidence.** The charts. Each one supports one sentence you have already
@@ -39,8 +54,11 @@ follow from it, a poster is not an A4 document printed larger.
    follows for the reader.
 7. **Method.** `footnotes`. Sources, period, exclusions, what not to conclude.
 
-Not every document needs all seven, but the *order* is robust: scale before
-mechanism, mechanism before evidence, tension before implication.
+**Most documents do not need all seven, and the list is not a checklist.** The
+*order* is robust: scale before mechanism, mechanism before evidence, tension
+before implication. The presence of each step is a judgement every time. A slot
+left empty because nothing earned it is a better document, not an incomplete
+one, and step 2 is the one that gets filled by reflex.
 
 ## Rhythm
 

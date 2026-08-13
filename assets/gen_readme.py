@@ -248,12 +248,6 @@ spec = {
         {"type": "hero", "kicker": "Claude Code skill",
          "title": "A skill that turns a document or a topic into a designed explainer",
          "subtitle": "It caps every text field and fails the build when a page becomes an essay."},
-        {"type": "kpi", "span": 12, "items": [
-            {"label": "Block types", "value": 52, "compact": False},
-            {"label": "Families", "value": 6, "compact": False},
-            {"label": "Themes", "value": 3, "compact": False},
-            {"label": "Test assertions", "value": 269, "compact": False},
-        ]},
         {"type": "definitions", "span": 12, "title": "Four words used throughout",
          "items": [
              {"term": "Block", "text": "One unit of the page: a chart, a diagram, a callout."},
@@ -340,6 +334,7 @@ spec = {
             "Density: graphic is the default and refuses body prose; report allows it and is opt-in per document.",
             "Target: the page geometry, one of seven paper sizes or the continuous scrolling page.",
             "Counts read from lib/registry.py and lib/density.py at the current commit: 52 block types, 6 families, 49 aliases.",
+            "The test suite carries 269 assertions; `ig.py selftest --render` also builds all five fixtures.",
             "Requirements: Python 3.9+ standard library, and a Chromium-family browser for rendering. Poppler optional.",
         ]},
     ],

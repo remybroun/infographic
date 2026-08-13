@@ -70,7 +70,7 @@ genre is plotting a number that was already the whole message.
 |---|---|---|
 | One current value, maybe with a trend | `stat` | a one-bar bar chart |
 | The number the page leads with | `hero_figure` (one per view) | none |
-| Three or four headline numbers | `kpi` | a grouped bar of unrelated measures |
+| Three or four headline numbers **the document does not explain further down** | `kpi` | a grouped bar of unrelated measures; a row restating figures the charts below already carry properly |
 | One ratio against a limit | `meter` | a two-slice pie |
 | A rule, a caveat, a definition | `callout`, `definitions` | a chart with two bars |
 | More than ~7 classes that all matter | `table`, or table + chart | more colours |

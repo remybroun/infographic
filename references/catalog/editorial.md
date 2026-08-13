@@ -111,6 +111,15 @@ Use sparingly. Three callouts on a page and none of them is a callout any more.
 real width**, so a 4-span KPI stacks vertically instead of colliding, and warns
 when it does, so you know to widen the span.
 
+**Before writing a `kpi` row, check whether the document explains any of those
+numbers further down.** If it does, the row is those facts with the denominator,
+the comparison and the shape stripped off, printed before the reader has a frame
+for them. This is the single most-added-by-reflex block in the catalog, because
+four labelled integers look like a summary and cost nothing to write. A row of
+four is the strongest tell: four numbers cannot each be the finding. Reach for
+`hero_figure` when one number genuinely is, and for nothing at all when none is.
+`leading-numbers` measures it and warns.
+
 `hero_figure` is the one number a page leads with: large, in the sans (never a
 serif, that reads as off-brand decoration), **exactly one per view**. All three
 use proportional figures rather than `tabular-nums`, which makes a number like

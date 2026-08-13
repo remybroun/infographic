@@ -42,6 +42,28 @@ against the document being replaced. Nothing else in this skill can see it: the
 linter reads one finished document and has no way to ask whether a different one
 would have been better.
 
+**❌ Four numbers at the top of the page, because that is what goes there.**
+A `kpi` row of labelled integers, every one of which a chart further down
+explains properly.
+Why: it is the cheapest block in the catalog. It looks like a summary, needs no
+argument, and takes ten seconds, so it gets added by reflex rather than chosen.
+`narrative.md` made it worse by listing "Scale" as slot 2 of a spine that "works
+for almost everything", and a slot in a template gets filled. The result is the
+same facts with their denominator, comparison and shape removed, printed before
+the reader has any frame for them.
+The tell is arithmetic: **four numbers cannot each be the finding.** If they
+could, you would have four documents.
+The measured version: a row reading 61 / 20 / 16 / 26, where all four appear
+again later, better, in a waffle, a convergence drawing, a switch grid and a
+matrix. Removing it changed nothing the reader concludes, which is this file's
+own test for cutting a block.
+Instead: `hero_figure` when one number genuinely is the whole finding, and
+nothing at all when none is. An empty slot is a better document, not an
+incomplete one.
+Caught by: `leading-numbers`, which counts how many of a row's figures the rest
+of the document restates. It fired on two of the five fixtures shipped in this
+repo, which is how the habit spread.
+
 **❌ One idea, never contested.** The document is built from the first angle
 that occurred to you, and no alternative was ever written down.
 Why: every step in this pipeline is convergent. Nothing asks for a second

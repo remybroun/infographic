@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from build import Document  # noqa: E402
 from lib import derivation  # noqa: E402
+from lib import leading_numbers  # noqa: E402
 from lib import density, registry, svg  # noqa: E402
 from lib.blocks_diagram import CHIP_PAD, _chip_rows, balanced_columns  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
@@ -596,6 +597,69 @@ def test_linter():
     os.remove(tmp)
 
 
+def test_leading_numbers():
+    """A kpi row that restates what the document explains properly.
+
+    Expectations come from the failure: a row of four whose every figure a
+    chart further down carries with a denominator and a shape. The rule is
+    stated before the implementation is consulted: warn when at least half a
+    row's figures appear elsewhere, and never warn for hero_figure or stat,
+    which are claims that evidence below them is supposed to support.
+    """
+    print("\nleading numbers, the row added because a slot existed")
+
+    restated = {"blocks": [
+        {"type": "kpi", "items": [{"label": "Kinds", "value": 61},
+                                  {"label": "Places", "value": 20}]},
+        {"type": "bar", "categories": ["a", "b"], "values": [61, 20]},
+    ]}
+    found = leading_numbers.check(restated, registry)
+    check("a row restating the chart below is reported",
+          found and "2 of 2" in found[0], found)
+
+    fresh = {"blocks": [
+        {"type": "kpi", "items": [{"label": "Kinds", "value": 61},
+                                  {"label": "Places", "value": 20}]},
+        {"type": "bar", "categories": ["a", "b"], "values": [7, 9]},
+    ]}
+    check("a row carrying numbers nothing else states is silent",
+          leading_numbers.check(fresh, registry) == [])
+
+    half = {"blocks": [
+        {"type": "kpi", "items": [{"label": "a", "value": 5}, {"label": "b", "value": 6},
+                                  {"label": "c", "value": 7}, {"label": "d", "value": 8}]},
+        {"type": "bar", "categories": ["x"], "values": [5, 6]},
+    ]}
+    check("half restated is enough to report",
+          leading_numbers.check(half, registry) != [])
+
+    # A claim supported by evidence underneath is the correct relationship.
+    claim = {"blocks": [
+        {"type": "hero_figure", "label": "Conversion", "value": 3.1, "unit": "%"},
+        {"type": "funnel", "stages": [{"label": "a", "value": 3.1}]},
+    ]}
+    check("a hero figure evidenced below it is not a restatement",
+          leading_numbers.check(claim, registry) == [])
+    single = {"blocks": [
+        {"type": "stat", "label": "Median", "value": 31},
+        {"type": "bar", "categories": ["a"], "values": [31]},
+    ]}
+    check("a stat evidenced below it is not a restatement",
+          leading_numbers.check(single, registry) == [])
+
+    # Numbers are found inside strings too, so a figure quoted in a title counts.
+    quoted = {"blocks": [
+        {"type": "kpi", "items": [{"label": "Kinds", "value": 61}]},
+        {"type": "callout", "title": "All 61 of them", "text": "x"},
+    ]}
+    check("a figure restated in prose is found",
+          leading_numbers.check(quoted, registry) != [])
+
+    check("a document with no leading row is silent",
+          leading_numbers.check({"blocks": [{"type": "bar", "categories": ["a"],
+                                             "values": [1]}]}, registry) == [])
+
+
 def test_derivation():
     """Whether a regeneration re-derived anything, or edited the last one.
 
@@ -1004,6 +1068,7 @@ def main():
     test_extractor()
     test_linter()
     test_derivation()
+    test_leading_numbers()
     test_fixtures(args.render)
 
     print(f"\n{len(PASSED)} passed, {len(FAILED)} failed")
