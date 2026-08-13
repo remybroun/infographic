@@ -371,6 +371,7 @@ def build(spec, out_path: str = None, theme: str = None, page: str = None,
     # document and cannot ask whether a different one would have been better.
     doc.warnings.extend(derivation.check(spec, registry, spec_path))
     doc.warnings.extend(leading_numbers.check(spec, registry))
+    doc.warnings.extend(leading_numbers.inverted_without_ground(spec))
     if out_path:
         os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as fh:

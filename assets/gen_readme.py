@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
-"""The visual explainer that illustrates this skill's own README.
+"""README graphics for this skill. Purpose-built, not page screenshots.
 
-STEP 2. READER: a developer landing on the repo cold. Knows what a README is,
-has never seen this tool, and is deciding in ten seconds whether it does
-anything a chart library does not.
+WHY THIS WAS REWRITTEN. Version 1 sliced a `scroll` document into four PNGs.
+Looked at on the real GitHub page, in dark mode, at the real column width, that
+gave: five frozen "Show the numbers" disclosures (a picture of a control nobody
+can operate), four light slabs on a dark page, images half empty because a
+scroll layout puts blocks on a narrow measure inside a wide viewport, and 8px
+axis labels once GitHub scaled 1280px into its ~890px column.
 
-TERMS THEY DO NOT HAVE -> where each goes:
-  block, form, spine, scene, the twin  -> `definitions`, before the argument
-  density, target                      -> footnotes
+TARGET `slide`, 338x190mm. A README image is a fixed 16:9 frame, and a
+paginated target fills its page instead of leaving the dead right-hand column a
+scroll layout leaves.
 
-STEP 3. SPINES considered:
-  A  what it makes      - input, output, the catalog, the themes   <- TAKEN
-  B  what it refuses    - the budget, the build errors, the guards  <- act two
-  C  how you use it     - the eleven steps, the CLI                 <- README prose
-A is taken because a cold reader asks "what does this produce" first, and B is
-folded in as the second act rather than a separate document, because the
-refusals are the *cause* of the output rather than a different subject.
+`tables: false`, which this skill normally forbids. The accessibility twin is a
+<details> element; in a raster image it is an affordance that cannot be
+operated. The values it carries are in the README prose beside every image, and
+the HTML document keeps its twins. That is the trade, stated rather than hidden.
 
-STEP 5. SCENES, before the catalog was opened:
-  1. a wall of prose collapsing into a designed page
-  2. a specimen sheet: what the 52 forms actually look like, at a glance
-Neither is a catalog shape. The third slot is deliberately unused.
+WHAT IS DELIBERATELY NOT AN IMAGE. The eleven pipeline steps and the
+guard/failure table were images in version 1. They are markdown now: an ordered
+list and a table render natively, are searchable and copyable, and follow the
+reader's theme. An image earns its place when the idea is spatial. A numbered
+list is not.
 """
 import json
 import os
@@ -28,9 +29,6 @@ import os
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 
-# --------------------------------------------------------------------------
-# Scene 1: the document you would have written, and the one it renders
-# --------------------------------------------------------------------------
 def fig_before_after():
     p = []
     p.append('<text class="ig-fig-kicker" x="40" y="28">what you would write</text>')
@@ -65,7 +63,7 @@ def fig_before_after():
         "id": "before-after",
         "title": "The same material as prose, and as a rendered explainer",
         "subtitle": "The word budget runs before anything renders, and a breach fails the build.",
-        "viewbox": "0 0 1080 372",
+        "viewbox": "0 0 1060 430",
         "alt": "On the left, a page filled with lines of body text. An arrow labelled budget leads to the right, where the same material is a page carrying a title, a bar chart and two short labels.",
         "encodes": {
             "columns": ["", "Words", "Graphics"],
@@ -73,7 +71,6 @@ def fig_before_after():
                      ["Budget, per page at graphic density", 150, "unbounded"]],
         },
         "svg": "".join(p),
-        "note": "The 2,086-word figure is this skill's own version 1, which is why the budget exists.",
     }
 
 
@@ -206,24 +203,22 @@ def fig_specimens():
         ("Editorial", 19, (kpis, callout, rows)),
     ]
 
-    p = ['<text class="ig-fig-kicker ig-fig-accent" x="0" y="18">52 forms, six families</text>']
+    p = []
     for i, (name, count, glyphs) in enumerate(families):
-        cx = 20 + (i % 3) * 360
-        cy = 52 + (i // 3) * 168
+        cx = 12 + (i % 3) * 352
+        cy = 44 + (i // 3) * 226
         p.append(f'<text class="ig-fig-title" x="{cx}" y="{cy}">{name}</text>')
         p.append(f'<text class="ig-fig-mute" x="{cx + 250}" y="{cy}" text-anchor="end">{count}</text>')
         p.append(f'<line class="ig-fig-rule" x1="{cx}" y1="{cy + 12}" x2="{cx + 250}" y2="{cy + 12}"/>')
         for j, glyph in enumerate(glyphs):
-            p.extend(glyph(cx + j * 86, cy + 26))
+            p.extend(glyph(cx + j * 84, cy + 26))
     return {
         "type": "figure",
         "span": 12,
         "id": "specimens",
-        "bleed": True,
-        "invert": True,
         "title": "The six families of block, three specimens from each",
-        "subtitle": "Editorial is the largest family and the one to reach for least.",
-        "viewbox": "0 0 1080 372",
+        "subtitle": "52 forms. Editorial is the largest and the one to reach for least.",
+        "viewbox": "0 0 1060 430",
         "alt": "Six labelled groups, each showing three miniature specimens of the block shapes in that family: bars and grids for quantity, lines and slopes for change, rings and waffles for part-to-whole, chains and trees for structure, layers and lanes for diagram, tiles and rules for editorial.",
         "encodes": {
             "columns": ["Family", "Block types"],
@@ -231,112 +226,30 @@ def fig_specimens():
                      ["Structure", 7], ["Diagram", 6], ["Change", 5]],
         },
         "svg": "".join(p),
-        "note": "Specimens are drawn to scale with each other, not to any particular data.",
     }
 
 
 spec = {
     "meta": {
-        "title": "infographic: a graphic-first document skill for Claude Code",
+        "title": "infographic, README figures",
         "theme": "default",
-        "page": "scroll",
+        "page": "slide",
         "density": "graphic",
-        "footer_left": "infographic",
-        "footer_right": "github.com/remybroun/infographic",
+        "tables": False,
+        "footer_left": " ",
+        "footer_right": " ",
     },
     "blocks": [
-        {"type": "hero", "kicker": "Claude Code skill",
-         "title": "A skill that turns a document or a topic into a designed explainer",
-         "subtitle": "It caps every text field and fails the build when a page becomes an essay."},
-        {"type": "definitions", "span": 12, "title": "Four words used throughout",
-         "items": [
-             {"term": "Block", "text": "One unit of the page: a chart, a diagram, a callout."},
-             {"term": "Spine", "text": "The argument a document makes, chosen from three."},
-             {"term": "Scene", "text": "An image the catalog has no shape for, drawn by hand."},
-             {"term": "Twin", "text": "The data table shipped beside every chart."},
-         ]},
-
-        {"type": "section", "number": "01", "title": "What it produces",
-         "lede": "A print-ready PDF, or a continuous page whose HTML is the deliverable."},
         fig_before_after(),
-        {"type": "process", "span": 12, "orientation": "vertical", "numbered": True,
-         "title": "The eleven steps from source to finished document",
-         "subtitle": "One to six are judgement and cannot be automated; seven to eleven mostly are.",
-         "steps": [
-             {"title": "Source", "text": "Read or extract the facts"},
-             {"title": "Reader and claim", "text": "Who reads it, what they lack"},
-             {"title": "Three spines", "text": "Three arguments, then choose"},
-             {"title": "Target", "text": "Paper, poster or scrolling page"},
-             {"title": "Scenes", "text": "Before the catalog is opened"},
-             {"title": "Forms", "text": "One per remaining claim"},
-             {"title": "Spec", "text": "Blocks in reading order"},
-             {"title": "Theme", "text": "Validated, never hand-picked"},
-             {"title": "Render", "text": "Compile, rasterise, lint"},
-             {"title": "Look at it", "text": "The linter never has"},
-             {"title": "Hand off", "text": "Spec, document and method"},
-         ]},
-
-        {"type": "section", "number": "02", "title": "The vocabulary it draws with"},
-        fig_specimens(),
-        {"type": "bar", "span": 12,
-         "title": "Block types available in each family",
-         "subtitle": "Editorial is largest because it holds the page furniture, not because it is used most.",
-         "categories": ["Editorial", "Quantity", "Part-to-whole", "Structure", "Diagram", "Change"],
-         "values": [19, 8, 7, 7, 6, 5], "sort": None, "compact": False,
-         "value_label": "Block types",
-         "note": "49 aliases map ordinary words onto these: pie to donut, waffle to unit, 2x2 to quadrant."},
-
-        {"type": "section", "number": "03", "title": "What the build refuses to render",
-         "lede": "Every guard below exists because a document shipped without it."},
-        {"type": "bar", "span": 12,
+        dict(fig_specimens(), **{"break": "before"}),
+        {"type": "bar", "span": 12, "break": "before",
          "title": "Words allowed in each text field, at graphic density",
-         "subtitle": "A drawing may carry 40 words of labels; a chart label may carry six.",
+         "subtitle": "A drawing may carry 40 words of labels; a label on a mark may carry six.",
          "categories": ["Figure text", "Quote", "Callout", "Note", "Subtitle",
                         "Title", "Item detail", "Chart label"],
-         "values": [40, 26, 24, 18, 16, 14, 12, 6], "sort": None, "compact": False,
-         "value_label": "Words",
-         "note": "Footnotes and table cells are exempt from the per-field caps, not from the page total."},
-        {"type": "chips", "span": 12,
-         "title": "How each guard fails",
-         "items": [
-             {"label": "Word budget", "tone": "danger", "note": "build error"},
-             {"label": "Over three figures", "tone": "danger", "note": "build error"},
-             {"label": "Colour literal in a drawing", "tone": "danger", "note": "build error"},
-             {"label": "No chart has a data twin", "tone": "danger", "note": "lint error"},
-             {"label": "Tables standing in for prose", "tone": "warn", "note": "warning"},
-             {"label": "Undefined vocabulary", "tone": "warn", "note": "warning"},
-             {"label": "Same forms as last time", "tone": "warn", "note": "warning"},
-         ]},
-        {"type": "table", "span": 12,
-         "columns": ["Guard", "The failure that produced it"],
-         "align": ["left", "left"],
-         "rows": [
-             ["Word budget, enforced in code",
-              "Version 1 shipped 2,086 words across eight pages carrying one chart"],
-             ["At most three hand-drawn figures",
-              "Version 2 fixed the word count and hand-drew everything, losing all consistency"],
-             ["Colour literals refused inside a drawing",
-              "Hand-drawn figures are where computed colour slips first"],
-             ["Authored tables count toward the budget",
-              "A section retyped as three tables passed as clean; the cells were exempt"],
-             ["Identifiers counted, definitions required",
-              "A page carried 30 identifiers and no definitions block, and passed"],
-             ["Graphic forms compared against the last version",
-              "A regeneration came back 93% identical, with every step performed honestly"],
-         ],
-         "caption": "Each guard is a specific document that shipped and should not have"},
-
-        {"type": "callout", "span": 12, "tone": "key",
-         "title": "The linter has never looked at a document",
-         "text": "It checks structure. Whether a label collided, an arrow points at nothing, or the argument lands is only ever answered by opening the render."},
-
-        {"type": "footnotes", "span": 12, "items": [
-            "Density: graphic is the default and refuses body prose; report allows it and is opt-in per document.",
-            "Target: the page geometry, one of seven paper sizes or the continuous scrolling page.",
-            "Counts read from lib/registry.py and lib/density.py at the current commit: 52 block types, 6 families, 49 aliases.",
-            "The test suite carries 269 assertions; `ig.py selftest --render` also builds all five fixtures.",
-            "Requirements: Python 3.9+ standard library, and a Chromium-family browser for rendering. Poppler optional.",
-        ]},
+         "values": [40, 26, 24, 18, 16, 14, 12, 6],
+         "sort": None, "compact": False, "value_label": "Words",
+         "note": "Footnotes and table cells are exempt from the per-field caps, never from the page total."},
     ],
 }
 
