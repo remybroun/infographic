@@ -52,19 +52,23 @@ That prints every block with its "use when". If anything downstream misbehaves,
 
 ```bash
 python3 scripts/ig.py extract source.pdf -o out/ledger.json   # 1. facts
-                                                              # 2. write the claim
-                                                              # 3. pick the target
-                                                              # 4. NAME THE SCENES
-                                                              # 5. pick a form per claim
-python3 scripts/ig.py new out/spec.json                       # 6. write the spec
-python3 scripts/ig.py render out/spec.json --out-dir out      # 7-8. build, render, lint
-python3 scripts/ig.py shoot out/doc.html                      # 9. LOOK AT IT
+                                                              # 2. name the reader, write the claim
+                                                              # 3. THREE SPINES, then pick one
+                                                              # 4. pick the target
+                                                              # 5. NAME THE SCENES
+                                                              # 6. pick a form per claim
+python3 scripts/ig.py new out/spec.json                       # 7. write the spec
+python3 scripts/ig.py render out/spec.json --out-dir out      # 8-9. build, render, lint
+python3 scripts/ig.py shoot out/doc.html                      # 10. LOOK AT IT
 ```
 
-Steps 2, 4 and 5 are the skill. The rest is tooling. Step 4 comes before the
-catalog is opened on purpose: once it is open it frames every idea, and the
-question silently changes from *what does this look like?* to *which of the 52
-shapes is closest?* Full detail in [pipeline.md](references/pipeline.md).
+Steps 2, 3, 5 and 6 are the skill. The rest is tooling. Two orderings are
+load-bearing: step 3 forces three candidate arguments before one is chosen,
+because the first one to arrive always wins otherwise and it is nearly always
+the *mechanism* rather than the thing the reader cares about; and step 5 comes
+before the catalog is opened, because once it is open it frames every idea and
+the question silently changes from *what does this look like?* to *which of the
+52 shapes is closest?* Full detail in [pipeline.md](references/pipeline.md).
 
 ## Which reference to load
 
@@ -129,6 +133,13 @@ holding, a blast spreading), it is a `figure`.
   the `subtitle`, stated flatly. A vague topic title is equally wrong: the fix is
   always **more specific, never more clever**.
   → [anti-patterns.md](references/anti-patterns.md#titles)
+- **Three spines before one is chosen, and ask which.** The same facts support
+  several documents; the first that occurs to you describes the mechanism,
+  because that is the shape the source is already in. Write three, name the
+  images each would live on, and present them with `AskUserQuestion`.
+  **A regeneration never opens the previous spec before the scenes are named**,
+  and declares `meta.supersedes` so the build can measure what actually moved.
+  → [pipeline.md](references/pipeline.md) steps 1 and 3
 - **Name the reader before the claim, and list what they will not know.** Every
   such term is either defined in `definitions` before it is used, or rewritten
   into words with the identifier demoted to the table twin. **An identifier is

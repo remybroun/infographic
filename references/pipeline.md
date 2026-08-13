@@ -1,12 +1,19 @@
 # The pipeline, end to end
 
-Ten steps. Steps 1-5 are judgement and cannot be automated; 6-10 are mechanical
-and mostly are.
+Eleven steps. Steps 1-6 are judgement and cannot be automated; 7-11 are
+mechanical and mostly are.
 
-The ordering of steps 4 and 5 is load-bearing. Deciding which images the document
-lives on has to happen **before** the catalog is opened, because once it is open
-it frames every idea and the question silently changes from *what does this look
-like?* to *which of the 51 shapes is closest?* → [scenes.md](scenes.md)
+Two orderings are load-bearing, and both exist to stop something else framing
+the work before you have decided what the work is:
+
+- **Step 3 before step 4.** Three candidate spines before one is chosen, because
+  the first spine that occurs to you always wins otherwise, and it is usually the
+  one that describes the *mechanism* rather than the one the reader has a stake
+  in.
+- **Step 5 before step 6.** Deciding which images the document lives on happens
+  **before** the catalog is opened, because once it is open it frames every idea
+  and the question silently changes from *what does this look like?* to *which of
+  the 52 shapes is closest?* → [scenes.md](scenes.md)
 
 ---
 
@@ -22,6 +29,25 @@ If the request is a topic rather than a document ("explain how X works"), the
 source is your own knowledge, write the claims down first anyway, because
 step 2 needs something to point at. Say so in the handoff, and do not present
 recalled figures as if they came from a document.
+
+**If a version of this document already exists, it is not a source.** Derive
+from the facts, and do not open the previous spec until the scenes are named in
+step 5. This is not fussiness. A prior artifact is a far tighter frame than the
+catalog will ever be, because it has already made every decision, and reasoning
+performed in front of it reliably reproduces it while feeling like fresh work.
+The measured case: a document regenerated "from the top", every step written
+down honestly, came out with a 93% identical block sequence and an identical set
+of graphic forms.
+
+When the regeneration is finished, declare what it replaces:
+
+```json
+{"meta": {"supersedes": "spec_v1.json"}}
+```
+
+The build then measures how much of the argument actually moved, and says so
+when the answer is "none of it". If you genuinely intend an edit rather than a
+regeneration, that is fine, but call it an edit and skip the ceremony.
 
 → [extraction.md](extraction.md)
 
@@ -47,15 +73,45 @@ read. `undefined-vocabulary` catches the worst of it, but it counts identifiers,
 and it cannot see a plain English word you have quietly redefined.
 
 Now the claim: one sentence the reader should believe by the end. Not a topic, a
-claim. This becomes the `hero.title`, and if you cannot write it, nothing
-downstream will rescue the document.
+claim. If you cannot write it, nothing downstream will rescue the document.
 
-Then write the three to six supporting claims. Each one becomes a block or a
-section. **This list is the document.** Everything after it is execution.
+## 3 · Write three spines, then choose one
+
+**Do not proceed on the first one that occurs to you.** The same facts support
+several different documents, and the first spine to arrive is almost always the
+one that describes the *mechanism*, because that is the shape the source material
+is already in. It is rarely the one the reader has a stake in.
+
+A spine is a claim plus the argument that carries it: what leads, what the
+document is *about*. Write **three**, one line each, and for each one name the
+two or three images it would live on. If all three produce the same pictures,
+they are one spine wearing three titles; try again.
+
+A worked set, from a branch that centralized how a company's automated partner
+email is sent. Same facts, three documents:
+
+| Spine | Leads with | Lives on |
+|---|---|---|
+| The mechanism | one checkpoint, six gates, a registry | convergence, a gate ladder, a control grid |
+| The recipient | what one partner receives and can stop | 61 cells split switchable / not, a first-month timeline |
+| The exposure | 37 kinds nobody could switch off, no record kept | who-could-stop-what matrix, a coverage heatmap |
+
+Only the first was ever built, twice, because nothing required the other two to
+be written down.
+
+**Then stop and ask.** When the user is present, present the three with
+`AskUserQuestion` and build the one they pick. This is the single highest-value
+question in the pipeline: it costs one turn and it decides the whole document.
+Skip it only when the request already pins the angle ("show me what partners can
+switch off"), and say which spine you took and why.
 
 → [narrative.md](narrative.md)
 
-## 3 · Choose the target
+Then write the three to six supporting claims under the chosen spine. Each
+becomes a block or a section. **That list is the document.** Everything after it
+is execution.
+
+## 4 · Choose the target
 
 Explainer, report, poster, one-pager, deck page, or a continuous scrolling page.
 That sets `meta.page`, which sets type scale, margins and block heights.
@@ -68,20 +124,20 @@ or read as a reference sheet.
 
 → [continuous.md](continuous.md) · [print-pdf.md](print-pdf.md)
 
-## 4 · Name the scenes
+## 5 · Name the scenes
 
 **Before opening the catalog.** Which two or three images does this document live
 or die by? Write them as pictures, not chart types: "a shockwave through shared
 code", "a beam that thins as it goes deeper".
 
 Those get authored as `figure` blocks, capped at three. Everything else is
-supporting material and goes on rails in step 5. If nothing in the document has a
+supporting material and goes on rails in step 6. If nothing in the document has a
 shape the catalog lacks, this step takes ten seconds and produces nothing, which
 is a perfectly good outcome.
 
 → [scenes.md](scenes.md) · [drawing.md](drawing.md)
 
-## 5 · Choose a form per remaining claim
+## 6 · Choose a form per remaining claim
 
 For each claim: what must the reader *do*: compare, follow, locate, weigh? Run
 the decision procedure, and check the disqualifiers before settling.
@@ -92,7 +148,7 @@ blocks than chart blocks.
 
 → [choosing-a-visual.md](choosing-a-visual.md) · [catalog/](catalog/README.md)
 
-## 6 · Write the spec
+## 7 · Write the spec
 
 ```bash
 python3 scripts/ig.py new out/spec.json
@@ -105,7 +161,7 @@ by then you have forgotten why each chart was there.
 
 → [spec-schema.md](spec-schema.md)
 
-## 7 · Pick the theme
+## 8 · Pick the theme
 
 `default` unless the work is branded. `rentos` for RentRemote / RentOS.
 `mono` when it will be photocopied. A new brand theme is a data file, not code,
@@ -113,7 +169,7 @@ and it must pass the checks before it ships.
 
 → [color-and-type.md](color-and-type.md)
 
-## 8 · Build and render
+## 9 · Build and render
 
 ```bash
 python3 scripts/ig.py render out/spec.json --out-dir out
@@ -126,7 +182,7 @@ sections automatically.
 
 → [print-pdf.md](print-pdf.md) · [continuous.md](continuous.md)
 
-## 9 · Look at it
+## 10 · Look at it
 
 ```bash
 python3 scripts/ig.py shoot out/doc.html
@@ -150,7 +206,7 @@ Check specifically:
 
 → [anti-patterns.md](anti-patterns.md) · [integrity.md](integrity.md)
 
-## 10 · Iterate, then hand off
+## 11 · Iterate, then hand off
 
 Fix, re-render, look again. Then say, in the handoff:
 

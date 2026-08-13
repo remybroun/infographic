@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import tempfile
 import os
 import re
 import sys
@@ -20,6 +21,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from build import Document  # noqa: E402
+from lib import derivation  # noqa: E402
 from lib import density, registry, svg  # noqa: E402
 from lib.blocks_diagram import CHIP_PAD, _chip_rows, balanced_columns  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
@@ -594,6 +596,68 @@ def test_linter():
     os.remove(tmp)
 
 
+def test_derivation():
+    """Whether a regeneration re-derived anything, or edited the last one.
+
+    Expectations come from the failure this check was written for: a document
+    regenerated "from the top" that came out with an identical set of graphic
+    forms. The overlap of two identical form lists is 1.0 by definition, not by
+    reading anything back from the implementation.
+    """
+    print("\nderivation, the check on a regeneration that changed nothing")
+
+    same = ["figure", "figure", "bar", "chips"]
+    check("identical form lists overlap completely",
+          derivation.overlap(same, list(same)) == 1.0)
+    check("disjoint form lists do not overlap",
+          derivation.overlap(["bar", "line"], ["tree", "venn"]) == 0.0)
+    check("forms are a multiset, so three figures differ from one",
+          derivation.overlap(["figure", "figure", "figure"], ["figure"]) < 1.0,
+          derivation.overlap(["figure", "figure", "figure"], ["figure"]))
+    # Jaccard, not Dice: one shared form across three distinct forms is a
+    # third, not a half. The union is the denominator.
+    check("one shared form among three distinct reads as a third",
+          abs(derivation.overlap(["bar", "line"], ["bar", "venn"]) - 1 / 3) < 1e-9,
+          derivation.overlap(["bar", "line"], ["bar", "venn"]))
+
+    spec = {"blocks": [{"type": "hero", "title": "t"}, {"type": "section"},
+                       {"type": "bar", "categories": ["a"], "values": [1]},
+                       {"type": "footnotes", "items": ["x"]}]}
+    forms = derivation.graphic_forms(spec, registry)
+    check("editorial scaffolding is not counted as a form",
+          forms == ["bar"], forms)
+
+    skipped = {"blocks": [{"type": "bar", "categories": ["a"], "values": [1], "skip": True}]}
+    check("a skipped block is not counted",
+          derivation.graphic_forms(skipped, registry) == [])
+
+    check("no supersedes means no derivation check",
+          derivation.check({"meta": {}, "blocks": []}, registry) == [])
+    check("a supersedes that does not exist is reported, not ignored",
+          "does not exist" in " ".join(
+              derivation.check({"meta": {"supersedes": "/nope/absent.json"},
+                                "blocks": []}, registry)))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        previous = {"blocks": [{"type": "figure", "viewbox": "0 0 10 10", "alt": "a",
+                                "encodes": "concept", "svg": "<text>x</text>"},
+                               {"type": "bar", "categories": ["a"], "values": [1]}]}
+        prev_path = os.path.join(tmp, "prev.json")
+        with open(prev_path, "w", encoding="utf-8") as fh:
+            json.dump(previous, fh)
+
+        unchanged = dict(previous, meta={"supersedes": "prev.json"})
+        found = derivation.check(unchanged, registry, os.path.join(tmp, "new.json"))
+        check("a regeneration onto the same forms is reported",
+              found and "100%" in found[0], found)
+
+        diverged = {"meta": {"supersedes": "prev.json"},
+                    "blocks": [{"type": "tree", "nodes": [{"label": "a"}]},
+                               {"type": "timeline", "events": [{"date": "2026", "title": "a"}]}]}
+        check("a regeneration onto different forms is silent",
+              derivation.check(diverged, registry, os.path.join(tmp, "new.json")) == [])
+
+
 def test_fixtures(render=False):
     print("\nfixtures")
     spec_dir = os.path.join(FIXTURES, "specs")
@@ -939,6 +1003,7 @@ def main():
     test_compiler()
     test_extractor()
     test_linter()
+    test_derivation()
     test_fixtures(args.render)
 
     print(f"\n{len(PASSED)} passed, {len(FAILED)} failed")

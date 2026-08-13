@@ -22,6 +22,35 @@ are a `scorecard`; a score against a ceiling is a `gauge`; parallel facts are
 Caught by: the build fails at graphic density. The linter also reports
 `text-heavy`, `text-heavy-mix` and `prose-only`.
 
+**❌ A regeneration that reproduces the document it replaces.** Asked for a
+fresh pass, you re-run the pipeline, write every step down, and arrive at the
+same blocks.
+Why: the previous document was open while you did it. A prior artifact is a
+tighter frame than the catalog, because it has already decided everything, and
+the reasoning still feels like reasoning. Reporting the convergence honestly
+("all three scenes survived re-derivation") makes it worse, not better: it
+dresses anchoring up as transparency. Running a process and reporting that it
+produced no change is not the same as the process having run.
+The measured version: 93% identical block sequence, 100% identical set of
+graphic forms, one callout added.
+Instead: derive from the facts with the old spec closed until the scenes are
+named, and write three spines first so there is something for the derivation to
+choose *between*. If you cannot honestly say what a different spine would have
+looked like, you did not pick one, you inherited one.
+Caught by: `meta.supersedes`, which makes the build compare the graphic forms
+against the document being replaced. Nothing else in this skill can see it: the
+linter reads one finished document and has no way to ask whether a different one
+would have been better.
+
+**❌ One idea, never contested.** The document is built from the first angle
+that occurred to you, and no alternative was ever written down.
+Why: every step in this pipeline is convergent. Nothing asks for a second
+candidate, so the first is also the last, and it is nearly always the *mechanism*
+angle, because that is the shape the source material already has. It is rarely
+the angle the reader has a stake in.
+Instead: step 3. Three spines, the images each would live on, then choose, and
+ask the user when they are there to ask.
+
 **❌ A bullet list.** Five discs, each carrying a clause.
 Why: a bullet list is a paragraph wearing a disc. It has no shape, so it is
 neither scannable nor readable, and it never has to justify its own length.

@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from lib import blocks_figure as figure_mod  # noqa: E402
 from lib import density as density_mod  # noqa: E402
+from lib import derivation  # noqa: E402
 from lib import registry, svg  # noqa: E402
 from lib.blocks_editorial import inline  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
@@ -359,10 +360,15 @@ def load_spec(path: str) -> dict:
 
 def build(spec, out_path: str = None, theme: str = None, page: str = None,
           tables: bool = None, texture: bool = None, density: str = None):
+    spec_path = spec if isinstance(spec, str) else None
     if isinstance(spec, str):
         spec = load_spec(spec)
     doc = Document(spec, theme, page, tables, texture, density)
     html = doc.render()
+    # A regeneration that declares what it replaces gets measured against it.
+    # Nothing else in the toolchain can see this: the linter reads one finished
+    # document and cannot ask whether a different one would have been better.
+    doc.warnings.extend(derivation.check(spec, registry, spec_path))
     if out_path:
         os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as fh:

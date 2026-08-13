@@ -7,6 +7,16 @@ That line exists because of a specific, repeatable failure, and it is worth
 describing precisely, because it does not feel like a failure while it is
 happening.
 
+> **The stronger form of this failure: a previous version of the document.**
+> Everything below is about the catalog framing your ideas. A finished document
+> frames them far harder, because it has already made every decision, and
+> re-deriving in front of it reproduces it while feeling like fresh work. The
+> measured case: a regeneration that named the reader, rewrote the claim and
+> re-derived the scenes, and came out with a 93% identical block sequence and an
+> identical set of graphic forms. Every step was performed. None of it was free
+> to land anywhere new. See [pipeline.md](pipeline.md) step 1 for the rule, and
+> declare `meta.supersedes` so the build measures it rather than trusting you.
+
 ## The failure
 
 An architecture explainer went out. Every block in it was a legitimate choice.
