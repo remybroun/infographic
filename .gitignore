@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 examples/out/
+
+# Generated: rebuilt by assets/build_gallery.sh, and the gallery spec carries
+# git-derived data, so it would churn on every commit.
+assets/*_spec.json
+assets/*_spec.html

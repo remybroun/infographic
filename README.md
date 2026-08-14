@@ -30,30 +30,48 @@ taste under time pressure always chooses "one more clarifying sentence".
 ordinary words (`pie` → `donut`, `waffle` → `unit`, `2x2` → `quadrant`,
 `flow` → `process`).
 
+That figure is a map. Below it are the blocks themselves, rendered: three sheets
+out of ten in **[the specimen gallery](GALLERY.md)**, which draws every form the
+skill has. Every number in it is read out of this repository at build time, from
+the registry, the word budget, the five shipped fixtures, the linter's own
+checks and `git log`, so it cannot drift from the code it documents and nothing
+in it is invented to complete a shape.
+
+![Six part-to-whole blocks rendered: a treemap of the 52 block types by family, a donut of linter checks by what they do to the build, a unit chart of types that draw against types that set text, a funnel from 52 registered types to 14 used by two or more examples, a share bar of the eleven pipeline steps, and a meter of authored figures against a cap of three.](assets/gallery-part.png)
+
+![Five structure blocks rendered: a pyramid of the five principles, a process of the five commands, a cycle of render, look, find, fix, a venn of what an authored figure shares with the built-in blocks, and a tree of the repository.](assets/gallery-structure-1.png)
+
 When the catalog has no shape for an idea, you draw it. A `figure` block takes
 authored SVG and keeps every guarantee the built-in blocks make: required `alt`,
 a required data twin, refused colour literals, and its labels charged against the
 budget. Capped at three per document, because without a cap "draw the shape the
 catalog lacks" becomes "hand-draw everything" and the consistency is gone.
 
+![Four diagram blocks rendered: a swimlane of the eleven pipeline steps across a you lane and a tooling lane, a scorecard of colour checks each theme passes, a gauge of 39 of 52 block types demonstrated by a shipped example, and an authored figure of three arguments over one set of facts with the chosen one highlighted.](assets/gallery-diagram.png)
+
+The bottom-left panel there is a `figure`. Three spines over one set of facts is
+not a tree (they partition nothing), not a process (they are alternatives, not
+steps) and not a quadrant (there are no axes). Naming the closest block type
+needs a "well, sort of", which is the test for authoring the shape instead.
+
 ## How a document gets made
 
 Steps 1–6 are judgement and cannot be automated. 7–11 mostly are.
 
-1. **Source** — read it, or `ig.py extract source.pdf`
-2. **Reader and claim** — who reads this, and which words are they missing?
-3. **Three spines** — three arguments over the same facts, then choose one
-4. **Target** — paper, poster, slide, or a continuous scrolling page
-5. **Scenes** — which images does this live or die by, *before* opening the catalog
-6. **Forms** — one per remaining claim
-7. **Spec** — `ig.py new out/spec.json`
-8. **Theme** — validated, never hand-picked
-9. **Render** — `ig.py render out/spec.json --out-dir out`
-10. **Look at it** — `ig.py shoot out/doc.html`. The linter never has.
-11. **Hand off** — the spec, the document, and how it was made
+1. **Source**: read it, or `ig.py extract source.pdf`
+2. **Reader and claim**: who reads this, and which words are they missing?
+3. **Three spines**: three arguments over the same facts, then choose one
+4. **Target**: paper, poster, slide, or a continuous scrolling page
+5. **Scenes**: which images does this live or die by, *before* opening the catalog
+6. **Forms**: one per remaining claim
+7. **Spec**: `ig.py new out/spec.json`
+8. **Theme**: validated, never hand-picked
+9. **Render**: `ig.py render out/spec.json --out-dir out`
+10. **Look at it**: `ig.py shoot out/doc.html`. The linter never has.
+11. **Hand off**: the spec, the document, and how it was made
 
 Two orderings are load-bearing. **Three spines before one is chosen**, because
-the first argument to arrive is nearly always the *mechanism* — that is the shape
+the first argument to arrive is nearly always the *mechanism*. That is the shape
 the source is already in, and it is rarely the one the reader has a stake in.
 And **scenes named before the catalog is opened**, because once it is open the
 question silently changes from *what does this look like?* to *which of the 52
@@ -99,7 +117,10 @@ identifiers only their author could read.
 All three pass the computable colour checks: contrast, categorical separation,
 and colour-vision-deficiency distance. A new brand theme is a JSON file, not
 code, and its slot order is found by enumerating orderings and keeping the ones
-that clear the gates, never by picking what looks nice.
+that clear the gates, never by picking what looks nice. The scorecard in the
+diagram sheet above counts those checks per theme; `mono` runs fewer of them
+because greyscale has fewer categorical slots to separate, not because it scores
+worse.
 
 ```bash
 python3 scripts/ig.py validate --all
@@ -124,7 +145,12 @@ scripts/
   lib/derivation.py     did a regeneration change anything
   lib/leading_numbers.py  is that stat row carrying its weight
 fixtures/specs/       five complete, rendering worked examples
-assets/gen_readme.py  the figures on this page
+GALLERY.md            every form the skill draws, drawn
+assets/
+  gen_readme.py         the three slides on this page
+  gen_gallery.py        the ten specimen sheets, from this repo's own data
+  build_gallery.sh      rebuilds every image here in one command
+  trim_png.py           crops the blank tail off a rasterised page
 ```
 
 ```bash
@@ -135,25 +161,41 @@ python3 scripts/ig.py selftest --render # also builds all five fixtures
 ## Requirements
 
 Python 3.9+ standard library, and a Chromium-family browser for rendering and
-screenshots (set `CHROME_PATH` if it is not found). `poppler` is optional: it
-reads PDF sources and measures per-page ink coverage. No pip installs, no npm,
-no matplotlib.
+screenshots (set `CHROME_PATH` if it is not found). `poppler` is optional for
+building documents, where it reads PDF sources and measures per-page ink
+coverage, and required for rebuilding the images on this page, which rasterise
+through `pdftoppm`. No pip installs, no npm, no matplotlib.
 
 ## Notes on this page
 
-The three figures above were produced by the skill, from
-[`assets/gen_readme.py`](assets/gen_readme.py) → spec → PDF → PNG. They are
-built as 16:9 slides rather than sliced out of a scrolling page, because a
-README image is a fixed frame and a paginated target fills it. They are the only
-things here that are images: the pipeline and the guard table are markdown,
-which is searchable, copyable, and follows your theme.
+Every image here was produced by the skill. `sh assets/build_gallery.sh` rebuilds
+all thirteen from source in one command.
 
-They are also the only place in this repo where `tables: false` is set. The
-accessibility twin is a `<details>` element, and inside a raster image that is a
-control nobody can operate — the values it would carry are in the prose beside
-each figure instead. The one thing still wrong with them: they are light images,
-so they glare in dark mode. Fixing that properly needs a validated dark theme,
-which does not exist yet.
+The three wide ones are 16:9 slides from [`gen_readme.py`](assets/gen_readme.py),
+built as a paginated target because a README image is a fixed frame and a
+paginated page fills it rather than leaving the dead column a scrolling layout
+leaves. The specimen sheets are A4 portrait, and that is deliberate too: a text
+label is a fixed size in millimetres, so the page *width* is what decides how
+large it lands in GitHub's column. A4 portrait puts an 8pt label at roughly 12px;
+the 338mm slide puts the same label at roughly 7px.
+
+The eleven pipeline steps and the guard table are not images. An ordered list and
+a table render natively, are searchable and copyable, and follow your theme. An
+image earns its place when the idea is spatial.
+
+The three slides are the only place in this repo where `tables: false` is set.
+The accessibility twin is a `<details>` element, and inside a raster image that
+is a control nobody can operate, so the values it would carry sit in the prose
+beside each figure instead. The specimen sheets keep their twins in the HTML.
+
+Two things are still wrong, and neither is faked:
+
+- **The images are light, so they glare in dark mode.** Fixing that properly
+  needs a validated dark theme, which does not exist yet.
+- **The gallery build reports one warning.** `near-empty-page` fires on the
+  change sheet at 6% ink. It is measuring correctly: line and slope charts put
+  less ink on a page than filled ones. The check is tuned for documents rather
+  than specimen sheets, and it is reported rather than suppressed.
 
 ## The one thing the tooling cannot do
 
