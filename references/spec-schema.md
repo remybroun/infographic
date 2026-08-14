@@ -29,6 +29,7 @@ python3 scripts/ig.py render out/spec.json     # spec -> HTML -> PDF -> lint
 | `page` | `"a4"` | `a4` `a4-land` `letter` `letter-land` `a3` `a3-land` `slide` `poster` |
 | `density` | `"graphic"` | `graphic` enforces the text budget and refuses body prose; `report` allows it. See [graphic-first.md](graphic-first.md) |
 | `paper` | `"panel"` | `panel` · `none` · `bleed`, see [print-pdf.md](print-pdf.md) |
+| `spacing` | `"normal"` | `tight` · `normal` · `airy`. Scales the gutter, the row gap and the padding inside a framed block together. Reach for `tight` only when the blocks ARE the subject (a specimen sheet, a dashboard, a reference card); in a document that argues, the gap is what tells a reader one idea has finished |
 | `lang` | `"en"` | document language, for screen readers and hyphenation |
 | `tables` | `true` | emit table-view twins |
 | `texture` | `false` | turn on the texture channel for CVD / mono print |
@@ -104,14 +105,16 @@ and the next one continues on the same row if it fits.
 
 ## Validation
 
-The compiler fails loudly on an unknown `type`, `theme`, `page` or `paper`, and
-warns (without failing) on the design problems it can detect:
+The compiler fails loudly on an unknown `type`, `theme`, `page`, `paper` or
+`spacing`, and warns (without failing) on the design problems it can detect:
 
 - more series than the palette has slots;
 - a scatter with more than three series;
 - a donut past six segments, a venn past three sets;
 - KPI tiles that will not fit the block's width;
-- `paper: bleed` on a document that looks multi-page.
+- `paper: bleed` on a document that looks multi-page;
+- a theme declaring `@font-face` files that are not on disk, which Chrome would
+  otherwise substitute silently.
 
 Warnings print to stderr and are surfaced by `ig.py render`. They are advice from
 the checks, not the design review, that is still yours.

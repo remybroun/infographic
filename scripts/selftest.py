@@ -399,6 +399,20 @@ def test_label_fitting():
     check("the dropped value survives in the table view", "ig-table-view" in out)
     check("no mark is cropped with overflow:hidden", "overflow: hidden" not in out
           and "overflow:hidden" not in out)
+    # Every category chart reserves `measure_labels(...) + pad` and then truncates
+    # to `reserved - pad`. Those two are the same number in arithmetic and not in
+    # binary floating point, so the WIDEST label, the one that set the reservation,
+    # came back ellipsized in a column sized for it exactly. It cost the gallery's
+    # lollipop chart an "Architectu…" beside three other charts spelling
+    # "Architecture" in full.
+    widest = "Architecture"
+    cats = [widest, "Concept", "Data", "Poster", "Scroll"]
+    reserved = min(chrome.measure_labels(cats, 10.5) + 12, 330.0 * 0.38)
+    check("the label that set the column width is not ellipsized",
+          svg.truncate(widest, 10.5, reserved - 12) == widest,
+          svg.truncate(widest, 10.5, reserved - 12))
+    check("a label genuinely too wide is still ellipsized",
+          svg.truncate(widest, 10.5, 30.0).endswith("…"))
 
 
 # --------------------------------------------------------------- compiler ---

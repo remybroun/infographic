@@ -25,10 +25,21 @@ python3 assets/pngtop.py "$OUT/r-3.png" assets/budget.png 600
 python3 assets/gen_gallery.py >/dev/null
 python3 scripts/ig.py render assets/gallery_spec.json --out-dir "$OUT"
 pdftoppm -r 120 -png "$OUT/gallery_spec.pdf" "$OUT/g"
+# Nine sheets, named for what is actually on them. Rows flow rather than break
+# per family, so a family's last half-width specimen shares a sheet with the next
+# family's first; the compound names say so. Re-derive these from the render if
+# you add or resize a specimen, do not assume the mapping held.
+# pdftoppm pads the page number to the width of the page COUNT, so the same
+# document is g-1.png at nine pages and g-01.png at ten. Take whichever exists
+# rather than assuming, because the count changes whenever a specimen resizes.
+page_file() {
+  [ -f "$OUT/g-$1.png" ] && echo "$OUT/g-$1.png" || printf '%s/g-%02d.png\n' "$OUT" "$1"
+}
+rm -f assets/gallery-*.png
 i=1
-for name in quantity-1 quantity-2 change part structure-1 structure-2 \
-            diagram aliases editorial-1 editorial-2; do
-  cp "$OUT/g-$(printf %02d $i).png" "assets/gallery-$name.png"
+for name in quantity guards-change change-part part-principles structure \
+            structure-diagram diagram-editorial editorial aliases; do
+  cp "$(page_file $i)" "assets/gallery-$name.png"
   i=$((i + 1))
 done
 python3 assets/trim_png.py assets/gallery-*.png

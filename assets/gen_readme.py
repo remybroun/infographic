@@ -232,7 +232,11 @@ def fig_specimens():
 spec = {
     "meta": {
         "title": "infographic, README figures",
-        "theme": "default",
+        # The same theme as the specimen sheets. With the slides on `default` and
+        # the gallery on `rentos`, the README read as two documents: the figure
+        # above the vocabulary section and the sheets below it disagreed about
+        # what a heading and an accent look like.
+        "theme": "rentos",
         "page": "slide",
         "density": "graphic",
         "tables": False,

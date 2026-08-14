@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 from . import svg
 
@@ -141,6 +142,16 @@ class Theme:
     def display_weight(self) -> int:
         return int(self.data["type"].get("display_weight", 650))
 
+    @property
+    def title_face(self) -> str:
+        """Which face block titles take: `sans` (default) or `display`.
+
+        Only worth setting on a theme whose display face is genuinely a second
+        family. Where display and sans are the same stack, this changes nothing
+        but the weight.
+        """
+        return str(self.data["type"].get("block_title", "sans"))
+
     def geom(self, key: str, fallback=0):
         return self.data.get("geometry", {}).get(key, fallback)
 
@@ -153,14 +164,35 @@ class Theme:
         """Flatten a series hue to a pale opaque fill on the given surface."""
         return svg.alpha_over(color, on or self.surface("card"), amount)
 
+    def fonts_dir(self) -> str:
+        fonts_dir = self.data.get("fonts_dir", "")
+        if fonts_dir.startswith("SKILL:"):
+            fonts_dir = os.path.abspath(os.path.join(SKILL_ROOT, fonts_dir[len("SKILL:"):]))
+        return fonts_dir
+
     def fonts_css(self) -> str:
         css = self.data.get("fonts_css", "")
         if not css:
             return ""
-        fonts_dir = self.data.get("fonts_dir", "")
-        if fonts_dir.startswith("SKILL:"):
-            fonts_dir = os.path.abspath(os.path.join(SKILL_ROOT, fonts_dir[len("SKILL:"):]))
+        fonts_dir = self.fonts_dir()
         return css.replace("{FONTS}", "file://" + fonts_dir if fonts_dir else "")
+
+    def missing_font_files(self):
+        """The @font-face sources this theme declares that are not on disk.
+
+        A missing file is silent: Chrome falls back to the next family in the
+        stack and the page still renders, just in Georgia instead of the brand
+        face, which nobody notices until it is printed. `fonts_dir` can point
+        outside the skill, so this is a real failure mode for anyone who has the
+        skill but not the brand assets beside it.
+        """
+        css = self.data.get("fonts_css", "")
+        if not css:
+            return []
+        fonts_dir = self.fonts_dir()
+        names = re.findall(r"\{FONTS\}/([^']+)", css)
+        return sorted({n for n in names
+                       if not os.path.isfile(os.path.join(fonts_dir, n))})
 
     def texture_def(self, uid: str, color: str, angle: int = 45) -> str:
         """The accessibility channel: one directional fill at 45 or 135 degrees.

@@ -125,6 +125,7 @@ colour hides the next real failure.
 | Hero title | display, theme weight | `hero` |
 | Section title | display | `section` |
 | Quote | display | `quote` |
+| Block title | theme's choice, sans by default | every block's `title`, and `callout` |
 | Everything else | sans | body, labels, tables, charts |
 | **Figures** | **sans, always** | `stat`, `kpi`, `hero_figure` |
 
@@ -132,6 +133,16 @@ colour hides the next real failure.
 reads as off-brand decoration rather than as data. This holds even when the theme
 has a beautiful serif, `rentos` sets Instrument Serif for headings and still
 renders every figure in Inter.
+
+**The block title is the one heading a theme gets to choose.** It is the smallest
+heading on the page, which makes the choice of face a real decision rather than a
+foregone one, so it is opt-in: `type.block_title: "display"`. Only set it on a
+theme whose display face is genuinely a second family; where display and sans are
+the same stack it changes nothing but the weight. A 400-weight serif needs more
+size than a 600-weight sans to hold the same presence, and the build applies that
+step for you. Do not push it further: at 1.3× body the extra leading pushed the
+architecture fixture's last note into the running footer, which is where the
+1.2× in `build.py` comes from.
 
 ## Scale
 

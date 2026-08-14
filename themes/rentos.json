@@ -124,6 +124,7 @@
     "mono": "ui-monospace, SFMono-Regular, Menlo, monospace",
     "display_weight": 400,
     "display_tracking": "-0.005em",
+    "block_title": "display",
     "heading_case": "none"
   },
   "geometry": {

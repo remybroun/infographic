@@ -83,16 +83,30 @@ def text_width(text: str, size: float, weight: int = 400, tracking: float = 0.0)
     return total * size + tracking * size * max(len(str(text)) - 1, 0) + 0.6
 
 
+# Slack, in px, on every width comparison against an estimate.
+#
+# Every category chart reserves `measure_labels(labels) + pad` for its label
+# column and then truncates each label to `reserved - pad`. Those two expressions
+# are the same number in arithmetic and not in binary floating point: 56.88 + 12
+# - 12 is 56.879999999999995, which is less than 56.88, so the widest label, the
+# one that set the reservation, was ellipsized inside a column measured for it
+# exactly. Comparing at full precision was the error: `text_width` is an
+# estimate that deliberately over-reads, so a quarter of a pixel is far inside
+# its own margin and cannot cause a real overlap.
+FIT_EPSILON = 0.25
+
+
 def truncate(text: str, size: float, max_width: float, weight: int = 400) -> str:
     """Ellipsize to fit. Returns text unchanged when it already fits."""
     text = str(text)
-    if text_width(text, size, weight) <= max_width:
+    limit = max_width + FIT_EPSILON
+    if text_width(text, size, weight) <= limit:
         return text
     ell = "…"
     lo, hi = 0, len(text)
     while lo < hi:
         mid = (lo + hi + 1) // 2
-        if text_width(text[:mid] + ell, size, weight) <= max_width:
+        if text_width(text[:mid] + ell, size, weight) <= limit:
             lo = mid
         else:
             hi = mid - 1

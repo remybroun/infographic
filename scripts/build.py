@@ -72,6 +72,19 @@ TYPE_SCALE = {
 GUTTER = 20.0
 ROW_GAP = 26.0
 SCROLL_ROW_GAP = 40.0
+FRAME_PAD = 18.0
+
+# `meta.spacing` scales the three distances that separate one block from the
+# next: the column gutter, the row gap, and the padding inside a framed block.
+# It scales all three together on purpose. Cutting the gap alone barely reads as
+# tighter, because two framed charts are held apart by pad + gap + pad, and at
+# the default that is 62px of which the gap is only 26.
+#
+# `tight` is for a sheet whose subject IS the blocks: a specimen page, a
+# dashboard, a reference card, where air between panels is dead space rather
+# than rhythm. It is not the default, because in a document that argues, the gap
+# is what tells a reader one idea has finished and the next has begun.
+SPACING = {"tight": 0.62, "normal": 1.0, "airy": 1.35}
 
 # How many drawings one document may author. See blocks_figure.py for why this
 # exists at all: without it, "draw the shape the catalog lacks" becomes
@@ -103,6 +116,22 @@ class Document:
         self.texture = bool(meta.get("texture", False)) if texture is None else texture
         self.warnings = []
 
+        missing = self.theme.missing_font_files()
+        if missing:
+            self.warnings.append(
+                f"theme {self.theme.name!r} declares {len(missing)} font file(s) that "
+                f"are not at {self.theme.fonts_dir()!r}: {', '.join(missing[:4])}"
+                f"{'...' if len(missing) > 4 else ''}. Chrome will fall back silently, "
+                f"so the document renders in a substitute face.")
+
+        self.spacing = str(meta.get("spacing", "normal")).lower()
+        if self.spacing not in SPACING:
+            raise SystemExit(f"[build] meta.spacing must be one of "
+                             f"{', '.join(sorted(SPACING))} (got {self.spacing!r})")
+        scale = SPACING[self.spacing]
+        self.gutter = GUTTER * scale
+        self.frame_pad = FRAME_PAD * scale
+
         css_size, w_mm, h_mm, margins = PAGES[self.page_key]
         self.css_page_size = css_size if not css_size[0].isdigit() else css_size
         self.margin_top, self.margin_side, self.margin_bottom = margins
@@ -110,14 +139,14 @@ class Document:
             self.unit = "mm"
             self.content_px = (w_mm - self.margin_side * 2) * MM
             self.doc_width_css = f"{self.content_px + self.margin_side * 2 * MM:.1f}px"
-            self.row_gap = ROW_GAP
+            self.row_gap = ROW_GAP * scale
         else:
             self.unit = "px"
             self.margin_top, self.margin_side, self.margin_bottom = SCROLL_MARGINS
             self.content_px = SCROLL_MEASURE
             self.doc_width_css = f"{SCROLL_MEASURE + self.margin_side * 2:.0f}px"
-            self.row_gap = SCROLL_ROW_GAP
-        self.column_px = (self.content_px - GUTTER * 11) / 12.0
+            self.row_gap = SCROLL_ROW_GAP * scale
+        self.column_px = (self.content_px - self.gutter * 11) / 12.0
         self.body_size, self.hero_size, self.section_size, self.figure_size = \
             TYPE_SCALE.get(self.page_key, TYPE_SCALE["a4"])
 
@@ -181,7 +210,7 @@ class Document:
 
     def span_width(self, span: int) -> float:
         span = max(1, min(12, int(span)))
-        return self.column_px * span + GUTTER * (span - 1)
+        return self.column_px * span + self.gutter * (span - 1)
 
     # -- rendering ---------------------------------------------------------
 
@@ -288,6 +317,20 @@ class Document:
             f"--ig-display:{t.font('display')}",
             f"--ig-mono:{t.font('mono')}",
             f"--ig-display-weight:{t.display_weight}",
+            # A block title is the one heading small enough that the choice of
+            # face is a real decision rather than a foregone one. A theme whose
+            # display face IS its sans (default, mono) gains nothing by using it
+            # here, so this is opt-in per theme: `type.block_title: "display"`.
+            # A 400-weight serif needs more size than a 600-weight sans to hold
+            # the same presence, hence the separate scale rather than one size.
+            f"--ig-title-font:{t.font('display' if t.title_face == 'display' else 'sans')}",
+            f"--ig-title-weight:{t.display_weight if t.title_face == 'display' else 600}",
+            # 1.2, not 1.3. A 400-weight serif does need more size than a
+            # 600-weight sans to hold the same presence, but at 1.3 the extra
+            # leading pushed the architecture fixture's last note into the
+            # running footer. A theme is allowed to reflow a document; it is not
+            # allowed to print one line on top of another.
+            f"--ig-title-scale:{1.2 if t.title_face == 'display' else 1.12}",
             f"--ig-display-tracking:{t.data['type'].get('display_tracking', '-0.02em')}",
             f"--ig-radius:{t.geom('radius', 4)}px",
             f"--ig-body-size:{self.body_size}px",
@@ -299,8 +342,9 @@ class Document:
             f"--ig-margin-side:{self.margin_side}{self.unit}",
             f"--ig-margin-bottom:{self.margin_bottom}{self.unit}",
             f"--ig-content-width:{self.doc_width_css}",
-            f"--ig-gutter:{GUTTER}px",
-            f"--ig-row-gap:{self.row_gap}px",
+            f"--ig-gutter:{self.gutter:.1f}px",
+            f"--ig-row-gap:{self.row_gap:.1f}px",
+            f"--ig-frame-pad:{self.frame_pad:.1f}px",
         ] + [
             # The categorical slots, published so an authored `figure` can paint
             # from the same validated palette every chart uses. Without these a

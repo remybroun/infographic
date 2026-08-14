@@ -31,15 +31,15 @@ ordinary words (`pie` → `donut`, `waffle` → `unit`, `2x2` → `quadrant`,
 `flow` → `process`).
 
 That figure is a map. Below it are the blocks themselves, rendered: three sheets
-out of ten in **[the specimen gallery](GALLERY.md)**, which draws every form the
-skill has. Every number in it is read out of this repository at build time, from
-the registry, the word budget, the five shipped fixtures, the linter's own
-checks and `git log`, so it cannot drift from the code it documents and nothing
-in it is invented to complete a shape.
+out of nine in **[the specimen gallery](GALLERY.md)**, which draws all 36 forms
+this repository has honest data for. Every number in it is read out of the repo
+at build time, from the registry, the word budget, the five shipped fixtures,
+the linter's own checks and `git log`, so it cannot drift from the code it
+documents and nothing in it is invented to complete a shape.
 
-![Six part-to-whole blocks rendered: a treemap of the 52 block types by family, a donut of linter checks by what they do to the build, a unit chart of types that draw against types that set text, a funnel from 52 registered types to 14 used by two or more examples, a share bar of the eleven pipeline steps, and a meter of authored figures against a cap of three.](assets/gallery-part.png)
+![Six quantity charts rendered: a lollipop of how graphic each shipped example is, a heatmap of blocks per family, a bar chart of printable area for the nine render targets, a grouped column chart of graphic against text blocks, a scatter of blocks against graphic blocks, and a diverging bar chart of family use in the poster against the scrolling page.](assets/gallery-quantity.png)
 
-![Five structure blocks rendered: a pyramid of the five principles, a process of the five commands, a cycle of render, look, find, fix, a venn of what an authored figure shares with the built-in blocks, and a tree of the repository.](assets/gallery-structure-1.png)
+![Five structure blocks rendered: a venn of what an authored figure shares with the built-in blocks, a process of the five commands, a cycle of render, look, find, fix, a quadrant of the six families, and a sankey from 52 block types through the families to whether each draws or sets text.](assets/gallery-structure.png)
 
 When the catalog has no shape for an idea, you draw it. A `figure` block takes
 authored SVG and keeps every guarantee the built-in blocks make: required `alt`,
@@ -47,9 +47,9 @@ a required data twin, refused colour literals, and its labels charged against th
 budget. Capped at three per document, because without a cap "draw the shape the
 catalog lacks" becomes "hand-draw everything" and the consistency is gone.
 
-![Four diagram blocks rendered: a swimlane of the eleven pipeline steps across a you lane and a tooling lane, a scorecard of colour checks each theme passes, a gauge of 39 of 52 block types demonstrated by a shipped example, and an authored figure of three arguments over one set of facts with the chosen one highlighted.](assets/gallery-diagram.png)
+![Five blocks rendered: a tree of the repository, an authored figure of three arguments over one set of facts with the chosen one highlighted, a scorecard of colour checks each theme passes, a gauge of 39 of 52 block types demonstrated by a shipped example, and a swimlane of the eleven pipeline steps across a you lane and a tooling lane.](assets/gallery-structure-diagram.png)
 
-The bottom-left panel there is a `figure`. Three spines over one set of facts is
+The top-right panel there is a `figure`. Three spines over one set of facts is
 not a tree (they partition nothing), not a process (they are alternatives, not
 steps) and not a quadrant (there are no axes). Naming the closest block type
 needs a "well, sort of", which is the test for authoring the shape instead.
@@ -114,13 +114,20 @@ identifiers only their author could read.
 `default` (neutral editorial) · `rentos` (olive editorial, Instrument Serif) ·
 `mono` (greyscale, print-safe).
 
+Every image on this page is `rentos`, so what you are looking at is a theme
+doing its whole job: the olive lead, terracotta as the warm secondary, blue and
+plum as separable companions, and Instrument Serif on the block titles over
+Inter everywhere else. The serif is opt-in per theme (`type.block_title`), since
+a theme whose display face *is* its sans gains nothing from it.
+
 All three pass the computable colour checks: contrast, categorical separation,
 and colour-vision-deficiency distance. A new brand theme is a JSON file, not
 code, and its slot order is found by enumerating orderings and keeping the ones
-that clear the gates, never by picking what looks nice. The scorecard in the
-diagram sheet above counts those checks per theme; `mono` runs fewer of them
-because greyscale has fewer categorical slots to separate, not because it scores
-worse.
+that clear the gates, never by picking what looks nice. Brand olive and
+terracotta are deliberately not adjacent slots: that pair measures a CVD ΔE of
+4.5, so a protanope cannot separate them. The scorecard in the sheet above counts
+the checks per theme; `mono` runs fewer of them because greyscale has fewer
+categorical slots to separate, not because it scores worse.
 
 ```bash
 python3 scripts/ig.py validate --all
@@ -148,8 +155,9 @@ fixtures/specs/       five complete, rendering worked examples
 GALLERY.md            every form the skill draws, drawn
 assets/
   gen_readme.py         the three slides on this page
-  gen_gallery.py        the ten specimen sheets, from this repo's own data
+  gen_gallery.py        the nine specimen sheets, from this repo's own data
   build_gallery.sh      rebuilds every image here in one command
+  measure_blocks.py     how tall does each block lay out, so rows can be paired
   trim_png.py           crops the blank tail off a rasterised page
 ```
 
@@ -169,7 +177,7 @@ through `pdftoppm`. No pip installs, no npm, no matplotlib.
 ## Notes on this page
 
 Every image here was produced by the skill. `sh assets/build_gallery.sh` rebuilds
-all thirteen from source in one command.
+all twelve from source in one command.
 
 The three wide ones are 16:9 slides from [`gen_readme.py`](assets/gen_readme.py),
 built as a paginated target because a README image is a fixed frame and a
@@ -178,6 +186,12 @@ leaves. The specimen sheets are A4 portrait, and that is deliberate too: a text
 label is a fixed size in millimetres, so the page *width* is what decides how
 large it lands in GitHub's column. A4 portrait puts an 8pt label at roughly 12px;
 the 338mm slide puts the same label at roughly 7px.
+
+The sheets set `meta.spacing: "tight"`, which scales the gutter, the row gap and
+the padding inside a framed block together. Scaling only the gap does not read as
+tighter: two framed charts are held apart by pad + gap + pad, and at the default
+that is 62px of which the gap is 26. `tight` is not the default, because in a
+document that argues, the gap is what tells a reader one idea has finished.
 
 The eleven pipeline steps and the guard table are not images. An ordered list and
 a table render natively, are searchable and copyable, and follow your theme. An
@@ -192,10 +206,16 @@ Two things are still wrong, and neither is faked:
 
 - **The images are light, so they glare in dark mode.** Fixing that properly
   needs a validated dark theme, which does not exist yet.
-- **The gallery build reports one warning.** `near-empty-page` fires on the
-  change sheet at 6% ink. It is measuring correctly: line and slope charts put
-  less ink on a page than filled ones. The check is tuned for documents rather
+- **The gallery build reports one warning.** `near-empty-page` fires on the alias
+  sheet at 8% ink. It is measuring correctly and measuring the wrong thing: that
+  sheet is 94% full by area and 8% full by ink, because a grid of outlined chips
+  is mostly the page showing through. The check is tuned for documents rather
   than specimen sheets, and it is reported rather than suppressed.
+- **The `rentos` theme's fonts live outside this repo.** Its `fonts_dir` points
+  at a sibling brand directory, so a fresh clone renders it in Georgia and Helvetica
+  instead of Instrument Serif and Inter. The build now warns when a declared font
+  file is missing rather than falling back in silence, but the assets are still
+  not vendored here.
 
 ## The one thing the tooling cannot do
 

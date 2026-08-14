@@ -140,21 +140,22 @@ body {
   background: var(--ig-card);
   border: 1px solid var(--ig-border);
   border-radius: calc(var(--ig-radius) * 2.5);
-  padding: 18px 18px 14px;
+  padding: var(--ig-frame-pad) var(--ig-frame-pad) calc(var(--ig-frame-pad) * 0.78);
 }
 
 .ig-block-tinted {
   background: var(--ig-sunken);
   border-radius: calc(var(--ig-radius) * 2.5);
-  padding: 18px 18px 14px;
+  padding: var(--ig-frame-pad) var(--ig-frame-pad) calc(var(--ig-frame-pad) * 0.78);
 }
 
 /* ---------------------------------------------------------- block head ---- */
 
 .ig-block-title {
   margin: 0 0 2px;
+  font-family: var(--ig-title-font);
   font-size: calc(var(--ig-body-size) * 1.08);
-  font-weight: 600;
+  font-weight: var(--ig-title-weight);
   letter-spacing: -0.008em;
   color: var(--ig-ink);
 }
@@ -333,7 +334,14 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 }
 .ig-callout p { margin: 0 0 6px; }
 .ig-callout p:last-child { margin-bottom: 0; }
-.ig-callout-title { font-weight: 600; color: var(--ig-ink); }
+/* A callout owns its own title, so it has to opt into the title face itself or
+   it is the one heading on the page still set in the body sans. */
+.ig-callout-title {
+  font-family: var(--ig-title-font);
+  font-size: calc(var(--ig-body-size) * var(--ig-title-scale) * 0.92);
+  font-weight: var(--ig-title-weight);
+  color: var(--ig-ink);
+}
 
 .ig-callout-icon {
   flex: 0 0 20px;
@@ -766,7 +774,7 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 /* Titles do more work when there is less around them, so they get more air and
    a tighter measure than the report-density defaults. */
 .ig-density-graphic .ig-block-title {
-  font-size: calc(var(--ig-body-size) * 1.12);
+  font-size: calc(var(--ig-body-size) * var(--ig-title-scale));
   max-width: 46ch;
 }
 .ig-density-graphic .ig-hero-lede { max-width: 56ch; }

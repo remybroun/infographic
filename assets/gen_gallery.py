@@ -155,19 +155,37 @@ def page(*blocks):
     a third of an A4 blank, and a `break: before` in front of a tall row strands
     whatever preceded it. The linter caught all four. Letting the rows flow means
     every sheet but the last is full, and GALLERY.md names what is on each.
+
+    ORDER WITHIN A GROUP IS BY RENDERED HEIGHT, shortest first. A row is as tall
+    as its tallest block, so pairing a 444px definitions list with a 137px stat
+    buys 307px of blank page, and eight such pairs cost 1,400px, an entire sheet
+    of nothing. The heights are not guessable from the payload, so they are
+    measured: `python3 assets/measure_blocks.py assets/gallery_spec.json` prints
+    the laid-out height of every block. Re-run it after editing a specimen, and
+    re-sort if a number moved. A group with an odd count of half-width blocks
+    leaves its last one to pair across the family boundary, which is why a
+    full-width block never sits directly after a lone half-width one.
     """
     return [dict(b) for b in blocks]
 
 
+def scatter_points():
+    """One dot per (blocks, graphics) coordinate, sharing a label where two
+    examples coincide. See the note at the call site."""
+    seen = collections.OrderedDict()
+    for f in FIXTURES:
+        seen.setdefault((f["blocks"], f["graphic"]), []).append(f["short"])
+    return [{"x": x, "y": y, "label": " · ".join(names)}
+            for (x, y), names in seen.items()]
+
+
 def quantity():
     fam = sorted(FAMILY, key=lambda f: -len(FAMILY[f]))
+    poster = next(f for f in FIXTURES if f["short"] == "Poster")
+    scroll = next(f for f in FIXTURES if f["short"] == "Scroll")
+    diverging_fam = sorted(FAMILY, key=lambda f: -(poster["families"].get(f, 0)
+                                                   - scroll["families"].get(f, 0)))
     return page(
-        {"type": "bar", "span": 6, "frame": "card",
-         "title": "Printable area of each render target",
-         "categories": [k for k, _w, _h in TARGETS],
-         "values": [round(w * h / 100) for _k, w, h in TARGETS],
-         "unit": " cm²", "value_label": "cm²",
-         "note": "scroll has no page, so it is measured at its A4 reading width."},
         {"type": "lollipop", "span": 6, "frame": "card",
          "title": "Share of blocks that are graphics, per shipped example",
          "categories": [f["short"] for f in FIXTURES],
@@ -178,20 +196,16 @@ def quantity():
          "rows": [f["short"] for f in FIXTURES],
          "cols": [FAMILY_TICK[f] for f in fam],
          "values": [[f["families"].get(k, 0) for k in fam] for f in FIXTURES]},
-        {"type": "scatter", "span": 6, "frame": "card",
-         "title": "Blocks against graphic blocks, in the five examples",
-         "axis_x": "Blocks", "axis_y": "Graphics",
-         "points": [{"x": f["blocks"], "y": f["graphic"], "label": f["short"]}
-                    for f in FIXTURES]},
-    )
-
-
-def quantity_two():
-    poster = next(f for f in FIXTURES if f["short"] == "Poster")
-    scroll = next(f for f in FIXTURES if f["short"] == "Scroll")
-    fam = sorted(FAMILY, key=lambda f: -(poster["families"].get(f, 0)
-                                         - scroll["families"].get(f, 0)))
-    return page(
+        # `thickness` 14 rather than the 24px default. Nine categories at full
+        # thickness made this the tallest block in the document by 80px, and a
+        # row is as tall as its tallest block. Thinner bars lose nothing here:
+        # length still encodes the magnitude, and the list reads faster.
+        {"type": "bar", "span": 6, "frame": "card", "thickness": 14,
+         "title": "Printable area of each render target",
+         "categories": [k for k, _w, _h in TARGETS],
+         "values": [round(w * h / 100) for _k, w, h in TARGETS],
+         "unit": " cm²", "value_label": "cm²",
+         "note": "scroll has no page, so it is measured at its A4 reading width."},
         {"type": "column", "span": 6, "frame": "card",
          "title": "Graphic and text blocks in each shipped example",
          "categories": [f["short"] for f in FIXTURES],
@@ -199,11 +213,20 @@ def quantity_two():
              {"name": "Graphic", "values": [f["graphic"] for f in FIXTURES]},
              {"name": "Text", "values": [f["blocks"] - f["graphic"] for f in FIXTURES]}],
          "value_label": "Blocks"},
+        {"type": "scatter", "span": 6, "frame": "card",
+         "title": "Blocks against graphic blocks, in the five examples",
+         "axis_x": "Blocks", "axis_y": "Graphics",
+         # Coincident points share one label. Two of the five examples are both
+         # 13 blocks and 7 graphics, so drawing five labels printed "Data" and
+         # "Scroll" on top of each other at the same coordinate and rendered as
+         # "Datall". Nudging one of them apart would move a real value to make
+         # room for a label, which is the one thing a chart may never do.
+         "points": scatter_points()},
         {"type": "diverging", "span": 6, "frame": "card",
          "title": "Family use in the poster, against the scrolling page",
          "items": [{"label": FAMILY_LABEL[f],
                     "value": poster["families"].get(f, 0) - scroll["families"].get(f, 0)}
-                   for f in fam],
+                   for f in diverging_fam],
          "sort": None, "value_label": "Blocks",
          "note": "Two documents, one subject each, reaching for opposite halves of the catalog."},
         # A matrix earns its space only when the rows genuinely differ. The first
@@ -269,6 +292,22 @@ def change():
 def part():
     fam = sorted(FAMILY, key=lambda f: -len(FAMILY[f]))
     return page(
+        {"type": "meter", "span": 6, "frame": "card",
+         "title": "Hand-drawn figures in the scrolling example",
+         "label": "Authored figures", "value": 3, "max": 3,
+         "thresholds": [{"at": 3, "status": "critical", "label": "Cap"}],
+         "note": "The cap is a ranking exercise: which images does this document live or die by?"},
+        {"type": "share_bar", "span": 6, "frame": "card",
+         "title": "The eleven pipeline steps, by what does them",
+         "parts": [{"label": "Judgement", "value": 6}, {"label": "Tooling", "value": 5}],
+         "value_label": "Steps"},
+        {"type": "funnel", "span": 6, "frame": "card",
+         "title": "How much of the vocabulary the shipped examples exercise",
+         "stages": [{"label": "Registered", "value": TOTAL},
+                    {"label": "In an example", "value": len(USED_ONCE)},
+                    {"label": "In two or more",
+                     "value": sum(1 for v in USED_ONCE.values() if v >= 2)}],
+         "value_label": "Block types"},
         {"type": "treemap", "span": 6, "frame": "card", "height": 240,
          "title": "The 52 block types, by family",
          "parts": [{"label": FAMILY_LABEL[f], "value": len(FAMILY[f])} for f in fam],
@@ -287,27 +326,6 @@ def part():
          # not one block type. Saying otherwise would make the note contradict
          # the legend printed directly above it.
          "note": "40 of the 52 registered types draw. The other 12 set text."},
-        {"type": "funnel", "span": 6, "frame": "card",
-         "title": "How much of the vocabulary the shipped examples exercise",
-         "stages": [{"label": "Registered", "value": TOTAL},
-                    {"label": "In an example", "value": len(USED_ONCE)},
-                    {"label": "In two or more",
-                     "value": sum(1 for v in USED_ONCE.values() if v >= 2)}],
-         "value_label": "Block types"},
-    )
-
-
-def part_two():
-    return page(
-        {"type": "share_bar", "span": 6, "frame": "card",
-         "title": "The eleven pipeline steps, by what does them",
-         "parts": [{"label": "Judgement", "value": 6}, {"label": "Tooling", "value": 5}],
-         "value_label": "Steps"},
-        {"type": "meter", "span": 6, "frame": "card",
-         "title": "Hand-drawn figures in the scrolling example",
-         "label": "Authored figures", "value": 3, "max": 3,
-         "thresholds": [{"at": 3, "status": "critical", "label": "Cap"}],
-         "note": "The cap is a ranking exercise: which images does this document live or die by?"},
         {"type": "pyramid", "span": 12, "frame": "card",
          "title": "The five principles, in the order they override each other",
          "levels": [
@@ -321,6 +339,10 @@ def part_two():
 
 def structure():
     return page(
+        {"type": "venn", "span": 6, "frame": "card", "height": 260,
+         "title": "What an authored figure keeps, and what it gives up",
+         "sets": [{"label": "Built-in blocks"}, {"label": "Authored figure"}],
+         "overlap": "alt, twin, no literals"},
         {"type": "process", "span": 6, "frame": "card", "orientation": "vertical",
          "title": "The five commands the tooling actually provides",
          "steps": [{"title": "extract", "text": "Read a PDF into a fact ledger."},
@@ -334,17 +356,6 @@ def structure():
          "steps": [{"title": "Render"}, {"title": "Look at it"},
                    {"title": "Find the collision"}, {"title": "Fix the spec"}],
          "note": "The linter checks structure. It has never once looked at a document."},
-        {"type": "venn", "span": 6, "frame": "card", "height": 260,
-         "title": "What an authored figure keeps, and what it gives up",
-         "sets": [{"label": "Built-in blocks"}, {"label": "Authored figure"}],
-         "overlap": "alt, twin, no literals"},
-        {"type": "tree", "span": 6, "frame": "card",
-         "title": "What is in this repository",
-         "root": {"label": "infographic", "children": [
-             {"label": "references", "children": [{"label": "pipeline"}, {"label": "catalog"}]},
-             {"label": "scripts", "emphasis": True,
-              "children": [{"label": "build"}, {"label": "lib"}]},
-             {"label": "fixtures", "children": [{"label": "specs"}]}]}},
         {"type": "quadrant", "span": 6, "frame": "card",
          "title": "The six families, by what a claim has to supply",
          "x_label": "Needs numbers", "y_label": "Needs an order",
@@ -367,6 +378,18 @@ def structure():
                    + [{"source": FAMILY_LABEL[f], "target": "Sets text",
                        "value": len(FAMILY[f]) - GRAPHIC[f]}
                       for f in FAMILY if len(FAMILY[f]) - GRAPHIC[f]])},
+        # Structure has five half-width specimens, an odd count, so one of them
+        # has to pair across the family boundary. It is the SHORTEST that is left
+        # over, not the tallest: the leftover meets the diagram group's shortest
+        # block, and 210 beside 210 wastes nothing, where the 335px quadrant in
+        # this slot wasted 99.
+        {"type": "tree", "span": 6, "frame": "card",
+         "title": "What is in this repository",
+         "root": {"label": "infographic", "children": [
+             {"label": "references", "children": [{"label": "pipeline"}, {"label": "catalog"}]},
+             {"label": "scripts", "emphasis": True,
+              "children": [{"label": "build"}, {"label": "lib"}]},
+             {"label": "fixtures", "children": [{"label": "specs"}]}]}},
     )
 
 
@@ -374,17 +397,16 @@ def diagram():
     themes = list(GATES)
     groups = list(next(iter(GATES.values())))
     return page(
-        {"type": "stack", "span": 12, "frame": "card",
-         "title": "What Claude loads, in the order it loads it",
-         "layers": [
-             {"label": "SKILL.md", "meta": "always",
-              "items": ["Principles", "Rules", "Catalog index"]},
-             {"label": "references", "meta": "one per decision",
-              "items": ["pipeline", "scenes", "graphic-first", "anti-patterns"]},
-             {"label": "scripts", "meta": "run, not read",
-              "items": ["build", "check_document", "density", "derivation"]},
-             {"label": "fixtures", "meta": "read one first",
-              "items": ["Five complete specs"]}]},
+        spines_figure(),
+        {"type": "scorecard", "span": 6, "frame": "card",
+         "title": "Colour checks each theme passes",
+         "choices": themes, "criteria": [GATE_LABEL.get(g, g) for g in groups], "max": 10,
+         "scores": [[GATES[t].get(g, 0) for g in groups] for t in themes],
+         "note": "Counts are checks that apply, not quality. Every theme passes every one."},
+        {"type": "gauge", "span": 6, "frame": "card",
+         "title": "Block types a shipped example demonstrates",
+         "value": len(USED_ONCE), "max": TOTAL, "label": "Exercised",
+         "caption": f"of {TOTAL} registered"},
         {"type": "swimlane", "span": 12, "frame": "card",
          "title": "The eleven steps, and who performs each one",
          "stages": ["Source", "Reader", "Spines", "Target", "Scenes", "Forms",
@@ -396,16 +418,17 @@ def diagram():
              {"label": "Tooling", "cells": ["extract", None, None, None, None, None,
                                             "new", "validate", "render", "shoot", None]}],
          "note": "Steps two to six cannot be automated. They are the skill."},
-        {"type": "scorecard", "span": 6, "frame": "card",
-         "title": "Colour checks each theme passes",
-         "choices": themes, "criteria": [GATE_LABEL.get(g, g) for g in groups], "max": 10,
-         "scores": [[GATES[t].get(g, 0) for g in groups] for t in themes],
-         "note": "Counts are checks that apply, not quality. Every theme passes every one."},
-        {"type": "gauge", "span": 6, "frame": "card",
-         "title": "Block types a shipped example demonstrates",
-         "value": len(USED_ONCE), "max": TOTAL, "label": "Exercised",
-         "caption": f"of {TOTAL} registered"},
-        spines_figure(),
+        {"type": "stack", "span": 12, "frame": "card",
+         "title": "What Claude loads, in the order it loads it",
+         "layers": [
+             {"label": "SKILL.md", "meta": "always",
+              "items": ["Principles", "Rules", "Catalog index"]},
+             {"label": "references", "meta": "one per decision",
+              "items": ["pipeline", "scenes", "graphic-first", "anti-patterns"]},
+             {"label": "scripts", "meta": "run, not read",
+              "items": ["build", "check_document", "density", "derivation"]},
+             {"label": "fixtures", "meta": "read one first",
+              "items": ["Five complete specs"]}]},
     )
 
 
@@ -451,29 +474,29 @@ def spines_figure():
     }
 
 
-def diagram_two():
-    aliases = sorted(registry.ALIASES)
+def aliases():
+    """The chip grid, on its own because it is 900px tall and fills a sheet."""
+    names = sorted(registry.ALIASES)
     return page(
         {"type": "chips", "span": 12, "frame": "card",
          "title": "Every alias, so a spec can be written in ordinary words",
-         "items": [{"label": a, "value": registry.ALIASES[a]} for a in aliases]},
+         "items": [{"label": a, "value": registry.ALIASES[a]} for a in names]},
     )
 
 
 def editorial():
     return page(
-        {"type": "definitions", "span": 6, "frame": "card",
+        # Span 12, not 6. At half width this stacks four terms vertically and
+        # runs to 444px, which beside the 137px stat left 307px of blank page,
+        # the single worst void in the document. Full width lays the terms out
+        # side by side instead, and the block gets shorter as it gets wider.
+        {"type": "definitions", "span": 12, "frame": "card",
          "title": "Four words this repository uses in a particular way",
          "items": [
              {"term": "Spine", "text": "One argument over the facts. Write three, choose one."},
              {"term": "Scene", "text": "An image the document lives or dies by."},
              {"term": "Twin", "text": "The table beside a chart, holding every value."},
              {"term": "Budget", "text": "Words allowed per field and per page."}]},
-        # `compact: false`, because the block otherwise renders 2,086 as "2.1K"
-        # and the exactness is the entire point of the number.
-        {"type": "stat", "span": 6, "frame": "card", "compact": False,
-         "value": 2086, "label": "Words in the failed first version",
-         "note": "Eight A4 pages, one chart, every paragraph individually defensible."},
         {"type": "comparison", "span": 12, "frame": "card",
          "title": "The two densities, and what each refuses",
          "left": {"label": "Report", "headline": "900 words a page",
@@ -493,21 +516,34 @@ def editorial():
          "dont": ["Open the previous version first",
                   "Fill a stat row because the top looks empty",
                   "Let an identifier stand in for a sentence"]},
-        {"type": "callout", "span": 8, "frame": "card", "tone": "accent",
-         "title": "The pattern behind every guard in this repository",
-         "text": "When the output is wrong, look for the incentive that made the wrong thing cheapest, not for the missing rule."},
-        {"type": "hero_figure", "span": 4, "frame": "card",
+        # `compact: false`, because the block otherwise renders 2,086 as "2.1K"
+        # and the exactness is the entire point of the number.
+        {"type": "stat", "span": 6, "frame": "card", "compact": False,
+         "value": 2086, "label": "Words in the failed first version",
+         "note": "Eight A4 pages, one chart, every paragraph individually defensible."},
+        {"type": "hero_figure", "span": 6, "frame": "card",
          "value": 150, "label": "Words a page, at graphic density",
          "note": "Checked once the real page count is known."},
+        {"type": "callout", "span": 12, "frame": "card", "tone": "accent",
+         "title": "The pattern behind every guard in this repository",
+         "text": "When the output is wrong, look for the incentive that made the wrong thing cheapest, not for the missing rule."},
     )
 
 
 spec = {
     "meta": {
         "title": "The specimen gallery",
-        "theme": "default",
+        # `rentos`: Instrument Serif headings over Inter, olive lead with
+        # terracotta as the warm secondary. The specimen sheets are the one place
+        # in this repo where the theme is the subject as much as the blocks are,
+        # and a validated brand theme shows more of what a theme can do than the
+        # neutral default, whose whole job is to get out of the way.
+        "theme": "rentos",
         "page": "a4",
         "density": "graphic",
+        # The blocks ARE the subject here, so the air between them is dead space
+        # rather than rhythm. See SPACING in build.py.
+        "spacing": "tight",
         # Empty strings, not omitted keys: `footer_left` falls back to the
         # document title and `footer_right` to the date, so leaving them out
         # produces a footer rather than removing one. The running footer is the
@@ -516,9 +552,13 @@ spec = {
         "footer_left": "",
         "footer_right": "",
     },
-    "blocks": (quantity() + quantity_two() + change() + part() + part_two()
-               + structure() + diagram() + diagram_two()
-               + editorial()),
+    # `aliases` last. It is a single 911px block, so wherever it lands it takes a
+    # sheet to itself and pushes whatever follows onto a fresh one. In the middle
+    # of the document that cost two near-empty pages, a lone `stack` on one and a
+    # lone `callout` on the last. At the end it fills the closing sheet, which is
+    # the one page allowed to be short.
+    "blocks": (quantity() + change() + part() + structure() + diagram()
+               + editorial() + aliases()),
 }
 
 path = os.path.join(HERE, "gallery_spec.json")
