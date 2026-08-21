@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import math
 
-from . import chrome, svg
+from . import chrome, pictograms, svg
 from .theme import Ctx
 from .blocks_quantity import formatter
 
@@ -152,6 +152,14 @@ def unit(b: dict, ctx: Ctx) -> str:
         assignment.extend([i] * count)
     assignment = assignment[:cells] + [None] * max(cells - len(assignment), 0)
 
+    # `square` and `circle` are the whole vocabulary this block had, and they
+    # remain the default and the safe answer: a square is unambiguous, and a
+    # countable square never has to be recognised before it can be counted.
+    # Any other name is looked up in the pictogram library, which is what the
+    # word "isotype" in this block's own docstring has always promised and
+    # never delivered. It is opt-in and it is a judgement: a drawn subject is
+    # worth the ambiguity only when recognising it tells the reader something
+    # the legend does not. See references/drawing.md.
     glyph = b.get("glyph", "square")
     for index in range(cells):
         row, col = divmod(index, per_row)
@@ -161,6 +169,10 @@ def unit(b: dict, ctx: Ctx) -> str:
         color = colors[who] if who is not None else t.surface("sunken")
         if glyph == "circle":
             canvas.circle(x + cell / 2, y + cell / 2, (cell - pad * 2) / 2, color)
+        elif glyph != "square":
+            canvas.add(pictograms.use(glyph, x + pad / 2, y + pad / 2, cell - pad,
+                                      where=f'unit.glyph ({b.get("id") or "unit"})',
+                                      fill=color))
         else:
             canvas.rect(x + pad / 2, y + pad / 2, cell - pad, cell - pad, color,
                         r=t.geom("radius", 4) / 2)
@@ -173,6 +185,189 @@ def unit(b: dict, ctx: Ctx) -> str:
         out.append(chrome.details_table(
             ["Part", b.get("value_label", "Value"), f"Glyphs of {cells}"],
             [[p[0], fmt(p[1]), str(counts[i])] for i, p in enumerate(parts)]))
+    return "".join(out)
+
+
+# --------------------------------------------------------------- pictogram ---
+
+def _nice_up(value: float) -> float:
+    """Round up to the next 1, 2 or 5 times a power of ten.
+
+    Used only to suggest a unit value in an error message, so the author is
+    handed "try 500" rather than "try 437.2".
+    """
+    if value <= 0:
+        return 1.0
+    exponent = math.floor(math.log10(value))
+    base = 10.0 ** exponent
+    for step in (1.0, 2.0, 5.0, 10.0):
+        if value <= step * base:
+            return step * base
+    return 10.0 * base
+
+
+def pictogram(b: dict, ctx: Ctx) -> str:
+    """Rows of repeated symbols, one symbol standing for a fixed quantity.
+
+    The Isotype form, and the one place in this skill where drawing the subject
+    is straightforwardly better than abstracting it. A bar chart of "apartments
+    by city" asks the reader to decode a length against an axis; a row of little
+    apartment blocks is counted, and the unit is stated once in the key rather
+    than implied by a tick mark.
+
+    It earns its place on quantities a reader can hold: a few rows, a countable
+    number of symbols, a unit that means something out loud ("one symbol is 500
+    apartments"). Past roughly two dozen symbols counting stops and this becomes
+    a bar chart drawn badly, which is why a row that does not fit is a build
+    error naming the unit value that would.
+
+    This block is not a replacement for `bar`. Precision belongs to `bar`, and
+    so does any comparison where the difference between two rows is smaller than
+    one symbol. What this buys is that the reader knows what is being counted
+    without reading the axis label.
+    """
+    t = ctx.theme
+    rows = b.get("rows", b.get("items", b.get("parts", [])))
+    if not rows:
+        return ""
+    where = f'pictogram ({b.get("id") or "pictogram"})'
+    default_glyph = str(b.get("glyph", "person"))
+
+    unit_value = float(b.get("unit_value", b.get("per", 0)) or 0)
+    if unit_value <= 0:
+        raise SystemExit(
+            f"[pictogram] {where}: `unit_value` must be a positive number.\n"
+            f"  It is what one symbol stands for, and it is the whole point of the\n"
+            f"  form: the reader counts symbols and multiplies. Without it there is\n"
+            f"  nothing to count in.\n"
+            f'    "unit_value": 500, "unit_label": "apartments"')
+
+    entries = []
+    for row in rows:
+        if not isinstance(row, dict):
+            row = {"label": str(row), "value": 0}
+        entries.append({
+            "label": str(row.get("label", "")),
+            "value": float(row.get("value") or 0),
+            "glyph": str(row.get("glyph") or default_glyph),
+            "color": row.get("color"),
+        })
+
+    # Resolve every name before any geometry, so a typo fails on the typo.
+    for entry in entries:
+        pictograms.resolve(entry["glyph"], f'{where} row {entry["label"]!r}')
+
+    fmt = formatter(b)
+    # 26, not 22. At 22 the symbols land around 18px on an A4 12-span, and
+    # drawing.md's own threshold is "under about 16px, `apartment` turns to
+    # mud" — a default that close to the line means the block ships on the
+    # wrong side of the skill's own advice for every detailed glyph.
+    size = float(b.get("size", 26))
+    gap_x = float(b.get("gap", 5))
+    row_gap = float(b.get("row_gap", 10))
+    label_size = 11.5
+    value_size = 11.0
+    show_values = bool(b.get("show_values", True))
+
+    label_w = min(
+        max(svg.text_width(e["label"], label_size, 600) for e in entries) + 10,
+        ctx.width * 0.34)
+    value_w = (max(svg.text_width(fmt(e["value"]), value_size, 600)
+                   for e in entries) + 12) if show_values else 0.0
+
+    available = ctx.width - label_w - value_w - 2
+    capacity = int((available + gap_x) // (size + gap_x))
+    if capacity < 1:
+        raise SystemExit(
+            f"[pictogram] {where}: no room for a single symbol at size {size:g}.\n"
+            f"  The labels are taking the whole column. Shorten them, drop\n"
+            f'  "show_values", or give the block a wider `span`.')
+
+    needed = max(math.ceil(e["value"] / unit_value - 1e-9) for e in entries)
+    if needed > capacity:
+        largest = max(e["value"] for e in entries)
+        suggestion = _nice_up(largest / capacity)
+        raise SystemExit(
+            f"[pictogram] {where}: the longest row needs {needed} symbols and "
+            f"{capacity} fit.\n"
+            f"  A row nobody can count is a bar chart drawn badly. Raise what one\n"
+            f"  symbol stands for, so the longest row lands inside the column:\n"
+            f'    "unit_value": {svg.fmt_plain(suggestion)}   '
+            f'(currently {svg.fmt_plain(unit_value)})\n'
+            f"  Or use `bar`, which is the right form for a quantity this long.")
+
+    accent = b.get("color") or t.accent
+    if b.get("ordinal"):
+        colors = [t.ordinal(i, len(entries)) for i in range(len(entries))]
+    elif b.get("palette") or b.get("vary_color"):
+        colors = chrome.series_colors(ctx, len(entries), palette=b.get("palette"))
+    else:
+        # One colour by default: the comparison here is row length, and giving
+        # each row its own hue invites the reader to decode the colour instead.
+        colors = [accent] * len(entries)
+    for i, entry in enumerate(entries):
+        if entry["color"]:
+            colors[i] = entry["color"]
+
+    # Values sit in a column immediately after the longest row, not pinned to
+    # the block's right edge. Pinned, a short row ends a third of the way
+    # across and its own number sits 300px away, which reads as two unrelated
+    # tables and undoes the one thing this form is for.
+    value_x = min(label_w + needed * (size + gap_x) - gap_x + 10 + value_w,
+                  ctx.width)
+
+    row_h = size + row_gap
+    key_h = 22.0
+    height = len(entries) * row_h - row_gap + key_h + 6
+    canvas = svg.Canvas(ctx.width, height, t)
+
+    for i, entry in enumerate(entries):
+        y = i * row_h
+        canvas.text(0, y + size * 0.72,
+                    svg.truncate(entry["label"], label_size, label_w - 8, 600),
+                    size=label_size, weight=600, fill=t.ink("primary"))
+
+        count = entry["value"] / unit_value
+        full = int(count + 1e-9)
+        frac = count - full
+        for j in range(full):
+            canvas.add(pictograms.use(entry["glyph"], label_w + j * (size + gap_x),
+                                      y, size, where, fill=colors[i]))
+        if frac > 0.02:
+            x = label_w + full * (size + gap_x)
+            # The ghost behind the cut symbol is what makes a partial readable
+            # as a fraction rather than as a drawing that failed to render.
+            canvas.add(pictograms.use(entry["glyph"], x, y, size, where,
+                                      fill=colors[i], opacity=0.2))
+            clip = canvas.uid("igpicclip")
+            canvas.define(f'<clipPath id="{clip}">'
+                          f'<rect x="{svg.num(x)}" y="{svg.num(y)}" '
+                          f'width="{svg.num(size * frac)}" height="{svg.num(size)}"/>'
+                          f"</clipPath>")
+            canvas.add(f'<g clip-path="url(#{clip})">'
+                       f'{pictograms.use(entry["glyph"], x, y, size, where, fill=colors[i])}'
+                       f"</g>")
+        if show_values:
+            canvas.text(value_x, y + size * 0.72, fmt(entry["value"]),
+                        size=value_size, weight=600, anchor="end",
+                        fill=t.ink("secondary"))
+
+    # The key. One symbol and what it stands for, stated rather than implied.
+    key_y = len(entries) * row_h - row_gap + 12
+    canvas.add(pictograms.use(default_glyph, 0, key_y, 13, where,
+                              fill=t.ink("muted")))
+    unit_label = str(b.get("unit_label", "")).strip()
+    key_text = f"= {fmt(unit_value)}" + (f" {unit_label}" if unit_label else "")
+    canvas.text(17, key_y + 10, key_text, size=10.5, weight=500,
+                fill=t.ink("muted"))
+
+    out = [canvas.render()]
+    if b.get("table", True):
+        out.append(chrome.details_table(
+            [b.get("label_header", "Row"), b.get("value_label", "Value"), "Symbols"],
+            [[e["label"], fmt(e["value"]),
+              svg.num(e["value"] / unit_value, 1)] for e in entries],
+            b.get("table_label", "Show the numbers")))
     return "".join(out)
 
 

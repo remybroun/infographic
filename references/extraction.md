@@ -73,6 +73,31 @@ What it detects today:
 | headline figures in prose | `stat` |
 | an existing pros/cons split | `checklist` |
 
+## The ledger is facts. A lesson needs the other inventory.
+
+**The extractor cannot find what the source never says**, and what a source
+never says is the thing a newcomer most needs: what the subject *is*, and why
+anyone built it. A design document, a spec, a codebase and a post-mortem all
+open from the assumption that the subject exists, is worth having, and is
+understood. That assumption is invisible in the text, so it survives extraction
+intact and lands in the document unexamined.
+
+So when `meta.mode` is `lesson`, read the source a second time for a different
+list:
+
+- **What does this source assume I already know?** Every one of those is a
+  candidate rung, and the source will never mark them.
+- **What did the world look like before this existed, and what was wrong with
+  it?** That is the "why it exists" beat, and it is almost never written down
+  anywhere, because the people who wrote the source lived through it.
+- **Which term is used from the first line as though it were ordinary English?**
+  Those are the most dangerous, more so than the obvious identifiers: an
+  "audience" that is not the people who read something but a rule for computing
+  an address. → [teaching.md](teaching.md)
+
+That inventory is what step 2.5 turns into the ladder. Neither `candidates` nor
+`numbers` can contribute a single entry to it.
+
 ## Reading a source the extractor cannot help with
 
 Plenty of sources are pure narrative and produce almost no candidates. That is

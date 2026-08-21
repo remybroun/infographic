@@ -60,18 +60,12 @@ letting them collapse:
 
 `.ig-block` sets `break-inside: avoid`, so a chart is never cut in half. The
 consequence is the one thing to design around: **a tall row moves to the next
-page whole**, leaving a gap behind it.
+page whole**, leaving a gap behind it. That gap is the commonest reason an
+output looks sparse, and one of the fixes for it is a span change, which is why
+it is named here.
 
-When a page looks half empty:
-
-1. Reduce the tallest block's `height`.
-2. Split a 12-span into two 6-spans, the row can break between them.
-3. Reorder so a short block fills the gap.
-4. Set `allow_break: true` on a long `table` or `prose`, which genuinely can
-   split across pages.
-5. Delete an unnecessary `break: before`.
-
-`check_document.py` reports the blocks-per-page ratio as `sparse-pages`.
+The fixes, in order, and the rest of the page mechanics, live with the renderer:
+→ [print-pdf.md](print-pdf.md#the-rules-that-actually-bite) rule 3.
 
 ## Framing
 

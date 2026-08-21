@@ -17,12 +17,16 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from lib import authored  # noqa: E402
 from lib import blocks_figure as figure_mod  # noqa: E402
 from lib import density as density_mod  # noqa: E402
 from lib import derivation  # noqa: E402
+from lib import ladder as ladder_mod  # noqa: E402
 from lib import leading_numbers  # noqa: E402
+from lib import pictograms  # noqa: E402
 from lib import registry, svg  # noqa: E402
 from lib.blocks_editorial import inline  # noqa: E402
+from lib.chrome import details_table  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -99,12 +103,28 @@ class Document:
         meta = spec.get("meta", {})
         self.meta = meta
 
+        # An authored page declares itself by carrying `body`. Validated here,
+        # before geometry or theme resolution, for the same reason the budget is:
+        # a page that picks its own colours should fail on the colour rather than
+        # on some downstream symptom of it.
+        self.authored = bool(str(spec.get("body") or "").strip())
+        if self.authored:
+            authored.validate(spec)
+
         # The text budget runs first, before geometry or theme resolution. A
         # spec that is really an essay should fail on the essay, not on some
         # downstream detail that happens to be checked earlier.
         self.density = density_mod.resolve(meta.get("density"), density)
         density_mod.enforce(spec, self.density, registry)
+        # The ladder runs beside the budget and for the same reason. The budget
+        # stops a document being an essay; the ladder stops it being a pile of
+        # correct pictures in the order the source happened to list them, which
+        # is the failure a reader experiences as "this was written for someone
+        # who already knows".
+        ladder_mod.enforce(spec, registry)
         self.check_figures(spec)
+        self.check_scenes_declaration(spec)
+        self.check_bridges(spec)
 
         self.page_key = (page or meta.get("page") or "a4").lower()
         if self.page_key not in PAGES:
@@ -206,6 +226,81 @@ class Document:
                 f"  `scorecard`, a set of states is `chips`. If all {len(figures)} really are\n"
                 f"  load-bearing, the honest answer is that this is two documents.")
 
+    def check_scenes_declaration(self, spec: dict) -> None:
+        """`meta.scenes`: the sentence that says why nothing here was drawn.
+
+        The linter warns when a document of five or more blocks authored no
+        figure, because absence used to cost nothing and so nothing was ever
+        drawn. But "nothing here needed a scene" is a legitimate answer, and a
+        warning that fires on legitimate documents is noise that teaches an
+        author to ignore the linter.
+
+        So the answer gets declared instead of assumed, which is the same move
+        `scenes.md` makes about rejecting a block: an assertion is not a test, a
+        written rejection is. The cap of eight words is what stops `"scenes":
+        "n/a"` becoming the way past it.
+        """
+        declared = spec.get("meta", {}).get("scenes")
+        if declared is None:
+            return
+        if not isinstance(declared, str) or density_mod.words(declared) < 8:
+            raise SystemExit(
+                f"[scenes] meta.scenes must be a sentence of at least 8 words "
+                f"(got {declared!r}).\n"
+                f"  It is the one line saying why this document draws nothing by "
+                f"hand, and\n  it is only worth having if it names what the "
+                f"catalog actually carried:\n"
+                f'    "scenes": "every claim here is a comparison of values or a '
+                f'share, and\n               the catalog draws both better than I '
+                f'would by hand"\n'
+                f"  A document that cannot finish that sentence has not run step "
+                f"5.\n  → references/scenes.md")
+
+    def check_bridges(self, spec: dict) -> None:
+        """Cap the connective sentences, and refuse two in a row.
+
+        `bridge` is the concession `lesson` density makes to the fact that a
+        subject taught from zero needs a sentence between two pictures. A
+        concession with no ceiling is just the old failure with a new key: put
+        six bridges in a document and it is prose again, with the pictures
+        illustrating it rather than carrying it.
+
+        The ceiling is per section, because that is the unit a bridge actually
+        serves: one hand-off from what the reader now knows to what the next
+        section will show them. Two adjacent bridges are always a paragraph that
+        has been split across two blocks to get under the word cap.
+        """
+        blocks = [b for b in spec.get("blocks", [])
+                  if isinstance(b, dict) and not b.get("skip")]
+        positions = [i for i, b in enumerate(blocks)
+                     if registry.resolve(b.get("type"))[0] == "bridge"]
+        if not positions:
+            return
+
+        for first, second in zip(positions, positions[1:]):
+            if second == first + 1:
+                raise SystemExit(
+                    f"[bridge] blocks[{first}] and blocks[{second}] are both "
+                    f"bridges, back to back.\n\n"
+                    f"  Two connective sentences in a row is a paragraph split "
+                    f"across two blocks.\n  A bridge carries the reader from one "
+                    f"picture to the next; between two\n  bridges there is no "
+                    f"picture. Merge them, or draw what goes in the middle.")
+
+        sections = sum(1 for b in blocks
+                       if registry.resolve(b.get("type"))[0] == "section")
+        cap = max(3, sections)
+        if len(positions) > cap:
+            raise SystemExit(
+                f"[bridge] {len(positions)} bridges across {sections} section(s); "
+                f"the cap is {cap}.\n\n"
+                f"  One hand-off per section is the budget. Past that the "
+                f"document is being\n  narrated rather than taught, and the "
+                f"pictures have quietly become\n  illustrations of the text "
+                f"instead of the thing carrying it.\n\n"
+                f"  Each bridge you cannot cut is a rung whose picture does not "
+                f"stand on its own.")
+
     # -- geometry ----------------------------------------------------------
 
     def span_width(self, span: int) -> float:
@@ -271,6 +366,38 @@ class Document:
         return (f'<{tag} class="{" ".join(classes)}"{block_id}>'
                 f"{head}{body}{note}{source}</{tag}>")
 
+    def render_placed_block(self, block: dict, width: float) -> str:
+        """One catalog block, rendered for a spot an authored page chose.
+
+        The grid is not involved: the page has already decided where this sits
+        and how wide it is, so the block gets the width it was given rather than
+        a span, and no `ig-block` wrapper that would drag grid rules in with it.
+        Everything else about the block is unchanged, which is the whole point.
+        A comparison of values really is a `bar`, and a hand-drawn one has no
+        axis maths, no label fitting, no table twin and no ordinal ramp.
+        """
+        options = dict(self.spec.get("options", {}))
+        options.update(block.get("options", {}) or {})
+        ctx = Ctx(self.theme, width, options, self.texture, self.spec, self.density)
+        payload = dict(block)
+        if not self.show_tables:
+            payload.setdefault("table", False)
+        body = registry.render_block(payload, ctx)
+        for warning in ctx.warnings:
+            self.warnings.append(f"{block.get('type')}#{block.get('id', '?')}: {warning}")
+
+        head = ""
+        if block.get("title") and not registry.owns(block, "title"):
+            head += f'<p class="ig-block-title">{inline(block["title"])}</p>'
+        if block.get("subtitle") and not registry.owns(block, "subtitle"):
+            head += f'<p class="ig-block-sub">{inline(block["subtitle"])}</p>'
+        note = (f'<p class="ig-block-note">{inline(block["note"])}</p>'
+                if block.get("note") and not registry.owns(block, "note") else "")
+        source = (f'<p class="ig-block-note">Source: {inline(block["source"])}</p>'
+                  if block.get("source") else "")
+        return (f'<div class="ig-placed" id="{svg.esc(str(block["id"]))}">'
+                f"{head}{body}{note}{source}</div>")
+
     def page_rule(self) -> str:
         """`@page` with literal values, it cannot be class-scoped, and custom
         properties are unreliable inside it.
@@ -309,6 +436,11 @@ class Document:
             f"--ig-good:{t.status('good_text')}",
             f"--ig-good-wash:{t.wash(t.status('good'), 0.10, on=t.surface('page'))}",
             f"--ig-warn:{t.status('warning')}",
+            # Amber is the one status colour that cannot be read at small sizes:
+            # every warning hue light enough to signal caution as a FILL sits
+            # near 1.6:1 against paper. So warning carries the same two roles
+            # the accent does, and text never reaches for the fill value.
+            f"--ig-warn-text:{t.status('warning_text')}",
             f"--ig-warn-wash:{t.wash(t.status('warning'), 0.14, on=t.surface('page'))}",
             f"--ig-danger:{t.status('critical')}",
             f"--ig-danger-text:{t.status('critical_text')}",
@@ -370,11 +502,50 @@ class Document:
         with open(os.path.join(TEMPLATES, "document.css"), encoding="utf-8") as fh:
             css = fh.read()
 
-        blocks = "\n".join(filter(None, (self.render_block(b) for b in self.spec.get("blocks", []))))
+        if self.authored:
+            main, warnings = authored.compose(
+                self.spec, self.render_placed_block, self.content_px)
+            self.warnings.extend(warnings)
+            for twin in authored.twins(self.spec):
+                main += details_table(twin["columns"], twin["rows"],
+                                      twin.get("label", "Show the numbers"),
+                                      twin.get("align"))
+        else:
+            main = ('<div class="ig-grid">\n' + "\n".join(filter(
+                None, (self.render_block(b) for b in self.spec.get("blocks", []))))
+                + "\n</div>")
         footer = self.footer_html()
         classes = [f"ig-paper-{self.paper}", f"ig-density-{self.density}",
                    f"ig-page-{self.page_key}",
                    "ig-paginated" if self.paginated else "ig-continuous"]
+        if self.authored:
+            # The linter reads both of these off the tag. Half its findings are
+            # about block composition (`thin`, `undrawn-section`,
+            # `no-authored-figure`) and mean nothing on a page that has no
+            # blocks; `no-table-view` is an error it must not raise against a
+            # page that has honestly declared it draws no data.
+            classes.append("ig-authored")
+            if authored.is_concept(self.spec):
+                classes.append("ig-encodes-concept")
+            # Words the author DREW, counted from the source and carried to the
+            # linter on the tag. The linter strips every `<svg>` before counting,
+            # deliberately, because a generated chart's axis ticks are part of
+            # the graphic rather than prose. That left an authored page a hole
+            # exactly the size of its labels: four hundred words of `<text>` and
+            # the budget sees none of them. Counting here rather than there is
+            # what keeps a PLACED block's ticks out of the total, because a
+            # placeholder has not expanded into a chart yet.
+            drawn = density_mod.svg_words(self.spec.get("body", ""))
+            if drawn:
+                classes.append(f"ig-drawn-{drawn}")
+        # One class for "the picture carries the idea", stamped for graphic and
+        # lesson alike, so the stylesheet does not have to name both densities
+        # in nine places and quietly miss the tenth. The density itself stays a
+        # separate class because the linter reads the budget from it by name.
+        if self.density in ("graphic", "lesson"):
+            classes.append("ig-graphic-first")
+        if self.meta.get("scenes"):
+            classes.append("ig-scenes-declared")
         if not self.show_tables:
             classes.append("ig-tables-hidden")
         if footer:
@@ -388,8 +559,10 @@ class Document:
             ("{{FONTS}}", self.theme.fonts_css()),
             ("{{TOKENS}}", self.tokens_css()),
             ("{{CSS}}", css),
+            ("{{PICTOGRAMS}}", pictograms.symbol_defs()),
             ("{{BODY_CLASS}}", body_class),
-            ("{{BLOCKS}}", blocks),
+            ("{{AUTHOR_CSS}}", str(self.spec.get("style") or "")),
+            ("{{MAIN}}", main),
             ("{{FOOTER}}", footer),
         ):
             html = html.replace(token, value)
@@ -414,6 +587,7 @@ def build(spec, out_path: str = None, theme: str = None, page: str = None,
     # Nothing else in the toolchain can see this: the linter reads one finished
     # document and cannot ask whether a different one would have been better.
     doc.warnings.extend(derivation.check(spec, registry, spec_path))
+    doc.warnings.extend(ladder_mod.check(spec, registry))
     doc.warnings.extend(leading_numbers.check(spec, registry))
     doc.warnings.extend(leading_numbers.inverted_without_ground(spec))
     if out_path:
@@ -436,7 +610,8 @@ def main():
                         help="turn on the texture channel for CVD / mono print")
     parser.add_argument("--density", choices=density_mod.DENSITIES,
                         help="graphic (default): titles and indicators, the picture "
-                             "carries the idea. report: allow body prose")
+                             "carries the idea. lesson: the same, with room to teach "
+                             "a subject from zero. report: allow body prose")
     args = parser.parse_args()
 
     html, warnings = build(args.spec, args.out, args.theme, args.page,

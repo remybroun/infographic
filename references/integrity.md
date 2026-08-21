@@ -91,8 +91,9 @@ and the linter reports its absence as an **error**.
 | data marks, icons, focus rings | 3:1 |
 | the de-emphasis gray, still a mark | 3:1 |
 
-`validate_theme.py` checks every ink role against every surface, and the
-self-test pins the de-emphasis floor. Do not eyeball any of it.
+`validate_theme.py` checks every ink role, and every status text role, against
+every surface, and the self-test pins the de-emphasis floor. Do not eyeball any
+of it.
 
 ## Structure
 

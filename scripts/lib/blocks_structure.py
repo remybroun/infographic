@@ -112,11 +112,27 @@ def cycle(b: dict, ctx: Ctx) -> str:
     n = len(steps)
     if n < 3:
         ctx.warn("cycle with fewer than 3 steps reads as a two-way arrow, not a loop.")
-    size = min(ctx.width, float(b.get("size", 380)))
+    wanted = float(b.get("size", 380))
+    size = min(ctx.width, wanted)
     height = size
     cx, cy = ctx.width / 2, size / 2
     ring_r = size * 0.30
     node_r = min(size * 0.115, 52)
+    # A ring is the one form here whose height IS its width, so a narrow column
+    # does not make it shorter, it makes it illegible: the node radius falls with
+    # the column and the label text does not. The tell is not that the ring is
+    # small, it is that the column squeezed it below the size it asked for, so
+    # that is what this measures. At a half column on A4 the result is a 326px
+    # square holding 38px nodes with three-line labels, and nothing in the
+    # payload hints at it, because `size` reads like a control rather than a
+    # ceiling.
+    if ctx.width < wanted:
+        ctx.warn(
+            f"cycle asked for {wanted:.0f}px and the column is {ctx.width:.0f}px, "
+            f"so it renders as a {size:.0f}px-tall square with {node_r:.0f}px "
+            f"nodes and the labels will not fit. A cycle wants a full-width span. "
+            f"Narrower than that, a `process` says the same sequence and reads at "
+            f"any width.")
     canvas = svg.Canvas(ctx.width, height, t)
 
     canvas.circle(cx, cy, ring_r, "none", stroke=t.rule("border"), width=1.5)

@@ -51,9 +51,23 @@ Gotchas:
 
 ## `area`: a total over time
 
-A `line` with `area: true`, and `stacked: true` when there is more than one
-series. Use it when the *accumulated total* is the subject. Use a plain `line`
-when the individual values are.
+```json
+{
+  "type": "area",
+  "title": "Nights booked per quarter, by channel",
+  "x": ["Q1", "Q2", "Q3", "Q4"],
+  "series": [
+    {"name": "Direct", "values": [820, 910, 1340, 1180]},
+    {"name": "Partner", "values": [460, 520, 610, 700]}
+  ],
+  "compact": true
+}
+```
+
+Every `line` key applies: `area` is that block with `area: true` already set,
+and it stacks on its own once there is more than one series. Pass
+`"stacked": false` to override. Use it when the *accumulated total* is the
+subject; use a plain `line` when the individual values are.
 
 Stacked areas hide everything except the bottom band and the total, the middle
 bands are read against a moving baseline, which humans do badly. If the middle

@@ -60,6 +60,95 @@ _ALLOWED = re.compile(
     r'|url\(\s*#[^)]+\s*\)'
     r'|var\(\s*--ig-[a-z0-9-]+\s*\))$', re.I)
 
+# `color-mix()` and the gradients are wrappers, not colours. Refusing them
+# outright cost the palette nothing and cost the drawing a great deal: a wash, a
+# soft field, a tinted overlay and a fade are all ordinary things to want, and
+# with no themed way to express them the only route left was a hex literal, which
+# is exactly what this check exists to prevent. So they pass, and whatever sits
+# inside them is held to the same rule by `has_literal`.
+_WRAPPER = re.compile(
+    r"^(?:color-mix|(?:repeating-)?(?:linear|radial|conic)-gradient)"
+    r"\s*\(\s*(.*?)\s*\)\s*$", re.I | re.S)
+
+_HEX_LITERAL = re.compile(r"#[0-9a-fA-F]{3,8}(?![0-9a-zA-Z_-])")
+_COLOR_FN = re.compile(
+    r"\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color|device-cmyk)\s*\(", re.I)
+
+# Not the full CSS list. These are the names anyone actually types, tested as
+# whole tokens so `--ig-good`, `to right` and a font called Salmon do not match.
+NAMED_COLOURS = frozenset("""
+aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond
+blue blueviolet brown burlywood cadetblue chartreuse chocolate coral
+cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray
+darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid
+darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey
+darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue
+firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod
+gray green greenyellow grey honeydew hotpink indianred indigo ivory khaki
+lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan
+lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon
+lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue
+lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue
+mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen
+mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin
+navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod
+palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum
+powderblue purple rebeccapurple red rosybrown royalblue saddlebrown salmon
+sandybrown seagreen seashell sienna silver skyblue slateblue slategray
+slategrey snow springgreen steelblue tan teal thistle tomato turquoise violet
+wheat white whitesmoke yellow yellowgreen
+""".split())
+
+_TOKENS = re.compile(r"[\s,()/]+")
+# Everything inside a gradient or a mix that is geometry or a colour space
+# rather than a colour, so a stray `red` cannot hide among them.
+_NOT_A_COLOUR = frozenset(
+    "in to at from srgb srgb-linear oklab oklch lab lch hsl hwb xyz "
+    "shorter longer increasing decreasing hue circle ellipse closest-side "
+    "closest-corner farthest-side farthest-corner top bottom left right "
+    "center corner".split())
+
+
+def has_literal(value: str) -> str:
+    """The first colour literal in a CSS/SVG paint value, or `""`.
+
+    One test, shared by the figure validator and the authored-page validator, so
+    a drawing and the stylesheet around it cannot disagree about what a colour
+    is allowed to be.
+    """
+    value = str(value).strip()
+    if not value or _ALLOWED.match(value):
+        return ""
+    wrapper = _WRAPPER.match(value)
+    if wrapper:
+        inner = wrapper.group(1)
+        # Recurse on nested wrappers first, then test what is left.
+        for part in re.split(r",(?![^(]*\))", inner):
+            found = has_literal(part.strip()) if _WRAPPER.match(part.strip()) else ""
+            if found:
+                return found
+        stripped = re.sub(r"(?:color-mix|(?:repeating-)?(?:linear|radial|conic)"
+                          r"-gradient)\s*\([^()]*\)", " ", inner, flags=re.I)
+        stripped = re.sub(r"var\(\s*--ig-[a-z0-9-]+\s*\)", " ", stripped, flags=re.I)
+        return _bare_literal(stripped)
+    return _bare_literal(value)
+
+
+def _bare_literal(text: str) -> str:
+    match = _HEX_LITERAL.search(text)
+    if match:
+        return match.group(0)
+    match = _COLOR_FN.search(text)
+    if match:
+        return match.group(0) + "…)"
+    for token in _TOKENS.split(text):
+        low = token.lower()
+        if low in _NOT_A_COLOUR:
+            continue
+        if low in NAMED_COLOURS:
+            return token
+    return ""
+
 _VIEWBOX = re.compile(r'^\s*-?[\d.]+\s+-?[\d.]+\s+-?[\d.]+\s+-?[\d.]+\s*$')
 
 
@@ -74,7 +163,7 @@ def paint_literals(markup: str):
 
     def consider(prop, value):
         value = str(value).strip()
-        if not value or _ALLOWED.match(value):
+        if not has_literal(value):
             return
         if (prop.lower(), value) in seen:
             return

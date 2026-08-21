@@ -87,8 +87,11 @@ quotation. A paraphrase in a box is just prose that has been made harder to read
  "text": "Time to close is a median, so the long tail is invisible."}
 ```
 
-`tone`: `key` · `note` · `warn` · `danger`. Each carries an icon as well as a
-colour, so the severity never depends on hue alone.
+`tone`: `key` · `note` · `warn` · `danger`. Each carries a mark as well as a
+colour, so the severity never depends on hue alone. `warn` and `danger` also
+tint the block, because there the hue IS the message; `key` and `note` sit on
+the neutral surface, because an idea does not become more important by being
+painted blue.
 
 Use sparingly. Three callouts on a page and none of them is a callout any more.
 
@@ -167,7 +170,19 @@ misleads.
 {"type": "definitions", "items": [{"term": "Churn", "text": "Customers who leave."}]}
 ```
 
-Put this **before** the argument that depends on the terms, not in an appendix.
+In `argument` mode, put this **before** the argument that depends on the terms,
+not in an appendix. The reader already has the concepts and is being handed the
+document's shorthand for them.
+
+**In `lesson` mode the opposite holds, and this entry is the one an agent reads
+at step 6, so it says so here rather than only in `teaching.md`.** A reader who
+does not have the concept cannot learn it from a definition list: a glossary
+placed before the lesson is the back of a textbook printed at the front. Each
+term is introduced by being *drawn*, at the rung that teaches it, and
+`definitions` goes last as a place to look things up again. It is the fallback,
+never the destination. `anti-patterns.md` lists "a glossary before the lesson"
+as a named failure for exactly this reason.
+→ [teaching.md](../teaching.md) · [../anti-patterns.md](../anti-patterns.md)
 
 ## `footnotes`: sources, method, and terms
 
@@ -192,8 +207,33 @@ not be bothered to explain.
 
 ## `image`: `divider`, `spacer`, `raw`
 
-`image` takes `src` (absolute `file://` or data URI), `alt` (required for the
-linter to pass), `ratio`, `fit`, `caption`.
+```json
+{"type": "image", "src": "file:///abs/path/lobby.jpg",
+ "alt": "The reception desk at Carrer de Balmes, seen from the entrance.",
+ "ratio": "16/9", "fit": "cover", "caption": "Balmes, ground floor."}
+
+{"type": "divider"}
+{"type": "spacer", "height": 24}
+{"type": "raw", "html": "<iframe …></iframe>"}
+```
+
+| Key | Block | Default | Notes |
+|---|---|---|---|
+| `src` | `image` | none | absolute `file://` or a data URI; a relative path does not resolve in the PDF renderer |
+| `alt` | `image` | `""` | one sentence saying what the image shows |
+| `ratio` | `image` | `16/9` | a CSS `aspect-ratio`, so `4/3`, `1/1`, `3/2` all work |
+| `fit` | `image` | `cover` | or `contain`, when cropping would cut the subject |
+| `caption` | `image` | none | printed under the frame, charged against the budget |
+| `height` | `spacer` | `24` | pixels of vertical air |
+| `html` | `raw` | `""` | injected unchanged |
+
+**Omitting `alt` is a decision, not a default.** The renderer emits `alt=""`,
+which passes the linter and declares to a screen reader that the image is
+decorative. That is right for a texture and wrong for everything else, and the
+linter cannot tell them apart. Write the sentence.
+
+`divider` and `spacer` take nothing else: they are a rule and a gap, and both
+are the honest answer when a page needs a beat rather than another block.
 
 `raw` injects HTML unchanged. It is the escape hatch, and it costs you theming,
 the table view, and every check in this skill. Use it after you have confirmed

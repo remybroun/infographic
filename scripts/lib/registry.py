@@ -27,6 +27,7 @@ from . import blocks_figure as fig
 from . import blocks_part as part
 from . import blocks_quantity as qty
 from . import blocks_structure as st
+from . import blocks_teaching as teach
 from . import blocks_time as tm
 
 FAMILIES = {
@@ -36,6 +37,7 @@ FAMILIES = {
     "part": "Share, composition and proportion",
     "structure": "Sequence, hierarchy, overlap and trade-off",
     "diagram": "The forms that absorb what would otherwise be paragraphs",
+    "teaching": "Meeting a subject for the first time",
 }
 
 REGISTRY = {
@@ -143,6 +145,11 @@ REGISTRY = {
                   "instead_of": "a pie chart"},
     "unit": {"fn": part.unit, "family": "part", "span": 8,
              "use_when": "a ratio should stay literally countable, 3 in 10"},
+    "pictogram": {"fn": part.pictogram, "family": "part", "span": 12,
+                  "use_when": "a few quantities are counted in a unit the reader "
+                              "should feel, one symbol standing for a fixed amount",
+                  "instead_of": "a bar chart whose axis label is the only thing "
+                                "saying what is being counted"},
     "donut": {"fn": part.donut, "family": "part", "span": 5,
               "use_when": "the brief demands a circle and there are at most six parts",
               "instead_of": "nothing, prefer share_bar unless asked"},
@@ -200,6 +207,46 @@ REGISTRY = {
     "swimlane": {"fn": dia.swimlane, "family": "diagram", "span": 12,
                  "use_when": "a sequence changes hands and the hand-off is the explanation",
                  "instead_of": "a process diagram whose steps each name a different owner"},
+
+    # -- teaching ----------------------------------------------------------
+    # Every family above draws a relation between things the reader already
+    # accepts. These three draw the moment before that, which is why a catalog
+    # of 53 correct forms could still only produce documents for insiders.
+    "analogy": {"fn": teach.analogy, "family": "teaching", "span": 12,
+                "text_roles": {"known": "label", "new": "label"},
+                "use_when": "the reader owns nothing yet, and something they do own "
+                            "has the same shape",
+                "instead_of": "`comparison`, which argues one side is better; an "
+                              "analogy claims both sides are the same shape"},
+    "progressive": {"fn": teach.progressive, "family": "teaching", "span": 12,
+                    "text_roles": {"parts": "label"},
+                    "use_when": "the finished picture has too many parts to meet at "
+                                "once, and each one exists because of the last",
+                    "instead_of": "one complete diagram, which shows what a system "
+                                  "contains and never how to think about it"},
+    "misconception": {"fn": teach.misconception, "family": "teaching", "span": 12,
+                      # The role of a payload string comes from the last named
+                      # key on its path, so `items[0].assumed` is charged as
+                      # `assumed`, not as `items`. Mapping the container key
+                      # would leave both columns uncapped.
+                      "text_roles": {"assumed": "detail", "actual": "detail",
+                                     "assumed_title": "label",
+                                     "actual_title": "label"},
+                      "use_when": "newcomers reliably arrive with a wrong model and "
+                                  "the document has to displace it",
+                      "instead_of": "stating the correct version and hoping it "
+                                    "overwrites what the reader already believes"},
+    "bridge": {"fn": teach.bridge, "family": "teaching", "span": 12,
+               # The one block in this family that is not a picture. It is here
+               # rather than in editorial because it only means anything as part
+               # of a ladder, and because listing it beside `prose` is how it
+               # would get reached for as prose.
+               "graphic": False,
+               "text_roles": {"text": "bridge"},
+               "use_when": "LESSON DENSITY ONLY, one sentence carrying the reader "
+                           "from one rung of the ladder to the next",
+               "instead_of": "cramming it into the next block's subtitle, which "
+                             "then stops stating what the picture shows"},
 }
 
 # Charts and diagrams carry their idea in a picture by construction. The
@@ -207,7 +254,8 @@ REGISTRY = {
 # where the distinction between a graphic and a wall of text actually lives.
 for _entry in REGISTRY.values():
     _entry.setdefault("graphic", _entry["family"] in
-                      ("quantity", "change", "part", "structure", "diagram"))
+                      ("quantity", "change", "part", "structure", "diagram",
+                       "teaching"))
 
 ALIASES = {
     "barchart": "bar", "hbar": "bar", "columns": "column", "vbar": "column",
@@ -222,8 +270,14 @@ ALIASES = {
     "tags": "chips", "pills": "chips", "badges": "chips", "facts": "chips",
     "criteria": "scorecard", "evaluation": "scorecard", "tradeoff": "scorecard",
     "dial": "gauge", "score": "gauge", "lanes": "swimlane", "handoff": "swimlane",
+    "pictograph": "pictogram", "picto": "pictogram", "symbol_chart": "pictogram",
     "draw": "figure", "scene": "figure", "drawing": "figure", "svg": "figure",
     "diagram": "figure", "illustration": "figure",
+    "like": "analogy", "metaphor": "analogy", "is_like": "analogy",
+    "buildup": "progressive", "build_up": "progressive", "stages": "progressive",
+    "myth": "misconception", "myths": "misconception",
+    "assumption": "misconception", "corrections": "misconception",
+    "transition": "bridge", "so_far": "bridge",
 }
 
 

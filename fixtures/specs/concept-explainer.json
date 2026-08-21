@@ -1,275 +1,276 @@
 {
- "meta": {
-  "title": "Compound and simple interest on £10,000 at 7% over 30 years",
-  "theme": "default",
-  "page": "a4",
-  "date": "2026",
-  "footer_left": "How compound interest actually works",
-  "footer_right": "An explainer"
- },
- "options": {},
- "blocks": [
-  {
-   "type": "hero",
-   "kicker": "Explainer",
-   "title": "Compound and simple interest on £10,000 at 7% over 30 years",
-   "subtitle": "Compounding ends at £76,123 against £31,000 for simple interest at the same rate.",
-   "lede": "Two savers contribute the same total at the same rate; the earlier one ends ahead.",
-   "author": "Worked example",
-   "date": "Fixture"
+  "meta": {
+    "title": "Compound and simple interest on £10,000 at 7% over 30 years",
+    "theme": "default",
+    "page": "a4",
+    "date": "2026",
+    "footer_left": "How compound interest actually works",
+    "footer_right": "An explainer",
+    "scenes": "Every claim here is a quantity over time or a comparison of two totals, and line, bar and unit draw all of them better than a hand-drawn version would."
   },
-  {
-   "type": "divider"
-  },
-  {
-   "type": "section",
-   "number": "01",
-   "title": "How one period of compounding is calculated",
-   "lede": "Simple interest adds. Compound interest multiplies. Everything else follows from that one difference."
-  },
-  {
-   "type": "process",
-   "span": 12,
-   "title": "The three steps in a single compounding period",
-   "orientation": "horizontal",
-   "steps": [
+  "options": {},
+  "blocks": [
     {
-     "title": "Start with a balance",
-     "text": "Whatever you already hold at the beginning of the period."
+      "type": "hero",
+      "kicker": "Explainer",
+      "title": "Compound and simple interest on £10,000 at 7% over 30 years",
+      "subtitle": "Compounding ends at £76,123 against £31,000 for simple interest at the same rate.",
+      "lede": "Two savers contribute the same total at the same rate; the earlier one ends ahead.",
+      "author": "Worked example",
+      "date": "Fixture"
     },
     {
-     "title": "Apply the rate",
-     "text": "Interest is calculated on the whole balance, not on the original deposit."
+      "type": "divider"
     },
     {
-     "title": "Add it back",
-     "text": "The interest joins the balance, so next period it earns interest too."
+      "type": "section",
+      "number": "01",
+      "title": "How one period of compounding is calculated",
+      "lede": "Simple interest adds. Compound interest multiplies. Everything else follows from that one difference."
+    },
+    {
+      "type": "process",
+      "span": 12,
+      "title": "The three steps in a single compounding period",
+      "orientation": "horizontal",
+      "steps": [
+        {
+          "title": "Start with a balance",
+          "text": "Whatever you already hold at the beginning of the period."
+        },
+        {
+          "title": "Apply the rate",
+          "text": "Interest is calculated on the whole balance, not on the original deposit."
+        },
+        {
+          "title": "Add it back",
+          "text": "The interest joins the balance, so next period it earns interest too."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "key",
+      "title": "Step three is the entire mechanism",
+      "text": "Step three is the entire mechanism. Remove it and compound interest becomes simple interest."
+    },
+    {
+      "type": "line",
+      "span": 8,
+      "title": "Balance over 30 years at 7%, compounded and simple",
+      "subtitle": "£10,000 initial deposit. The gap comes from step three repeating, not from the rate.",
+      "x": [
+        "0",
+        "5",
+        "10",
+        "15",
+        "20",
+        "25",
+        "30"
+      ],
+      "currency": "£",
+      "compact": true,
+      "series": [
+        {
+          "name": "Compounded",
+          "values": [
+            10000,
+            14026,
+            19672,
+            27590,
+            38697,
+            54274,
+            76123
+          ]
+        },
+        {
+          "name": "Simple",
+          "values": [
+            10000,
+            13500,
+            17000,
+            20500,
+            24000,
+            27500,
+            31000
+          ]
+        }
+      ],
+      "note": "Both lines share one axis. Two y-scales here would invent a relationship the arithmetic does not contain."
+    },
+    {
+      "type": "stat",
+      "span": 4,
+      "label": "Interest earned on interest",
+      "value": 45123,
+      "currency": "£",
+      "compact": true,
+      "note": "The whole gap between the two curves above, and none of it deposited."
+    },
+    {
+      "type": "section",
+      "number": "02",
+      "title": "The effect of starting age on the final balance",
+      "lede": "Time enters the formula as an exponent. Contributions enter it as a multiplier. Exponents win."
+    },
+    {
+      "type": "comparison",
+      "span": 12,
+      "left": {
+        "label": "Saver A",
+        "headline": "Pays in for 10 years, then stops",
+        "points": [
+          "£5,000 a year from age 25 to 35",
+          "£50,000 contributed in total",
+          "Nothing added after 35",
+          "£602,000 at age 65"
+        ]
+      },
+      "right": {
+        "label": "Saver B",
+        "headline": "Pays in for 30 years, and never stops",
+        "points": [
+          "£5,000 a year from age 35 to 65",
+          "£150,000 contributed in total",
+          "Three times the contributions",
+          "£540,000 at age 65"
+        ]
+      },
+      "vs": "vs",
+      "note": "Saver A contributes a third as much and still finishes ahead."
+    },
+    {
+      "type": "bar",
+      "span": 7,
+      "title": "What one pound becomes, by deposit age",
+      "subtitle": "A single £1 at 7%, valued at age 65.",
+      "categories": [
+        "Age 25",
+        "Age 35",
+        "Age 45",
+        "Age 55"
+      ],
+      "values": [
+        14.97,
+        7.61,
+        3.87,
+        1.97
+      ],
+      "currency": "£",
+      "decimals": 2,
+      "sort": null,
+      "ordinal": true,
+      "ordinal_reverse": true,
+      "value_label": "Value at 65",
+      "note": "Reversed ordinal ramp: the earliest deposit holds the dark end."
+    },
+    {
+      "type": "unit",
+      "span": 5,
+      "title": "Composition of Saver A's final balance",
+      "subtitle": "Saver A's £602,000, as 100 squares.",
+      "cells": 100,
+      "per_row": 10,
+      "parts": [
+        {
+          "label": "Money they paid in",
+          "value": 8
+        },
+        {
+          "label": "Interest on that money",
+          "value": 25
+        },
+        {
+          "label": "Interest on the interest",
+          "value": 67
+        }
+      ],
+      "note": "Two thirds of the outcome is money the money made."
+    },
+    {
+      "type": "section",
+      "number": "03",
+      "title": "How an annual fee reduces the final balance",
+      "lede": "The same exponent that builds the balance also magnifies anything subtracted every year."
+    },
+    {
+      "type": "dumbbell",
+      "span": 12,
+      "title": "The cost of a 1% fee over 30 years",
+      "from_label": "At 7%",
+      "to_label": "At 6% after fees",
+      "currency": "£",
+      "compact": true,
+      "items": [
+        {
+          "label": "£10,000 lump sum",
+          "from": 76123,
+          "to": 57435
+        },
+        {
+          "label": "£5,000 a year",
+          "from": 505365,
+          "to": 419008
+        },
+        {
+          "label": "£20,000 lump sum",
+          "from": 152245,
+          "to": 114870
+        }
+      ],
+      "note": "One percent a year removes roughly a quarter of the balance."
+    },
+    {
+      "type": "checklist",
+      "span": 12,
+      "do_title": "What moves the outcome",
+      "dont_title": "What barely does",
+      "do": [
+        "Starting earlier, even with less",
+        "Never interrupting the compounding",
+        "Cutting annual percentage fees",
+        "Re-investing every distribution"
+      ],
+      "dont": [
+        "Timing the first deposit to the month",
+        "Chasing an extra 0.2% of headline rate",
+        "Larger contributions started late",
+        "Checking the balance more often"
+      ]
+    },
+    {
+      "type": "definitions",
+      "span": 12,
+      "title": "Terms used here",
+      "items": [
+        {
+          "term": "Principal",
+          "text": "The amount you put in, and the only part you control."
+        },
+        {
+          "term": "Compounding period",
+          "text": "What the pot earns each period, expressed as a rate."
+        },
+        {
+          "term": "Effective annual rate",
+          "text": "What the headline rate actually becomes once compounding frequency is accounted for."
+        },
+        {
+          "term": "Real return",
+          "text": "The return after inflation. Compounding works on the way down too."
+        }
+      ]
+    },
+    {
+      "type": "footnotes",
+      "span": 12,
+      "title": "Method",
+      "items": [
+        "All figures assume a constant 7% nominal annual return, compounded annually, with no tax.",
+        "Contributions are modelled as made at the end of each year.",
+        "Fee scenario applies a flat 1% of balance annually before compounding.",
+        "This is a worked fixture for the infographic skill, not financial advice."
+      ]
     }
-   ]
-  },
-  {
-   "type": "callout",
-   "tone": "key",
-   "title": "Step three is the entire mechanism",
-   "text": "Step three is the entire mechanism. Remove it and compound interest becomes simple interest."
-  },
-  {
-   "type": "line",
-   "span": 8,
-   "title": "Balance over 30 years at 7%, compounded and simple",
-   "subtitle": "£10,000 initial deposit. The gap comes from step three repeating, not from the rate.",
-   "x": [
-    "0",
-    "5",
-    "10",
-    "15",
-    "20",
-    "25",
-    "30"
-   ],
-   "currency": "£",
-   "compact": true,
-   "series": [
-    {
-     "name": "Compounded",
-     "values": [
-      10000,
-      14026,
-      19672,
-      27590,
-      38697,
-      54274,
-      76123
-     ]
-    },
-    {
-     "name": "Simple",
-     "values": [
-      10000,
-      13500,
-      17000,
-      20500,
-      24000,
-      27500,
-      31000
-     ]
-    }
-   ],
-   "note": "Both lines share one axis. Two y-scales here would invent a relationship the arithmetic does not contain."
-  },
-  {
-   "type": "stat",
-   "span": 4,
-   "label": "Interest earned on interest",
-   "value": 45123,
-   "currency": "£",
-   "compact": true,
-   "note": "The whole gap between the two curves above, and none of it deposited."
-  },
-  {
-   "type": "section",
-   "number": "02",
-   "title": "The effect of starting age on the final balance",
-   "lede": "Time enters the formula as an exponent. Contributions enter it as a multiplier. Exponents win."
-  },
-  {
-   "type": "comparison",
-   "span": 12,
-   "left": {
-    "label": "Saver A",
-    "headline": "Pays in for 10 years, then stops",
-    "points": [
-     "£5,000 a year from age 25 to 35",
-     "£50,000 contributed in total",
-     "Nothing added after 35",
-     "£602,000 at age 65"
-    ]
-   },
-   "right": {
-    "label": "Saver B",
-    "headline": "Pays in for 30 years, and never stops",
-    "points": [
-     "£5,000 a year from age 35 to 65",
-     "£150,000 contributed in total",
-     "Three times the contributions",
-     "£540,000 at age 65"
-    ]
-   },
-   "vs": "vs",
-   "note": "Saver A contributes a third as much and still finishes ahead."
-  },
-  {
-   "type": "bar",
-   "span": 7,
-   "title": "What one pound becomes, by deposit age",
-   "subtitle": "A single £1 at 7%, valued at age 65.",
-   "categories": [
-    "Age 25",
-    "Age 35",
-    "Age 45",
-    "Age 55"
-   ],
-   "values": [
-    14.97,
-    7.61,
-    3.87,
-    1.97
-   ],
-   "currency": "£",
-   "decimals": 2,
-   "sort": null,
-   "ordinal": true,
-   "ordinal_reverse": true,
-   "value_label": "Value at 65",
-   "note": "Reversed ordinal ramp: the earliest deposit holds the dark end."
-  },
-  {
-   "type": "unit",
-   "span": 5,
-   "title": "Composition of Saver A's final balance",
-   "subtitle": "Saver A's £602,000, as 100 squares.",
-   "cells": 100,
-   "per_row": 10,
-   "parts": [
-    {
-     "label": "Money they paid in",
-     "value": 8
-    },
-    {
-     "label": "Interest on that money",
-     "value": 25
-    },
-    {
-     "label": "Interest on the interest",
-     "value": 67
-    }
-   ],
-   "note": "Two thirds of the outcome is money the money made."
-  },
-  {
-   "type": "section",
-   "number": "03",
-   "title": "How an annual fee reduces the final balance",
-   "lede": "The same exponent that builds the balance also magnifies anything subtracted every year."
-  },
-  {
-   "type": "dumbbell",
-   "span": 12,
-   "title": "The cost of a 1% fee over 30 years",
-   "from_label": "At 7%",
-   "to_label": "At 6% after fees",
-   "currency": "£",
-   "compact": true,
-   "items": [
-    {
-     "label": "£10,000 lump sum",
-     "from": 76123,
-     "to": 57435
-    },
-    {
-     "label": "£5,000 a year",
-     "from": 505365,
-     "to": 419008
-    },
-    {
-     "label": "£20,000 lump sum",
-     "from": 152245,
-     "to": 114870
-    }
-   ],
-   "note": "One percent a year removes roughly a quarter of the balance."
-  },
-  {
-   "type": "checklist",
-   "span": 12,
-   "do_title": "What moves the outcome",
-   "dont_title": "What barely does",
-   "do": [
-    "Starting earlier, even with less",
-    "Never interrupting the compounding",
-    "Cutting annual percentage fees",
-    "Re-investing every distribution"
-   ],
-   "dont": [
-    "Timing the first deposit to the month",
-    "Chasing an extra 0.2% of headline rate",
-    "Larger contributions started late",
-    "Checking the balance more often"
-   ]
-  },
-  {
-   "type": "definitions",
-   "span": 12,
-   "title": "Terms used here",
-   "items": [
-    {
-     "term": "Principal",
-     "text": "The amount you put in, and the only part you control."
-    },
-    {
-     "term": "Compounding period",
-     "text": "What the pot earns each period, expressed as a rate."
-    },
-    {
-     "term": "Effective annual rate",
-     "text": "What the headline rate actually becomes once compounding frequency is accounted for."
-    },
-    {
-     "term": "Real return",
-     "text": "The return after inflation. Compounding works on the way down too."
-    }
-   ]
-  },
-  {
-   "type": "footnotes",
-   "span": 12,
-   "title": "Method",
-   "items": [
-    "All figures assume a constant 7% nominal annual return, compounded annually, with no tax.",
-    "Contributions are modelled as made at the end of each year.",
-    "Fee scenario applies a flat 1% of balance annually before compounding.",
-    "This is a worked fixture for the infographic skill, not financial advice."
-   ]
-  }
- ]
+  ]
 }

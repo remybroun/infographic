@@ -12,20 +12,33 @@ role, the count and the cap. There is no truncation, because silently cutting a
 sentence in half changes what the document claims. The author has to make the
 choice the budget is forcing: say it shorter, or draw it instead.
 
-Two densities:
+Three densities:
 
 - `graphic` (the default): titles and indicators only. The picture carries the
   idea. Body prose is refused outright.
+- `lesson`: graphic density with room to teach. The same refusal of body prose,
+  slightly longer labels, and one sanctioned channel for connective tissue: the
+  `bridge` block, capped at 40 words and refused everywhere else. It exists
+  because the graphic budget and the instruction "explain it to someone who has
+  never met this subject" were in direct conflict, and the budget won every
+  time: it is enforced in code and the instruction was a paragraph of prose. A
+  6-word label cap makes `skipped_bucket` cost one word and "the recipient
+  switched that group off" cost six, so the cheapest accurate label is always
+  the one only the author can read. This density is that conflict resolved in
+  the author's favour, with a ceiling low enough that it cannot become an essay.
 - `report`: the old behaviour, for when a real prose document is genuinely
   wanted. Opt in explicitly with `meta.density` or `--density report`; it is
   never the fallback for "the text did not fit".
+
+`lesson` is not the fallback either. The order to try is: draw it, then rewrite
+it shorter, then `lesson` if the subject genuinely has to be taught from zero.
 """
 
 from __future__ import annotations
 
 import re
 
-DENSITIES = ("graphic", "report")
+DENSITIES = ("graphic", "lesson", "report")
 
 # Caps are in WORDS, not characters, because words are what a reader parses and
 # what an author can act on. "Cut three words" is a real instruction; "cut 18
@@ -54,11 +67,31 @@ CAPS = {
         # picture. 40 is a third of a whole page's allowance (see
         # WORDS_PER_PAGE), because one drawing must never be the page's text.
         "figure_text": 40,
+        # The connective sentence between two rungs of a ladder, refused here.
+        # A `bridge` at graphic density would be body prose with a different
+        # key, which is exactly the hole `body: 0` exists to close.
+        "bridge": 0,
+    },
+    # Every cap here is the graphic cap plus room for one ordinary word where a
+    # jargon term would otherwise have fit. `label` at 8 rather than 6 is the
+    # whole point in miniature: "recipient switched this off" is five words and
+    # does not fit under 6 once a qualifier is needed, so the identifier wins.
+    # `body` stays refused, because a lesson is still carried by its pictures.
+    "lesson": {
+        "hero_title": 18, "title": 16, "subtitle": 24, "label": 8,
+        "detail": 18, "note": 24, "callout": 32, "quote": 30, "body": 0,
+        "figure_text": 55,
+        # One line of connective tissue: "so far, every request went to one
+        # place. Here is what happens when there are two." A lesson needs it and
+        # graphic density has nowhere to put it, which is how the connective
+        # sentence ends up crammed into a subtitle that then stops stating the
+        # finding. 40 words is a sentence or two, not a paragraph.
+        "bridge": 40,
     },
     "report": {
         "hero_title": 24, "title": 22, "subtitle": 40, "label": 12,
         "detail": 60, "note": 60, "callout": 90, "quote": 60, "body": 1_000_000,
-        "figure_text": 120,
+        "figure_text": 120, "bridge": 90,
     },
 }
 
@@ -68,14 +101,19 @@ CAPS = {
 # It was 130 when titles were capped at 9; raising the title cap without raising
 # this would buy the longer title by taking the words out of the subtitle, which
 # is exactly where the finding lives.
-WORDS_PER_PAGE = {"graphic": 150, "report": 900}
+#
+# 260 for `lesson`, which is not a compromise between 150 and 900 but a measured
+# floor: the smallest allowance that fits a four-rung ladder's bridges, its
+# longer labels and one definition, on a page that is still mostly picture. A
+# lesson page over 260 words has stopped teaching and started narrating.
+WORDS_PER_PAGE = {"graphic": 150, "lesson": 260, "report": 900}
 
 # The same budget for a document with no pages to divide by (`page: scroll`).
 # Charged per block instead, and derived from the caps above rather than picked:
 # title (14) + subtitle (16) + note (18) is the most chrome a single block may
 # legally carry, so a document averaging that much has every block running at
 # maximum text, which is the signature of an essay wearing block formatting.
-WORDS_PER_BLOCK = {"graphic": 48, "report": 160}
+WORDS_PER_BLOCK = {"graphic": 48, "lesson": 78, "report": 160}
 
 # Which role a payload key carries, when the block does not override it.
 # Anything absent from this map is data (values, colours, ids) and is not text.
@@ -92,6 +130,7 @@ DEFAULT_ROLES = {
     "attribution": "label",
     "author": "label",
     "unit": "label",
+    "unit_label": "label",
     "axis_x": "label",
     "axis_y": "label",
     "low_label": "label",
@@ -115,6 +154,11 @@ SKIP_KEYS = {
     "orientation", "level", "tone", "vs", "number", "delta", "delta_unit",
     "delta_period", "delta_decimals", "up_is_good", "target", "max", "min",
     "table", "reverse", "alt_ramp", "emphasis", "lead", "ordered",
+    # Pictogram names are identifiers pointing at a shape, not words a reader
+    # reads. Listed rather than left to fall through the role map, because a
+    # drawing costing nothing against the budget is the argument for drawing.
+    "glyph", "icon", "unit_value", "per", "size", "gap", "row_gap",
+    "show_values", "vary_color",
     # Authored figures: geometry, declarations, and the accessibility twin.
     # `alt` is exempt for the same reason a table is, it is a duplicate of
     # what the drawing already says, and charging it would push an author to
@@ -168,14 +212,25 @@ class Violation:
                     f"      → a drawing labels, it does not narrate. Move the sentences "
                     f"into the block's own `title` and `subtitle`, cut the labels to "
                     f"nouns, or split the drawing in two.")
+        if self.cap == 0 and self.role == "bridge":
+            return (f"  {where}: `bridge` is not available at this density "
+                    f"({self.count} words).\n"
+                    f"      {self.sample}\n"
+                    f"      → a bridge is the one connective sentence a lesson "
+                    f"is allowed between\n        two rungs of its ladder, and "
+                    f"it exists at `lesson` density only. Set\n        "
+                    f'meta.density to "lesson" if this document teaches a '
+                    f"subject from zero;\n        otherwise the sentence belongs "
+                    f"in the next block's `subtitle`, or drawn.")
         if self.cap == 0:
             return (f"  {where}: body prose is not available at graphic density "
                     f"({self.count} words).\n"
                     f"      {self.sample}\n"
                     f"      → draw it. If this paragraph is a sequence use `process`, a "
                     f"comparison use `comparison` or `scorecard`, a structure use `stack` "
-                    f"or `tree`, a set of facts use `chips` or `kpi`. If it is genuinely "
-                    f"an essay, pass --density report.")
+                    f"or `tree`, a set of facts use `chips` or `kpi`. If it is one "
+                    f"sentence linking two rungs of a lesson, it is a `bridge` at "
+                    f"--density lesson. If it is genuinely an essay, --density report.")
         return (f"  {where}: {self.count} words as a `{self.role}`, cap is {self.cap}.\n"
                 f"      {self.sample}\n"
                 f"      → cut to {self.cap}, or move the idea into the graphic beside it.")
@@ -218,6 +273,35 @@ def _scan(node, roles, caps, block_label, path, out, exempt):
                      if key in MARKUP_ROLES else node)
     if count > cap:
         out.append(Violation(block_label, path, role, count, cap, sample))
+
+
+def block_words(block: dict, registry) -> int:
+    """Words one block contributes, charged exactly as `audit` charges them.
+
+    Public because the alternative is every caller that wants to know *where*
+    the words are re-implementing the SKIP_KEYS walk, which is how a budget
+    report drifts from the budget it reports on.
+    """
+    _key, entry = registry.resolve(block.get("type"))
+    if not entry or entry.get("text_exempt") or block.get("skip"):
+        return 0
+    exempt = set(entry.get("text_free", ()))
+    total = 0
+
+    def walk(node, key=None):
+        nonlocal total
+        if isinstance(node, dict):
+            for name, value in node.items():
+                if name not in SKIP_KEYS and name not in exempt:
+                    walk(value, name)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item, key)
+        elif isinstance(node, str):
+            total += svg_words(node) if key in MARKUP_ROLES else words(node)
+
+    walk(block)
+    return total
 
 
 def audit(spec: dict, density: str, registry) -> list:

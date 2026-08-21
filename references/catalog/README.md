@@ -4,17 +4,26 @@ Every visual this skill can draw, grouped by the reader's job. The registry in
 `scripts/lib/registry.py` is the machine-readable twin of these files, if they
 disagree, the registry is right and the doc needs fixing.
 
-Run `python3 scripts/ig.py catalog` for the live list, or
-`python3 scripts/ig.py catalog --sheet out/catalog.pdf` to render a proof sheet
-showing every block drawn with sample data in the current theme.
+Run `python3 scripts/ig.py catalog` for the live list, which also names the file
+documenting each family. **`python3 scripts/ig.py catalog <type>` prints one
+block in full**: its payload example, every key it takes, its aliases, how its
+text is charged against the budget, and the section below that documents it.
+Reach for that before opening a file by hand. `--sheet out/catalog.pdf` renders
+a proof sheet of every block drawn with sample data in the current theme.
 
 **Start with [diagram.md](diagram.md).** It holds the forms that absorb what
 would otherwise become paragraphs, which is the commonest failure this catalog
 exists to prevent.
 
+**Then read [teaching.md](teaching.md) if the reader has never met the subject.**
+Every other family here draws a relation between things the reader already
+accepts, which is a large vocabulary for *operating* on a subject and no
+vocabulary at all for *meeting* one.
+
 | File | Family | Blocks |
 |---|---|---|
 | **[diagram.md](diagram.md)** | **The forms that absorb paragraphs** | `stack` `swimlane` `scorecard` `gauge` `chips` |
+| **[teaching.md](teaching.md)** | **Meeting a subject for the first time** | `analogy` `progressive` `misconception` · plus `bridge`, **lesson density only** |
 | [quantity.md](quantity.md) | How much, and how items compare | `bar` `column` `lollipop` `diverging` `likert` `scatter` `heatmap` `matrix` |
 | [change.md](change.md) | Movement over time or between two states | `line` `area` `dumbbell` `slope` `timeline` |
 | [part-to-whole.md](part-to-whole.md) | Share, composition, proportion | `share_bar` `unit` `donut` `treemap` `funnel` `pyramid` `meter` |
@@ -51,7 +60,7 @@ Accepted by every block that prints a number.
 | `currency` | `""` | prefix, e.g. `"$"`, `"£"`, `"€"` |
 | `unit` | `""` | suffix, e.g. `"%"`, `"h"`, `"kg"` |
 | `decimals` | `0` | decimal places |
-| `compact` | `false` | 1284 → 1.3K, 4200000 → 4.2M |
+| `compact` | `false` | 1284 → 1.3K, 4200000 → 4.2M. **Number formatting, not a height or width control**, despite reading like one. It rounds, so it destroys a headline figure: 2,023 becomes "2K" and the precision that made the number worth printing is gone. Use it on axis ticks and long tails, never on the value the document is about |
 | `table` | `true` | emit the table-view twin (turning this off is an accessibility regression) |
 | `value_label` | `"Value"` | column header in the table view |
 | `category_label` | `"Category"` | first column header in the table view |

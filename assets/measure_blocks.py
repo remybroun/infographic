@@ -35,11 +35,44 @@ window.addEventListener('load', function () {
     out.push([i, Math.round(el.getBoundingClientRect().height)]);
   });
   document.body.setAttribute('data-measured', JSON.stringify(out));
+  var grid = document.querySelector('.ig-grid');
+  document.body.setAttribute('data-gridpx',
+    grid ? Math.round(grid.getBoundingClientRect().height) : 0);
+  // An authored page has no grid, so its height is the content box of <main>.
+  // Without this the one instrument for "will this fit on a sheet" is blind to
+  // exactly the documents that need it most: block heights are at least
+  // guessable from the payload, and a page laid out by its own CSS is not.
+  // The CONTENT box, not the border box. On screen `.ig-doc` carries the page
+  // margins as padding and `@media print` removes them, because in print the
+  // @page box supplies them instead. Measuring the border box here reports a
+  // document as ~140px taller than it prints, which is the difference between
+  // "one sheet, 120px spare" and a spurious second page.
+  var main = document.querySelector('main.ig-doc');
+  var pad = main ? getComputedStyle(main) : null;
+  document.body.setAttribute('data-mainpx', main ? Math.round(
+    main.getBoundingClientRect().height
+    - parseFloat(pad.paddingTop) - parseFloat(pad.paddingBottom)) : 0);
 });
 </script>"""
 
 
 def measure(spec_path: str):
+    """Real layout numbers for a spec: per-block heights and the whole stack.
+
+    Returns a dict rather than a tuple so a caller wanting one more number does
+    not have to change every call site. `grid_px` includes the inter-block
+    margins, which is why it is read off the container instead of summed.
+    """
+    # The linter's `near-empty-page` hint says to run `ig.py measure`, and the
+    # thing in hand at that moment is the PDF it just complained about. Saying
+    # so beats a UnicodeDecodeError nine frames deep in the json module.
+    if not str(spec_path).lower().endswith((".json", ".jsonc")):
+        raise SystemExit(
+            f"[measure] {spec_path}: measure reads the spec, not the rendered "
+            f"document.\n"
+            f"  It lays the blocks out to find their heights, so it needs the "
+            f"source.\n"
+            f"    python3 scripts/ig.py measure out/spec.json")
     spec = json.load(open(spec_path, encoding="utf-8"))
     html, _warnings = build_mod.build(spec_path)
     tmp = os.path.join(os.path.dirname(os.path.abspath(spec_path)), ".measure.html")
@@ -56,14 +89,24 @@ def measure(spec_path: str):
     found = re.search(r'data-measured="([^"]+)"', dom)
     if not found:
         raise SystemExit("[measure] Chrome returned no measurements")
-    heights = dict(json.loads(found.group(1).replace("&quot;", '"')))
-    return [b for b in spec.get("blocks", []) if not b.get("skip")], heights
+    grid = re.search(r'data-gridpx="(\d+)"', dom)
+    main = re.search(r'data-mainpx="(\d+)"', dom)
+    return {
+        "spec": spec,
+        "html": html,
+        "blocks": [b for b in spec.get("blocks", []) if not b.get("skip")],
+        "heights": dict(json.loads(found.group(1).replace("&quot;", '"'))),
+        "grid_px": int(grid.group(1)) if grid else 0,
+        "main_px": int(main.group(1)) if main else 0,
+        "authored": bool(str(spec.get("body") or "").strip()),
+    }
 
 
 def main():
     if len(sys.argv) != 2:
         raise SystemExit(__doc__)
-    blocks, heights = measure(sys.argv[1])
+    measured = measure(sys.argv[1])
+    blocks, heights = measured["blocks"], measured["heights"]
     waste, previous = 0, None
     for index, block in enumerate(blocks):
         height = heights.get(index, 0)

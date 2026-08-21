@@ -116,6 +116,7 @@
     "serious": "#B06A3F",
     "critical": "#A63A28",
     "good_text": "#3D4A1A",
+    "warning_text": "#8E5A2E",
     "critical_text": "#8E3020"
   },
   "type": {

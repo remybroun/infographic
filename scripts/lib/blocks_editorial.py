@@ -53,7 +53,8 @@ def hero(b: dict, ctx: Ctx) -> str:
     if b.get("lede"):
         parts.append(f'<div class="ig-hero-lede">{_paragraphs(b["lede"])}</div>')
     if b.get("stats"):
-        parts.append(kpi({"items": b["stats"], "compact": True}, ctx))
+        parts.append(kpi({"items": b["stats"],
+                          "compact": b.get("compact", True)}, ctx))
     meta = []
     for key in ("author", "date", "source"):
         if b.get(key):
@@ -108,7 +109,12 @@ def callout(b: dict, ctx: Ctx) -> str:
     """One of: key, note, warn, danger. The tone maps to a status color and an
     icon, never to color alone."""
     tone = b.get("tone", "key")
-    icons = {"key": "◆", "note": "i", "warn": "!", "danger": "!"}
+    # Four marks, four shapes. They used to be reversed out of a coloured disc,
+    # where "!" could serve both warn and danger because the disc carried the
+    # hue; drawn as bare marks they have to differ in shape or the severity is
+    # riding on colour alone, which is the one thing this block promises not to
+    # do.
+    icons = {"key": "◆", "note": "●", "warn": "!", "danger": "✕"}
     title = (f'<p class="ig-callout-title">{inline(b["title"])}</p>' if b.get("title") else "")
     return (f'<aside class="ig-callout ig-callout-{svg.esc(tone)}">'
             f'<span class="ig-callout-icon" aria-hidden="true">{svg.esc(icons.get(tone, "◆"))}</span>'
@@ -143,8 +149,12 @@ def stat(b: dict, ctx: Ctx) -> str:
     t = ctx.theme
     value = b.get("value")
     if isinstance(value, (int, float)):
+        # `compact` is opt-in, as catalog/README.md documents it. It used to
+        # default on, which silently turned an author's 8,231 into "8.2K": a
+        # real, readable count replaced by a rounder one nobody asked for. A
+        # figure the reader can cite beats a figure that fits.
         text = svg.fmt_compact(value, int(b.get("decimals", 1)), b.get("currency", ""),
-                               b.get("unit", "")) if b.get("compact", True) \
+                               b.get("unit", "")) if b.get("compact", False) \
             else svg.fmt_plain(value, int(b.get("decimals", 0)), b.get("currency", ""),
                                b.get("unit", ""))
     else:

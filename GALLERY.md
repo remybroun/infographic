@@ -2,8 +2,8 @@
 
 Every form this skill draws, drawn. Nothing on this page is a mock-up or a
 sketch of a chart: each sheet is a rendered A4 page out of the same pipeline any
-document goes through, and each one is trimmed to its content. Thirty-six
-specimens over nine sheets, in the `rentos` theme.
+document goes through, and each one is trimmed to its content. Forty-one
+specimens over ten sheets, in the `rentos` theme.
 
 **The data is this repository.** Every number here is read at build time from the
 block registry, `density.CAPS`, the five shipped fixture specs, the linter's own
@@ -53,7 +53,7 @@ being replaced.
 
 ## Change, and part-to-whole
 
-![Six blocks. A dumbbell chart of the words allowed in each field at report against graphic density. A slope chart of blocks per family in the poster against the scrolling page. A meter showing three authored figures against a cap of three. A share bar of the eleven pipeline steps split into judgement and tooling. A funnel from 52 registered block types to 39 used by an example to 14 used by two or more. A treemap of the 52 block types by family.](assets/gallery-change-part.png)
+![Six blocks. A dumbbell chart of the words allowed in each field at report against graphic density. A slope chart of blocks per family in the poster against the scrolling page. A meter showing three authored figures against a cap of three. A share bar of the eleven pipeline steps split into judgement and tooling. A funnel from 57 registered block types down to those a shipped example uses, and those two or more use. A treemap of the 57 block types by family.](assets/gallery-change-part.png)
 
 `dumbbell` `slope` `meter` `share_bar` `funnel` `treemap`. On the slope chart,
 structure and diagram change places, which is what a slope chart is for. The
@@ -73,9 +73,9 @@ The unit chart normalises to a hundred squares, so a square is one percent and
 not one block type. Its note says the underlying count instead, because a note
 that contradicts the legend printed directly above it is worse than no note.
 
-## Structure
+## The principles, and structure
 
-![Five blocks. A venn of what an authored figure shares with the built-in blocks. A vertical process of the five commands the tooling provides. A cycle of render, look at it, find the collision, fix the spec. A quadrant placing the six families by whether a claim needs numbers and whether it needs an order. A sankey from 52 block types through the six families to whether each draws or sets text.](assets/gallery-structure.png)
+![A pyramid of the five principles in the order they override each other. A venn of what an authored figure shares with the built-in blocks. A vertical process of the five commands the tooling provides. A cycle of render, look at it, find the collision, fix the spec. A quadrant placing the families by whether a claim needs numbers and whether it needs an order. A sankey from 57 block types through the families to whether each draws or sets text.](assets/gallery-principles-structure.png)
 
 `venn` `process` `cycle` `quadrant` `sankey`. The cycle is the loop the linter
 cannot close for you: it checks structure, and it has never once looked at a
@@ -85,10 +85,9 @@ named, not when the dots are precise.
 
 ## Structure, and diagram
 
-![Five blocks. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the three themes passes. A gauge showing 39 of 52 block types demonstrated by a shipped example. A swimlane of the eleven pipeline steps across two lanes, you and tooling.](assets/gallery-structure-diagram.png)
+![Four blocks. A sankey from 57 block types through the families to whether each draws or sets text. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the three themes passes, and a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
 
-`tree` `figure` `scorecard` `gauge` `swimlane`. The swimlane is the argument for
-the whole skill: steps two to six sit in the top lane and cannot be automated.
+`sankey` `tree` `figure` `scorecard` `gauge`.
 
 The figure is the one specimen the catalog cannot supply. Three spines over one
 set of facts is not a tree (they do not partition anything), not a process (they
@@ -96,34 +95,57 @@ are alternatives, not steps) and not a quadrant (there are no axes). Naming the
 closest block type needs a "well, sort of", which is the test for authoring the
 shape instead.
 
-## Diagram, and editorial
+## Diagram, and teaching
 
-![Three blocks. A layer stack of what Claude loads in the order it loads it. A definitions list of spine, scene, twin and budget laid out in four columns. A comparison of the two densities, 900 words a page against 150.](assets/gallery-diagram-editorial.png)
+![Four blocks. A swimlane of the eleven pipeline steps across two lanes, you and tooling. A layer stack of what Claude loads in the order it loads it. An analogy putting a recipe beside a ladder, three correspondences mapped row by row. A misconception block with what the pipeline assumed on the left, crossed out, and what a reader needs on the right, ticked.](assets/gallery-diagram-teaching.png)
 
-`stack` `definitions` `comparison`. The definitions block is at span 12 rather
-than 6. At half width it stacks its four terms vertically and runs to 444px,
-which beside the 137px stat left 307px of blank page, the single worst void in
-the document.
+`swimlane` `stack` `analogy` `misconception`. The swimlane is the argument for
+the whole skill: steps two to six sit in the top lane and cannot be automated.
+
+The two teaching blocks are the newest forms here and the only ones whose
+subject is this skill's own failure. Every other family draws a relation between
+things the reader already accepts, which is an enormous vocabulary for operating
+on a subject and none at all for meeting one. The analogy names its own limit in
+the note, because an analogy with no boundary is one a reader over-extends.
+
+## Teaching, and editorial
+
+![Four blocks. A progressive built in three stages, each adding one guard against jargon while the parts not yet added stay as empty outlines. A definitions list of spine, scene, twin and budget in four columns. A comparison of the outer two densities, 900 words a page against 150. A do and don't checklist for handing a document over.](assets/gallery-teaching-editorial.png)
+
+`progressive` `definitions` `comparison` `checklist`. The progressive draws the
+same three-part picture three times, accenting only what each stage adds: a word
+budget, then a jargon scanner because the budget selects for jargon, then a
+ladder because plain words can still arrive in the wrong order. Each stage exists
+because the one before it left a hole the reader fell into, which is the shape
+the block is for and something a finished diagram of all three cannot show.
+
+The definitions block is at span 12 rather than 6. At half width it stacks its
+four terms vertically and runs to 444px, which beside the 137px stat left 307px
+of blank page, the single worst void in the document.
 
 ## Editorial
 
-![Three blocks and a stat pair. A do and don't checklist for handing a document over. A stat reading 2,086 words in the failed first version. A hero figure reading 150 words a page at graphic density. A callout carrying the pattern behind every guard in the repository.](assets/gallery-editorial.png)
+![A stat reading 2,086 words in the failed first version. A hero figure reading 150 words a page at graphic density. A callout carrying the pattern behind every guard in the repository.](assets/gallery-editorial.png)
 
-`checklist` `stat` `hero_figure` `callout`. The checklist is at span 12 for the
-same reason as the definitions list: at half width its two columns are about
-90px each and every item wrapped to one word a line, which the render showed and
-the linter did not. The stat sets `compact: false`, because the block otherwise
-renders 2,086 as "2.1K" and the exactness is the entire point of the number.
+`stat` `hero_figure` `callout`. The stat sets `compact: false`, because the block
+otherwise renders 2,086 as "2.1K" and the exactness is the entire point of the
+number. The checklist on the sheet above is at span 12 for the same reason as the
+definitions list: at half width its two columns are about 90px each and every
+item wrapped to one word a line, which the render showed and the linter did
+not.
 
 ## Every alias
 
-![A chip grid of all 49 aliases, each showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process.](assets/gallery-aliases.png)
+![Two chip grids holding all 64 aliases, each chip showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process, myth to misconception.](assets/gallery-aliases.png)
 
-`chips`. All 49 aliases, so a spec can be written in ordinary words. It is last
-in the document rather than in the middle of the diagram family, because it is a
-single 911px block: wherever it lands it takes a sheet to itself and pushes
-whatever follows onto a fresh one. In the middle that cost two near-empty pages.
-At the end it fills the closing sheet, which is the one page allowed to be short.
+`chips`. All 64 aliases, so a spec can be written in ordinary words. Split into
+two blocks rather than one, and that is not cosmetic: a single grid was 911px at
+60 aliases and 1,171px at 67, and `break-inside: avoid` means a block taller than
+the 1,005px text area cannot be placed at all. It takes a page to itself,
+overflows it, and strands two more. Halving it is what keeps the sheet count
+stable as the alias table grows. It is last in the document for the older reason:
+wherever it lands it fills a sheet, and at the end that sheet is the one page
+allowed to be short.
 
 ## How the sheets are packed
 
@@ -140,8 +162,8 @@ python3 assets/measure_blocks.py assets/gallery_spec.json
 ```
 
 It prints every block's laid-out height and totals the blank left in mismatched
-pairs. That total is now 336px across the whole document, down from 1,400px, and
-no single pair wastes more than 63px. The document lost a sheet: nine, not ten.
+pairs. That total is 344px across the whole document, down from 1,400px, and no
+single pair wastes more than 63px.
 
 ## What is not on this page, and why
 
@@ -155,6 +177,7 @@ stays missing.
 | `timeline` | Wants dates that carry the argument. Every commit here landed on one day. |
 | `anatomy` · `image` | Both need a photograph or a screenshot as their subject. |
 | `kpi` | Deliberate. It is the block this skill added a guard against, and putting a row of four numbers at the top of a specimen sheet would teach exactly the reflex that guard exists to stop. |
+| `bridge` | Deliberate. A bridge is one sentence carrying a reader between two rungs of a ladder, so a bridge with nothing on either side of it is not a specimen of anything. It is drawn in context in the architecture fixture instead. |
 
 ## Two honest defects
 
@@ -163,9 +186,9 @@ validated dark theme, which does not exist yet. A theme is a JSON file, not code
 but it has to clear the contrast, categorical-separation and colour-vision gates
 before it can ship.
 
-**The build still reports one warning.** `near-empty-page` fires on the alias
-sheet at 8% ink against a 13% median. It is measuring correctly, and it is
-measuring the wrong thing here: that sheet is 94% full by area and 8% full by
-ink, because a grid of outlined chips is mostly the page showing through. The
-check is tuned for documents rather than specimen sheets, and it is left
-reported rather than suppressed.
+**The build still reports two warnings.** `near-empty-page` fires on the closing
+alias sheet at 3% ink against a 14% median, and once mid-document. It is
+measuring correctly and measuring the wrong thing here: the alias sheet is most
+of a page by area and almost nothing by ink, because a grid of outlined chips is
+mostly the page showing through. The check is tuned for documents rather than
+specimen sheets, and it is left reported rather than suppressed.

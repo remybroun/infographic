@@ -32,14 +32,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(SKILL, "scripts"))
 
-from lib import density, registry  # noqa: E402
+from lib import density, pictograms, registry  # noqa: E402
 
 
 # ---------------------------------------------------------------- the facts --
 
 FAMILY = {f: [n for n, _ in e] for f, e in registry.by_family().items()}
 FAMILY_LABEL = {"quantity": "Quantity", "change": "Change", "part": "Part-to-whole",
-                "structure": "Structure", "diagram": "Diagram", "editorial": "Editorial"}
+                "structure": "Structure", "diagram": "Diagram", "editorial": "Editorial",
+                "teaching": "Teaching"}
 # Axis ticks get six words and about twelve characters before they truncate, so
 # the long family name is shortened where it is a tick rather than a title.
 FAMILY_TICK = dict(FAMILY_LABEL, part="Part")
@@ -76,7 +77,9 @@ def fixtures():
     root = os.path.join(SKILL, "fixtures", "specs")
     for name in sorted(os.listdir(root)):
         spec = json.load(open(os.path.join(root, name)))
-        blocks = [b for b in spec["blocks"] if not b.get("skip")]
+        # An authored spec composes its own page and may carry no `blocks` at
+        # all, so this reads the key rather than assuming it.
+        blocks = [b for b in spec.get("blocks", []) if not b.get("skip")]
         per, used, graphic = collections.Counter(), set(), 0
         for block in blocks:
             key, entry = registry.resolve(block.get("type"))
@@ -139,7 +142,12 @@ def theme_gates():
 
 TARGETS = targets()
 CODES = linter_codes()
-FIXTURES = fixtures()
+# Every chart below counts blocks and divides by them, so an authored spec, which
+# composes its own page and may have none, is not a row in any of them. It is not
+# a gap in the gallery: "what share of this document's blocks are graphic" has no
+# answer for a page that is one drawing with CSS around it, and a zero would read
+# as "this fixture is all text", which is the opposite of true.
+FIXTURES = [f for f in fixtures() if f["blocks"]]
 HISTORY = history()
 GATES = theme_gates()
 USED_ONCE = collections.Counter(k for f in FIXTURES for k in f["used"])
@@ -253,7 +261,7 @@ def quantity():
 def change():
     caps = [(role, density.CAPS["report"][role], cap)
             for role, cap in density.CAPS["graphic"].items()
-            if role != "body"]
+            if cap and role != "body"]
     caps.sort(key=lambda r: -r[1])
     return page(
         {"type": "line", "span": 6, "frame": "card",
@@ -309,7 +317,7 @@ def part():
                      "value": sum(1 for v in USED_ONCE.values() if v >= 2)}],
          "value_label": "Block types"},
         {"type": "treemap", "span": 6, "frame": "card", "height": 240,
-         "title": "The 52 block types, by family",
+         "title": f"The {TOTAL} block types, by family",
          "parts": [{"label": FAMILY_LABEL[f], "value": len(FAMILY[f])} for f in fam],
          "value_label": "Types"},
         {"type": "donut", "span": 6, "frame": "card",
@@ -325,7 +333,17 @@ def part():
          # The block normalises to a hundred squares, so a square is one percent,
          # not one block type. Saying otherwise would make the note contradict
          # the legend printed directly above it.
-         "note": "40 of the 52 registered types draw. The other 12 set text."},
+         "note": f"{TOTAL_GRAPHIC} of the {TOTAL} registered types draw. "
+                 f"The other {TOTAL - TOTAL_GRAPHIC} set text."},
+        {"type": "pictogram", "span": 12, "frame": "card",
+         "title": "The optional pictogram library, by category",
+         "subtitle": "Each row is drawn in one of its own members.",
+         "unit_value": 1, "unit_label": "pictogram", "glyph": "box",
+         "rows": [{"label": category.title(), "value": len(members),
+                   "glyph": members[0]}
+                  for category, members in pictograms.by_category()],
+         "note": "Nothing in the skill asks for these. A unit chart with no "
+                 "glyph still draws squares."},
         {"type": "pyramid", "span": 12, "frame": "card",
          "title": "The five principles, in the order they override each other",
          "levels": [
@@ -371,7 +389,10 @@ def structure():
          "note": "Placement is a judgement about the form, not a measurement."},
         {"type": "sankey", "span": 12, "frame": "card", "height": 260,
          "title": "Block types, by family, and by whether they draw",
-         "links": ([{"source": "52 types", "target": FAMILY_LABEL[f], "value": len(FAMILY[f])}
+         # `TOTAL`, never a typed number. This node read "52 types" through two
+         # commits that changed the registry, which is exactly the drift this
+         # file's docstring promises cannot happen here.
+         "links": ([{"source": f"{TOTAL} types", "target": FAMILY_LABEL[f], "value": len(FAMILY[f])}
                     for f in FAMILY]
                    + [{"source": FAMILY_LABEL[f], "target": "Draws", "value": GRAPHIC[f]}
                       for f in FAMILY if GRAPHIC[f]]
@@ -428,7 +449,53 @@ def diagram():
              {"label": "scripts", "meta": "run, not read",
               "items": ["build", "check_document", "density", "derivation"]},
              {"label": "fixtures", "meta": "read one first",
-              "items": ["Five complete specs"]}]},
+              "items": ["Six complete specs"]}]},
+    )
+
+
+def teaching():
+    """The family for a reader who does not have the concept yet.
+
+    Drawn with this repository's own history as the subject, like every other
+    sheet here: the skill spent three versions able to choose a good form for
+    any fact and unable to explain anything, because no step ever produced an
+    explanation. These three blocks are what was missing from the vocabulary.
+    """
+    return page(
+        {"type": "analogy", "span": 12, "frame": "card",
+         "title": "What a ladder is, next to something you already have",
+         "known": {"label": "A recipe", "glyph": "document"},
+         "new": {"label": "A ladder", "glyph": "layers"},
+         "pairs": [
+             {"known": "Ingredients listed before the steps",
+              "new": "Terms taught before they are used"},
+             {"known": "Step 4 assumes step 3 happened",
+              "new": "Rung 4 assumes rung 3 landed"},
+             {"known": "Out of order, it fails",
+              "new": "A forward reference is refused"}],
+         "note": "Unlike a recipe, a reader may enter anywhere: hierarchy has to enforce the order too."},
+        {"type": "misconception", "span": 12, "frame": "card",
+         "title": "What this skill assumed for three versions",
+         "assumed_title": "What the pipeline assumed",
+         "actual_title": "What a reader needs",
+         "items": [
+             {"assumed": "A claim is the start of a document",
+              "actual": "A claim is the end of an explanation"},
+             {"assumed": "Good forms produce understanding",
+              "actual": "Order produces understanding"},
+             {"assumed": "A glossary handles unknown words",
+              "actual": "A drawing handles unknown words"}]},
+        {"type": "progressive", "span": 12, "frame": "card",
+         "title": "How the guard against jargon was built up",
+         "parts": ["A word budget", "A jargon scanner", "A ladder"],
+         "stages": [
+             {"label": "1. Refuse the essay", "adds": "A word budget",
+              "detail": "150 words a page, in code"},
+             {"label": "2. Count the identifiers", "adds": "A jargon scanner",
+              "detail": "The budget selects for jargon"},
+             {"label": "3. Check the order", "adds": "A ladder",
+              "detail": "Plain words, still in the wrong order"}],
+         "note": "Each stage exists because the one before it left a hole the reader fell into."},
     )
 
 
@@ -475,13 +542,24 @@ def spines_figure():
 
 
 def aliases():
-    """The chip grid, on its own because it is 900px tall and fills a sheet."""
+    """The chip grid, on its own because it fills a sheet.
+
+    Split in two halves rather than drawn as one block. A single grid was 911px
+    when there were 60 aliases and 1,171px at 67, and `break-inside: avoid`
+    means a block taller than the 1,005px text area cannot be placed at all: it
+    takes a page to itself, overflows it, and strands two more. Halving it is
+    not cosmetic, it is what keeps the sheet count stable as the alias table
+    grows.
+    """
     names = sorted(registry.ALIASES)
-    return page(
+    half = -(-len(names) // 2)
+    return page(*[
         {"type": "chips", "span": 12, "frame": "card",
-         "title": "Every alias, so a spec can be written in ordinary words",
-         "items": [{"label": a, "value": registry.ALIASES[a]} for a in names]},
-    )
+         "title": ("Every alias, so a spec can be written in ordinary words"
+                   if not part_index else "Aliases, continued"),
+         "items": [{"label": a, "value": registry.ALIASES[a]} for a in chunk]}
+        for part_index, chunk in enumerate((names[:half], names[half:]))
+    ])
 
 
 def editorial():
@@ -498,13 +576,14 @@ def editorial():
              {"term": "Twin", "text": "The table beside a chart, holding every value."},
              {"term": "Budget", "text": "Words allowed per field and per page."}]},
         {"type": "comparison", "span": 12, "frame": "card",
-         "title": "The two densities, and what each refuses",
+         "title": "The outer two densities, and what each refuses",
          "left": {"label": "Report", "headline": "900 words a page",
                   "points": ["Body prose allowed", "Opt in explicitly",
                              "For real prose documents"]},
          "right": {"label": "Graphic", "headline": "150 words a page",
                    "points": ["Body prose refused", "The default",
-                              "A breach fails the build"]}},
+                              "A breach fails the build"]},
+         "note": "Lesson sits between them at 260: prose still refused, room to teach from zero."},
         # Span 12, not 6. At half width the do and don't columns are each about
         # 90px, and every item wrapped to one word a line. A checklist is read in
         # phrases; it needs the full measure.
@@ -558,7 +637,7 @@ spec = {
     # lone `callout` on the last. At the end it fills the closing sheet, which is
     # the one page allowed to be short.
     "blocks": (quantity() + change() + part() + structure() + diagram()
-               + editorial() + aliases()),
+               + teaching() + editorial() + aliases()),
 }
 
 path = os.path.join(HERE, "gallery_spec.json")

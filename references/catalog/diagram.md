@@ -212,6 +212,14 @@ costs you your adjectives, because a chip needing twelve words is not a chip.
 `danger`, `accent`; each carries an icon as well as a colour, so the state never
 depends on hue alone. `value` sits right-aligned, `note` drops to its own line.
 
+`icon` overrides the tone mark, either with a literal character or with a name
+from the pictogram library (`"icon": "key"` draws a key). The tone marks are the
+default and they usually say the thing that matters, which is whether the item
+is good or bad; a picture is worth swapping them for when the chips name
+*things* rather than states. Not both: a chip carrying a drawn key and no tone
+colour has lost the one channel a reader scans for.
+→ [drawing.md](../drawing.md#pictograms-when-the-subject-has-a-shape)
+
 Labels are charged against the **label** budget (6 words), not the detail
 budget. That is deliberate.
 

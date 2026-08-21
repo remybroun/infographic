@@ -46,7 +46,13 @@ would start hard against the paper edge.
 **3. A grid row moves whole.** `.ig-block` sets `break-inside: avoid`, so a block
 never splits mid-chart. The consequence is that a tall row jumps entirely to the
 next page and leaves a gap behind it. This is the single most common reason an
-output looks sparse. Fixes, in order of preference:
+output looks sparse.
+
+**Measure before you guess**: `python3 scripts/ig.py measure spec.json` prints
+every block's real laid-out height and word count, and how far the stack runs
+past a sheet. Block height is not guessable from the payload, it comes out of
+text wrapping, legend rows and the theme's type scale. Fixes, in order of
+preference:
 
 - reduce the block's `height` so the row fits;
 - split a 12-span into two 6-spans, which can break between them;

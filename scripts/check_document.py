@@ -158,8 +158,17 @@ def check(html_path: str, pdf_path: str = None):
         add("warn", "default-title", "the document title is still the default",
             "set meta.title to the claim the document makes")
 
+    # An authored page has no blocks, and every finding below that counts them
+    # is measuring a composition it does not have. What still applies is
+    # everything about what a reader receives: the word budget, the graphic
+    # ratio, alt text, page economy, the anti-patterns. Those are unchanged.
+    is_authored = "ig-authored" in classes
     blocks = _count(r'class="ig-block[ "]', body)
-    if blocks == 0:
+    if is_authored:
+        if len(re.sub(r"<[^>]+>", "", body).strip()) < 80 and "<svg " not in body:
+            add("error", "empty", "the authored body renders to almost nothing",
+                "check spec.body")
+    elif blocks == 0:
         add("error", "empty", "no blocks rendered", "check spec.blocks")
     elif blocks < 3:
         add("warn", "thin", f"only {blocks} blocks, this is a fragment, not a document")
@@ -169,15 +178,32 @@ def check(html_path: str, pdf_path: str = None):
     # ABSENT, which is how this skill talked itself into shipping an eight-page
     # A4 document carrying 2,086 words and one bar chart. The measurement that
     # matters is the inverse, so it is now the inverse.
-    graphic_density = "ig-density-graphic" in classes
+    # `lesson` is graphic density with room to teach, so every check below that
+    # asks "is this still carried by pictures" applies to it unchanged. Only the
+    # per-page word budget differs, and that reads the density by name.
+    density_name = next((c[len("ig-density-"):] for c in sorted(classes)
+                         if c.startswith("ig-density-")), "graphic")
+    graphic_density = density_name in ("graphic", "lesson")
     charts = _count(r"<svg ", body)
     # `ig-table` is in this list and `ig-table-view` is not: the trailing [ "]
     # keeps the twins out. An authored table is a text block for the purposes of
     # "is this a graphic document", because it is the shape prose takes when an
     # author needs it to stop being counted. Three of them is a chapter.
+    # `ig-bridge` is in this list for the same reason `ig-table` is. A bridge
+    # is sanctioned connective prose, capped and counted, but it is still prose:
+    # a lesson whose graphic ratio only clears 60% once its bridges are excused
+    # is a written document with pictures beside it.
     text_blocks = sum(_count(rf'class="{cls}[ "]', body) for cls in
-                      ("ig-prose", "ig-bullets", "ig-quote", "ig-table"))
+                      ("ig-prose", "ig-bullets", "ig-quote", "ig-table", "ig-bridge"))
     words = _visible_words(body)
+    # `_visible_words` strips every `<svg>`, which is right for a generated
+    # chart's axis ticks and wrong for the labels an author wrote by hand. The
+    # build counted those from the source, where a placed block is still an
+    # unexpanded placeholder, and stamped the total here. Without it an authored
+    # page can carry its whole argument inside `<text>` and clear the budget
+    # with room to spare.
+    drawn = re.search(r"\big-drawn-(\d+)\b", " ".join(classes))
+    words += int(drawn.group(1)) if drawn else 0
 
     if graphic_density:
         if charts == 0:
@@ -204,7 +230,7 @@ def check(html_path: str, pdf_path: str = None):
         # exactly like that. What this catches is a section carried by the two
         # forms with no shape at all, `table` and `prose`, which is what an
         # author reaches for when the budget says no.
-        shapeless = re.compile(r'class="(?:ig-table|ig-prose|ig-bullets)[ "]')
+        shapeless = re.compile(r'class="(?:ig-table|ig-prose|ig-bullets|ig-bridge)[ "]')
         runs = re.split(r'(?=<[^>]+class="ig-section-head")', body)[1:]
         barren = [i + 1 for i, run in enumerate(runs)
                   if "<svg " not in run and shapeless.search(run)]
@@ -214,6 +240,37 @@ def check(html_path: str, pdf_path: str = None):
                 f"or prose with no graphic at all",
                 "ask what shape the rows are: options against criteria are a "
                 "`matrix`, a sequence is a `process`, counts are a `bar`")
+
+        # The one finding here that fires on what is NOT on the page.
+        #
+        # Every other pressure in this skill points one way. The figure cap is a
+        # hard error, `alt`, `viewbox`, `encodes` and the colour whitelist are
+        # hard errors, a figure's labels are charged against the page budget,
+        # and it costs two compositions and a `sketch` run to author one. A
+        # catalog block costs one line and risks nothing. So the document that
+        # authored nothing was the risk-free document, and this skill reliably
+        # shipped it: four of its own five worked examples have no figure in
+        # them at all. Absence has to cost something or step 5 never runs.
+        #
+        # A warning rather than an error, because "nothing here needs a scene"
+        # is a legitimate answer to step 5. It is legitimate when it was reached
+        # *through* the three images, and that is what the fix asks for.
+        # `ig-scenes-declared` is `meta.scenes`, the written sentence saying what
+        # the catalog carried and why nothing needed drawing. A legitimate "no"
+        # exists here, so the finding asks for it in writing rather than
+        # assuming it: an assertion is not a test, a written rejection is, and a
+        # warning that fires on correct documents teaches an author to stop
+        # reading the linter.
+        figures = _count(r'class="ig-figure[ "]', body)
+        if (not is_authored and figures == 0 and blocks >= 5
+                and "ig-scenes-declared" not in classes):
+            add("warn", "no-authored-figure",
+                f"{blocks} blocks and not one authored figure",
+                "before the catalog was opened, which two or three images did "
+                "this document live or die by? If a catalog block genuinely "
+                "carried each one completely, say so in `meta.scenes` and this "
+                "finding goes away; what it must not be is an answer nobody "
+                "reached. → references/scenes.md")
     else:
         if charts and text_blocks == 0:
             add("note", "no-prose",
@@ -264,10 +321,17 @@ def check(html_path: str, pdf_path: str = None):
             "demote the rest to stat tiles")
 
     # -- accessibility ----------------------------------------------------
-    if charts and "ig-table-view" not in body:
+    # `ig-encodes-concept` is the authored page's honest declaration that it
+    # draws no data, the same one `figure` makes with `encodes: "concept"`. Any
+    # authored page that did not make it is held to the twin exactly as a chart
+    # document is.
+    if charts and "ig-table-view" not in body and "ig-encodes-concept" not in classes:
         add("error", "no-table-view",
             "charts are present but no table view exists",
-            "every chart needs its WCAG-clean twin; do not pass --no-tables")
+            "every chart needs its WCAG-clean twin; do not pass --no-tables"
+            if not is_authored else
+            'declare meta.encodes: "concept" if the page draws no data, or give '
+            "the numbers as {columns, rows} and the twin is rendered for you")
 
     # Count legend containers only, `class="ig-legend` also prefix-matches
     # `ig-legend-item`, which made every document look like it had thin legends.
@@ -312,7 +376,7 @@ def check(html_path: str, pdf_path: str = None):
     # fire on a document that is behaving exactly as intended. The budget still
     # applies, charged per block instead of per page.
     if "ig-continuous" in classes:
-        budget = WORDS_PER_BLOCK["graphic" if graphic_density else "report"]
+        budget = WORDS_PER_BLOCK.get(density_name, WORDS_PER_BLOCK["graphic"])
         per_block = words / blocks if blocks else 0
         if per_block > budget:
             add("error" if graphic_density else "warn", "text-heavy",
@@ -340,7 +404,7 @@ def check(html_path: str, pdf_path: str = None):
             # The budget that would have caught the document this check was
             # written for: 2,086 words across 8 A4 pages is 261 per page, twice
             # the graphic-density ceiling.
-            budget = WORDS_PER_PAGE["graphic" if graphic_density else "report"]
+            budget = WORDS_PER_PAGE.get(density_name, WORDS_PER_PAGE["graphic"])
             per_page_words = words / pages
             if per_page_words > budget:
                 add("error" if graphic_density else "warn", "text-heavy",
@@ -365,15 +429,23 @@ def check(html_path: str, pdf_path: str = None):
                 median = ordered[len(ordered) // 2]
                 for number, share in enumerate(ink, start=1):
                     if share < 0.05 or (share < 0.10 and share < median * 0.62):
+                        # A bare last page is an overflow sliver: the document
+                        # very nearly fitted and spilled. Anywhere else it is a
+                        # row that jumped a boundary. Opposite fixes, so saying
+                        # "move the break" on a spill sends the author hunting
+                        # for a break that is not there.
                         add("warn", "near-empty-page",
                             f"page {number} is {share * 100:.0f}% covered "
                             f"(median page {median * 100:.0f}%)",
+                            "the document spilled: `ig.py measure` prints how "
+                            "far past the sheet it runs, then shave that much"
+                            if number == len(ink) else
                             "a `break: before` in front of a tall row strands "
                             "whatever precedes it; move the break, shorten the "
                             "row, or split the 12-span into two 6-spans")
 
             per_page = blocks / pages if pages else 0
-            if per_page < 2 and pages > 1:
+            if not is_authored and per_page < 2 and pages > 1:
                 add("warn", "sparse-pages",
                     f"{blocks} blocks across {pages} pages ({per_page:.1f} per page)",
                     "a tall grid row moves to the next page whole; reduce block heights, "

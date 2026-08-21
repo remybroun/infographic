@@ -226,9 +226,15 @@ class Ctx:
 
     @property
     def graphic(self) -> bool:
-        """True when the document is graphic-density, so a renderer should
-        choose its tile form over its prose form."""
-        return self.density == "graphic"
+        """True when the picture carries the idea, so a renderer should choose
+        its tile form over its prose form.
+
+        `lesson` counts. It is graphic density with room to teach, not a step
+        towards report density: a lesson that renders its definitions as a
+        two-column list of sentences is the glossary-at-the-back failure this
+        skill added the lesson mode to prevent.
+        """
+        return self.density in ("graphic", "lesson")
 
     def warn(self, message: str):
         self.warnings.append(message)

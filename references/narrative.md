@@ -10,16 +10,24 @@ that order.
 
 | Shape | Page | Blocks | The reader | Structure |
 |---|---|---|---|---|
-| **Explainer** | a4 | 8-16 | wants to understand a concept | claim → mechanism → implication → caveats |
+| **Lesson** | a4, scroll | 10-18 | has never met the subject | what it is → why it exists → one rung at a time |
+| **Explainer** | a4 | 8-16 | has the concept, wants it deepened | claim → mechanism → implication → caveats |
 | **Report** | a4 | 12-25 | wants to know what happened | headline → where it came from → why → what to do |
 | **Poster** | a3 | 12-20 | is scanning a wall or a screenshot | one dominant figure, then three named zones |
 | **One-pager** | a4, 1 page | 5-9 | has 60 seconds before a meeting | claim, evidence, ask |
 | **Deck page** | slide | 3-6 | is being presented to | one idea, one visual, one sentence |
 
-Set it in `meta.page`. The type scale, margins and default block heights all
-follow from it, a poster is not an A4 document printed larger.
+Set the page in `meta.page`. The type scale, margins and default block heights
+all follow from it, a poster is not an A4 document printed larger.
 
-## The spine that works for almost everything
+**A lesson is not an explainer with simpler words.** The row above it in this
+table opens on a claim and works outward; a lesson opens on what the thing is
+and works up. That is a different order, not a different register, and it is set
+in `meta.mode`, which the build enforces. The lesson spine lives in
+[teaching.md](teaching.md#the-lesson-spine); everything below this line is the
+argument spine.
+
+## The spine that works for almost every argument
 
 1. **Claim.** `hero`. One sentence the reader should believe by the end. Work it
    out before anything else; the document has no spine without it. It is then
@@ -28,37 +36,32 @@ follow from it, a poster is not an A4 document printed larger.
    slogan. See [anti-patterns.md](anti-patterns.md#titles).
 2. **Scale, and only when a number is itself the finding.** `hero_figure` for
    the one number the document is about; `stat` when a single current value is
-   the whole message. **`kpi` is not a slot and this is not a step you owe the
-   template.** Four labelled integers above the fold are the cheapest block in
-   the catalog to write: they look like a summary, need no argument, and get
-   added by reflex. Before writing one, answer this, out loud:
-
-   > **Does the document explain any of these numbers properly further down?**
-
-   If it does, the tile is that fact with its denominator, its comparison and
-   its shape removed, printed first. Cut it. A row of four is the strongest tell,
-   because four numbers cannot each be the finding. `leading-numbers` measures
-   this and warns, and it fired on two of the five fixtures shipped in this
-   repo, which is how the habit spread in the first place.
-
-   The honest version of "scale" is usually one number nothing else in the
-   document says, or no block at all.
-3. **Mechanism.** `process`, `cycle`, `tree`, or prose plus one chart. *How* the
-   thing works. Concept documents live here; reports often skip straight to 4.
+   the whole message. **This is not a step, and it is listed second only because
+   that is where it lands when it is earned.** A `kpi` row of four labelled
+   integers is the cheapest block in the catalog to write: it looks like a
+   summary, needs no argument, and gets added by reflex. If a chart further down
+   explains any of those numbers properly, the tile is that fact with its
+   denominator and its comparison removed, printed first. Cut it. Four numbers
+   cannot each be the finding. `leading-numbers` measures this and warns, and it
+   fired on two of the five shipped fixtures, which is how the habit spread.
+3. **Mechanism.** `process`, `cycle`, `tree`, or one chart with its sentence.
+   *How* the thing works. Reports often skip straight to 4.
 4. **Evidence.** The charts. Each one supports one sentence you have already
    written.
 5. **Tension.** `comparison`, `diverging`, `matrix`, `callout`. Where the obvious
-   reading is wrong, or where the options genuinely conflict. **A document with
-   no tension reads as marketing.**
+   reading is wrong, or where the options genuinely conflict. **An argument with
+   no tension reads as marketing.** In a lesson the same job is done by
+   `misconception`, and the thing being contradicted is what the reader already
+   wrongly believes rather than a rival position.
 6. **Implication.** `checklist`, `callout`, or a closing `prose` block. What
    follows for the reader.
 7. **Method.** `footnotes`. Sources, period, exclusions, what not to conclude.
 
 **Most documents do not need all seven, and the list is not a checklist.** The
-*order* is robust: scale before mechanism, mechanism before evidence, tension
-before implication. The presence of each step is a judgement every time. A slot
-left empty because nothing earned it is a better document, not an incomplete
-one, and step 2 is the one that gets filled by reflex.
+*order* is robust: mechanism before evidence, tension before implication. The
+presence of each step is a judgement every time. A slot left empty because
+nothing earned it is a better document, not an incomplete one, and step 2 is the
+one that gets filled by reflex.
 
 ## Rhythm
 
@@ -83,6 +86,13 @@ Use `section` when the *argument* turns, not every time the subject changes.
 Three or four sections in an A4 explainer; two or three on a poster. Give each
 one a `lede` that states what the section will establish, the reader should be
 able to read only the hero and the section ledes and still get the argument.
+
+**In a lesson, a section title is the question that section answers**, in the
+reader's words, and the `lede` is where the answer goes. "Why does one program
+serve a hundred addresses?" with a lede reading "The answer is the only thing a
+visitor actually types". A noun phrase with no verb ("Tenant resolution") is the
+tell that the insider register has come back: nobody has ever asked a question
+in that shape. → [teaching.md](teaching.md#the-register)
 
 Number them only when the sequence is information the reader needs. Numbering
 because it looks tidy is grammar you did not choose.

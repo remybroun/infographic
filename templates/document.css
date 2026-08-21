@@ -115,6 +115,14 @@ body {
   align-items: start;
 }
 
+/* An authored page brings its own layout, so it gets the page box and nothing
+   else: no grid, no row rhythm, no block frame. `.ig-placed` is the one thing
+   the skill puts back, the wrapper around a catalog block dropped into a spot
+   the page chose. It is deliberately unstyled apart from breaking sanely,
+   because the page around it has already decided where it sits. */
+.ig-placed { min-width: 0; break-inside: avoid; }
+.ig-placed > .ig-block-title { margin-top: 0; }
+
 .ig-block {
   grid-column: span 12;
   min-width: 0;
@@ -322,11 +330,16 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 
 /* ------------------------------------------------------------- callout ---- */
 
+/* A tinted slab with a badge on it is how a web app says "info", and a page
+   that says it four times has said nothing. Here the fill is neutral and the
+   tone is a single mark, so colour is spent only where colour IS the message:
+   a caution and a failure keep their wash, a key idea and a note do not need
+   to be blue to be read. */
 .ig-callout {
   display: flex;
-  gap: 13px;
-  padding: 15px 17px;
-  border-radius: calc(var(--ig-radius) * 2.5);
+  gap: 11px;
+  padding: 14px 16px;
+  border-radius: calc(var(--ig-radius) * 1.5);
   background: var(--ig-sunken);
   font-size: calc(var(--ig-body-size) * 0.95);
   color: var(--ig-secondary);
@@ -343,23 +356,25 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   color: var(--ig-ink);
 }
 
+/* The mark is smaller than the title but has to share its baseline, and it
+   cannot inherit one: it is a flex item, so it owns its own line box. The
+   line-height is what lowers the glyph onto the title's baseline, and it is
+   derived from the title's rather than guessed, so a theme that rescales its
+   titles does not leave the mark hanging. */
 .ig-callout-icon {
-  flex: 0 0 20px;
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  font-size: 11px; font-weight: 700; line-height: 1;
-  color: #fff;
-  background: var(--ig-accent);
-  margin-top: 1px;
+  flex: 0 0 13px;
+  width: 13px;
+  display: block;
+  font-size: calc(var(--ig-body-size) * 0.98);
+  font-weight: 700;
+  line-height: calc(var(--ig-title-scale) * 0.92 * 1.62 / 0.98);
+  color: var(--ig-accent-text);
 }
-.ig-callout-key    { background: var(--ig-accent-wash); }
-.ig-callout-key    .ig-callout-icon { background: var(--ig-accent); }
-.ig-callout-note   .ig-callout-icon { background: var(--ig-muted); }
+.ig-callout-note   .ig-callout-icon { color: var(--ig-muted); }
 .ig-callout-warn   { background: var(--ig-warn-wash); }
-.ig-callout-warn   .ig-callout-icon { background: var(--ig-warn); color: var(--ig-ink); }
+.ig-callout-warn   .ig-callout-icon { color: var(--ig-warn-text); }
 .ig-callout-danger { background: var(--ig-danger-wash); }
-.ig-callout-danger .ig-callout-icon { background: var(--ig-danger); }
+.ig-callout-danger .ig-callout-icon { color: var(--ig-danger-text); }
 
 /* --------------------------------------------------------------- stats ---- */
 
@@ -563,28 +578,46 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 
 /* The graphic-density form: a vocabulary laid out side by side rather than a
    stack of term-and-sentence rows. The column count is set in Python from the
-   block's real width, because CSS cannot see how wide a grid column is. */
+   block's real width, because CSS cannot see how wide a grid column is.
+
+   Each entry is a rule and two lines of type, not a card. A box drawn around a
+   single sentence costs a fill, a radius and four corners to say something the
+   white space between columns already says, and the accent bar it hangs from
+   turns a term into a label shouting for attention it does not need. The rule
+   sits on each entry rather than spanning the block so that the form survives
+   wrapping to a second row, where a single spanning rule would leave the lower
+   row floating. */
 .ig-definitions-grid {
   grid-template-columns: repeat(var(--ig-def-n, 3), minmax(0, 1fr));
-  gap: 10px;
+  column-gap: 22px;
+  row-gap: 15px;
 }
 .ig-definitions-grid .ig-def {
   display: block;
-  padding: 12px 14px;
+  min-width: 0;
+  padding: 9px 0 0;
   border-bottom: 0;
-  border-radius: calc(var(--ig-radius) * 2);
-  background: var(--ig-sunken);
-  border-top: 2px solid var(--ig-accent);
+  border-top: 1px solid var(--ig-ink);
 }
 .ig-definitions-grid .ig-def dt {
-  font-size: calc(var(--ig-body-size) * 0.74);
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--ig-accent-text);
-  margin-bottom: 5px;
+  font-size: calc(var(--ig-body-size) * 0.95);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ig-ink);
+  margin-bottom: 2px;
+  text-wrap: pretty;
 }
-.ig-definitions-grid .ig-def dd { font-size: calc(var(--ig-body-size) * 0.88); }
+.ig-definitions-grid .ig-def dd {
+  font-size: calc(var(--ig-body-size) * 0.88);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+/* A block title sits 2px off its content, which is right when the content
+   starts with type and wrong when it starts with a rule: at 2px the first two
+   rules read as a broken underline of the heading. Margins collapse, so this
+   one value covers the title, the sub, and the pair. */
+.ig-block-title + .ig-definitions-grid,
+.ig-block-sub + .ig-definitions-grid { margin-top: 13px; }
 
 /* --------------------------------------------------------------- chips ---- */
 
@@ -598,6 +631,11 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   grid-template-columns: repeat(var(--ig-chip-n, 4), minmax(0, 1fr));
   gap: 9px;
 }
+/* One surface for every chip, and the tone lives in the mark alone.
+   The earlier form said "danger" three times over: a red tab, a red wash and a
+   red disc. Three channels for one fact is not emphasis, it is noise, and a
+   grid of differently painted pills stops being a grid you can scan. The mark
+   keeps the state off hue alone, which is the promise the catalog makes. */
 .ig-chip {
   display: flex;
   align-items: baseline;
@@ -606,7 +644,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   padding: 10px 13px;
   border-radius: calc(var(--ig-radius) * 2);
   background: var(--ig-sunken);
-  border-left: 3px solid var(--ig-border);
   break-inside: avoid;
 }
 .ig-chip-label {
@@ -626,30 +663,43 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   font-size: calc(var(--ig-body-size) * 0.76);
   color: var(--ig-muted);
 }
+/* The mark is the drawing, never a badge containing one. A glyph reversed out
+   of a 15px disc is a notification dot: it reads as chrome, it repeats the
+   colour the glyph already carries, and at this size the disc is the thing the
+   eye lands on rather than the shape inside it. So the colour moves onto the
+   mark, which means every tone has to name a value that survives as small
+   text: `--ig-warn`, an amber built to work as a fill, would sit at 1.6:1. */
+   Typed, the mark also sits on the label's baseline, because the chip aligns
+   its line on the baseline and an inline-block hands its own last baseline up
+   to that. A disc had to be centred instead, which is why the tick used to
+   float below the word it belonged to. */
 .ig-chip-icon {
   flex: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9.5px;
+  width: 14px;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
   font-weight: 700;
-  line-height: 1;
-  background: var(--ig-muted);
-  color: var(--ig-card);
-  align-self: center;
+  color: var(--ig-muted);
 }
-.ig-chip-good   { border-left-color: var(--ig-good); }
-.ig-chip-good   .ig-chip-icon { background: var(--ig-good); }
-.ig-chip-warn   { border-left-color: var(--ig-warn); background: var(--ig-warn-wash); }
-.ig-chip-warn   .ig-chip-icon { background: var(--ig-warn); color: #1a1300; }
-.ig-chip-danger { border-left-color: var(--ig-danger); background: var(--ig-danger-wash); }
-.ig-chip-danger .ig-chip-icon { background: var(--ig-danger); }
-.ig-chip-accent { border-left-color: var(--ig-accent); background: var(--ig-accent-wash); }
-.ig-chip-accent .ig-chip-icon { background: var(--ig-accent); }
-.ig-chip-mute   { background: transparent; border: 1px solid var(--ig-hairline); border-left-width: 3px; }
+/* A pictogram sits where the tone mark would, drawn rather than typed. An SVG
+   has no baseline worth aligning to, so this one is centred on the line. It is
+   declared BEFORE the tones because it matches at the same specificity they
+   do: any later rule would quietly repaint a toned pictogram. */
+.ig-chip-icon.ig-chip-pic {
+  width: 17px;
+  height: 17px;
+  align-self: center;
+  color: var(--ig-secondary);
+  fill: currentColor;
+}
+.ig-chip-good   .ig-chip-icon { color: var(--ig-good); }
+.ig-chip-warn   .ig-chip-icon { color: var(--ig-warn-text); }
+.ig-chip-danger .ig-chip-icon { color: var(--ig-danger-text); }
+.ig-chip-accent .ig-chip-icon { color: var(--ig-accent-text); }
+/* The one chip that carries a border pays for it out of its own padding, so
+   its label sits on the same line as the filled chips beside it. */
+.ig-chip-mute   { background: transparent; border: 1px solid var(--ig-hairline); padding: 9px 12px; }
 .ig-chip-mute .ig-chip-label { color: var(--ig-secondary); font-weight: 500; }
 
 /* ---------------------------------------------------------- comparison ---- */
@@ -693,6 +743,167 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ig-muted);
+}
+
+/* -------------------------------------------------------- misconception ---- */
+
+/* analogy: two stages, and one exploded-drawing numbering across both.
+
+   The correspondence is carried by position and by a repeated number, never by
+   a connector glyph between two cells. Cells made it a table; a table made the
+   reader read a mapping they should have been able to see. The two sides are
+   the same layout with different nouns, which is the strongest claim an analogy
+   can make: not "these relate" but "this is that shape". The familiar side is
+   set in the de-emphasis ink because it is scaffolding, not a finding. */
+
+.ig-analogy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 18px;
+  align-items: stretch;
+}
+.ig-anl-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 14px 13px;
+  margin-bottom: 12px;
+  border-radius: var(--ig-radius);
+  text-align: center;
+}
+.ig-anl-stage.ig-anl-known {
+  background: var(--ig-sunken);
+  border: 1px solid var(--ig-hairline);
+}
+.ig-anl-stage.ig-anl-new {
+  background: var(--ig-accent-wash);
+  border: 1px solid var(--ig-accent);
+}
+.ig-anl-kicker {
+  margin: 0;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ig-muted);
+}
+.ig-anl-stage.ig-anl-new .ig-anl-kicker { color: var(--ig-accent-text); }
+/* A drawn stage: the scene is the stage, so it runs the full width of the card
+   and the label sits under it as a caption. A library glyph is the fallback and
+   is deliberately not given this room: an icon blown up to card width is a
+   bigger icon, not a better picture. */
+.ig-anl-scene { display: block; width: 100%; height: auto; overflow: visible; }
+.ig-anl-drawn { padding: 8px 12px 9px; gap: 4px; }
+.ig-anl-glyph { display: block; width: 46px; height: 46px; }
+.ig-anl-stage.ig-anl-known .ig-anl-glyph { fill: var(--ig-secondary); }
+.ig-anl-stage.ig-anl-new .ig-anl-glyph { fill: var(--ig-accent); }
+.ig-anl-name {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ig-ink);
+}
+.ig-anl-stage.ig-anl-known .ig-anl-name { color: var(--ig-secondary); }
+/* No pictogram: the name is the whole stage, so it carries the weight. */
+.ig-anl-bare { justify-content: center; min-height: 74px; }
+.ig-anl-bare .ig-anl-name { font-size: 17px; }
+
+.ig-anl-part {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 11.5px;
+  line-height: 1.35;
+  border-top: 1px solid var(--ig-hairline);
+}
+.ig-anl-part.ig-anl-known { color: var(--ig-secondary); }
+.ig-anl-part.ig-anl-new { color: var(--ig-ink); font-weight: 600; }
+.ig-anl-no {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  position: relative;
+  top: 1px;
+}
+.ig-anl-part.ig-anl-known .ig-anl-no {
+  background: var(--ig-sunken);
+  color: var(--ig-muted);
+  border: 1px solid var(--ig-hairline);
+}
+.ig-anl-part.ig-anl-new .ig-anl-no {
+  background: var(--ig-accent);
+  color: var(--ig-page);
+}
+
+/* Deliberately not styled as a comparison. A comparison is symmetrical, two
+   positions someone holds on purpose; this is asymmetrical, because the left
+   column is what the reader probably believes and the right is what is true.
+   The wrong column is set back and de-emphasised so the eye lands on the
+   correction, which is the half that has to survive being skimmed. */
+
+.ig-misconception { display: grid; gap: 8px; }
+.ig-misc-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  font-size: calc(var(--ig-body-size) * 0.74);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.ig-misc-head p { margin: 0; color: var(--ig-muted); }
+.ig-misc-head p:last-child { color: var(--ig-accent-text); }
+.ig-misc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+.ig-misc-row > div {
+  display: flex;
+  gap: 8px;
+  padding: 11px 13px;
+  border-radius: calc(var(--ig-radius) * 2);
+  font-size: calc(var(--ig-body-size) * 0.9);
+  line-height: 1.4;
+}
+.ig-misc-assumed {
+  background: var(--ig-sunken);
+  color: var(--ig-secondary);
+}
+.ig-misc-actual {
+  background: var(--ig-accent-wash);
+  color: var(--ig-ink);
+  font-weight: 500;
+}
+.ig-misc-row span[aria-hidden] { font-weight: 700; line-height: 1.35; }
+.ig-misc-assumed span[aria-hidden] { color: var(--ig-muted); }
+.ig-misc-actual span[aria-hidden] { color: var(--ig-accent-text); }
+
+/* -------------------------------------------------------------- bridge ---- */
+
+/* One sentence, carrying the reader from one rung to the next. Set as a lead-in
+   rather than as body copy: the rule and the indent say "this is joining two
+   pictures", which is what stops it reading as the start of a paragraph and
+   inviting a second one. */
+
+.ig-bridge {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--ig-accent);
+  max-width: 62ch;
+  font-size: calc(var(--ig-body-size) * 1.02);
+  line-height: 1.5;
+  color: var(--ig-secondary);
+  text-wrap: pretty;
 }
 
 /* ------------------------------------------------------------ callouts ---- */
@@ -762,26 +973,26 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
    word counts; these rules make the surviving text LOOK like labelling rather
    than like prose that happens to be short, so the register is consistent. */
 
-.ig-density-graphic .ig-block-sub,
-.ig-density-graphic .ig-section-lede {
+.ig-graphic-first .ig-block-sub,
+.ig-graphic-first .ig-section-lede {
   max-width: 52ch;
   font-size: calc(var(--ig-body-size) * 0.94);
 }
-.ig-density-graphic .ig-block-note {
+.ig-graphic-first .ig-block-note {
   font-size: calc(var(--ig-body-size) * 0.74);
   letter-spacing: 0.01em;
 }
 /* Titles do more work when there is less around them, so they get more air and
    a tighter measure than the report-density defaults. */
-.ig-density-graphic .ig-block-title {
+.ig-graphic-first .ig-block-title {
   font-size: calc(var(--ig-body-size) * var(--ig-title-scale));
   max-width: 46ch;
 }
-.ig-density-graphic .ig-hero-lede { max-width: 56ch; }
+.ig-graphic-first .ig-hero-lede { max-width: 56ch; }
 
 /* The do/don't columns become two chip stacks: same information, no sentences,
    and the ✓/✕ carries the polarity so colour is never the only channel. */
-.ig-density-graphic .ig-check li {
+.ig-graphic-first .ig-check li {
   align-items: center;
   padding: 7px 9px;
   margin-bottom: 5px;
@@ -789,12 +1000,12 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   background: var(--ig-card);
   font-size: calc(var(--ig-body-size) * 0.86);
 }
-.ig-density-graphic .ig-compare-side ul { font-size: calc(var(--ig-body-size) * 0.88); }
+.ig-graphic-first .ig-compare-side ul { font-size: calc(var(--ig-body-size) * 0.88); }
 
 @media print {
   /* Nothing here is decoration, so nothing here is allowed to be cropped. */
-  .ig-density-graphic .ig-chips,
-  .ig-density-graphic .ig-definitions-grid { break-inside: avoid; }
+  .ig-graphic-first .ig-chips,
+  .ig-graphic-first .ig-definitions-grid { break-inside: avoid; }
 }
 
 /* ------------------------------------------------------- the drawing kit ---- */
@@ -968,6 +1179,12 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 .ig-bleed-dark .ig-hero-subtitle { color: var(--ig-border); }
 .ig-bleed-dark .ig-block-note,
 .ig-bleed-dark .ig-stat-label { color: var(--ig-axis); }
+/* A vocabulary is a rule and two weights of ink, so on the inverted field it is
+   a rule and two weights of nothing unless it is told otherwise. */
+.ig-bleed-dark .ig-def { border-color: var(--ig-axis); }
+.ig-bleed-dark .ig-def dt { color: var(--ig-page); }
+.ig-bleed-dark .ig-def dd { color: var(--ig-border); }
+
 /* The accessibility twin has to survive the dark field too, or the values are
    reachable in theory and invisible in practice. */
 .ig-bleed-dark .ig-table-toggle > summary { color: var(--ig-border); }

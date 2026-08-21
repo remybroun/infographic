@@ -53,15 +53,24 @@ the first, this is a `process` drawn in a circle, which is worse than a
 Step titles wrap to three lines inside the node, so keep them to three or four
 words and put the detail in prose beside the block.
 
+**A cycle is square: its height is its width, and it wants a full-width span.**
+`size` is a ceiling, not a size, so a narrow column does not make the ring
+shorter, it shrinks the nodes while the label text stays put. At a half column
+on A4 that is a 326px-tall square holding 38px nodes with three-line labels in
+them, which is both illegible and a third of the sheet. The build warns when the
+column squeezes the ring below what it asked for. Below a full span, a `process`
+carries the same sequence and reads at any width; you lose the closing arrow, so
+say the loop closes in the title.
+
 ## `funnel`: drop-off through stages
 
-See [part-to-whole.md](part-to-whole.md#funnel--stage-to-stage-drop-off). Listed
+See [part-to-whole.md](part-to-whole.md#funnel-stage-to-stage-drop-off). Listed
 here because it is a sequence form too: use `process` when the *steps* are the
 message, `funnel` when the *losses* are, and both when you need each.
 
 ## `timeline`: events located in time
 
-See [change.md](change.md#timeline--events-in-sequence).
+See [change.md](change.md#timeline-events-in-sequence).
 
 The distinction people get wrong: a timeline marks **moments**, not durations.
 Bars of duration are a `bar` with a non-zero baseline, or a table. And a

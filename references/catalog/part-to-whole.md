@@ -50,8 +50,21 @@ percentage.
 |---|---|---|
 | `cells` | `100` | total glyphs |
 | `per_row` | `10` | 10 for a 100-cell square |
-| `glyph` | `"square"` | or `"circle"` |
+| `glyph` | `"square"` | `"circle"`, or any name from the pictogram library |
 | `total` | sum of parts | set it when the parts are a subset of a larger whole |
+
+**The glyph can be a picture of the thing being counted**, which is what the
+word "isotype" in this block's title has always meant: `"glyph": "person"` draws
+a hundred people, `"glyph": "home"` a hundred houses.
+`python3 scripts/ig.py pictograms` lists the fifty-two names.
+
+It is optional, and a square is the safer mark. A square has no wrong reading,
+survives being 12px across, and never makes the reader identify a shape before
+they can count it. A picture is worth its ambiguity when **recognising the
+symbol tells the reader something the legend does not**: that these are people
+and not euros, that the unit is a dwelling. When the label already says it and
+the shape is decoration, use squares.
+→ [drawing.md](../drawing.md#pictograms-when-the-subject-has-a-shape)
 
 **Rounding is handled, not ignored.** Exact shares rarely land on whole glyphs,
 so the drift is distributed to the largest remainders and the grid always totals
@@ -60,6 +73,49 @@ exactly `cells`. A waffle that draws 99 squares out of 100 is a bug the reader
 
 **Not when** the parts are tiny fractions, at 100 cells, anything under 1%
 disappears. Say it in prose instead.
+
+## `pictogram`: rows of symbols, one symbol per fixed amount
+
+```json
+{"type": "pictogram", "glyph": "apartment",
+ "unit_value": 500, "unit_label": "apartments",
+ "rows": [{"label": "Lisbon", "value": 4200},
+          {"label": "Porto", "value": 2350},
+          {"label": "Faro", "value": 620}]}
+```
+
+The other isotype form. Where `unit` divides one whole into parts, this counts
+several quantities in a stated unit: one apartment block is 500 apartments, and
+Lisbon's row is eight of them. The reader counts and multiplies rather than
+decoding a length against an axis, and the unit is said out loud in the key
+instead of being implied by a tick mark.
+
+| Key | Default | Notes |
+|---|---|---|
+| `unit_value` | **required** | what one symbol stands for |
+| `unit_label` | `""` | the noun in the key: "= 500 apartments" |
+| `glyph` | `"person"` | any library name; a row may override it |
+| `rows` | | `{label, value}`, plus optional `glyph` and `color` |
+| `show_values` | `true` | the exact number at the end of each row |
+| `size` · `gap` · `row_gap` | `26` · `5` · `10` | symbol size and spacing |
+| `ordinal` · `palette` · `vary_color` | off | per-row colour; off by default on purpose |
+
+**One colour by default.** The comparison here is row length. Giving each row
+its own hue invites the reader to decode the colour instead, and there is
+nothing in it to decode.
+
+**A part symbol is cut, not rounded**, with the whole shape left behind it at
+low opacity so the fraction reads as a fraction rather than as a drawing that
+failed to render.
+
+**A row that does not fit is a build error**, naming the `unit_value` that would
+fit. Past roughly two dozen symbols nobody is counting any more, and an isotype
+nobody counts is a bar chart drawn badly.
+
+**Not when** precision matters, or when two rows differ by less than one symbol.
+That is `bar`, and `bar` is better at it: real axis maths, real label fitting.
+What this buys is that the reader knows what is being counted without reading
+the axis label. If that is not worth anything here, it is the wrong form.
 
 ## `donut`: part-to-whole in a circle
 

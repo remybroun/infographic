@@ -37,8 +37,8 @@ page_file() {
 }
 rm -f assets/gallery-*.png
 i=1
-for name in quantity guards-change change-part part-principles structure \
-            structure-diagram diagram-editorial editorial aliases; do
+for name in quantity guards-change change-part part-principles principles-structure \
+            structure-diagram diagram-teaching teaching-editorial editorial aliases; do
   cp "$(page_file $i)" "assets/gallery-$name.png"
   i=$((i + 1))
 done

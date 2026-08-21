@@ -37,6 +37,7 @@ TEXT_PAIRS = (
     ("accent as small text", "ink.accent_text", "surface.page", 4.5),
     ("accent as a fill", "accent", "surface.page", 3.0),
     ("good delta text", "status.good_text", "surface.page", 4.5),
+    ("warning mark text", "status.warning_text", "surface.page", 4.5),
     ("critical delta text", "status.critical_text", "surface.page", 4.5),
     ("gridline", "rule.grid", "surface.card", 1.12),
 )

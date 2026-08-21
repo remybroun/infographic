@@ -1,206 +1,269 @@
 {
   "meta": {
-    "title": "Provider website architecture: one application, many domains",
+    "title": "Provider websites: one program, many company sites",
     "theme": "rentos",
     "page": "a4",
-    "density": "graphic",
+    "mode": "lesson",
+    "density": "lesson",
     "paper": "panel",
     "footer_left": "RentOS provider websites",
-    "footer_right": "Architecture at a glance",
-    "date": "August 2026"
+    "footer_right": "How it works, from the beginning",
+    "date": "August 2026",
+    "ladder": [
+      {
+        "says": "A provider website is a rental company's own public site, built and run by us.",
+        "introduces": [
+          "provider website"
+        ],
+        "at": "what-it-is"
+      },
+      {
+        "says": "One shared application serves every company, instead of a separate copy each.",
+        "introduces": [
+          "shared application"
+        ],
+        "at": "one-or-many"
+      },
+      {
+        "says": "The web address a visitor types is what decides whose site they see.",
+        "introduces": [
+          "web address",
+          "tenant"
+        ],
+        "at": "how-it-knows"
+      },
+      {
+        "says": "Most visits are answered at the edge by a cache, never reaching the application.",
+        "introduces": [
+          "cache",
+          "edge"
+        ],
+        "at": "who-answers"
+      },
+      {
+        "says": "Adding a company means adding an address and a certificate, not another copy.",
+        "introduces": [
+          "certificate"
+        ],
+        "at": "adding-a-site"
+      },
+      {
+        "says": "The site displays RentOS data; RentOS stays the single source of truth.",
+        "introduces": [
+          "source of truth"
+        ],
+        "at": "who-owns-data"
+      }
+    ]
   },
   "blocks": [
     {
+      "id": "what-it-is",
       "type": "hero",
-      "kicker": "Architecture explainer",
-      "title": "Provider website architecture: one application serving many domains",
-      "subtitle": "The tenant is resolved from the Host header, so every domain shares one deployment.",
-      "stats": [
-        {
-          "label": "Recommended option",
-          "value": "66/75"
-        },
-        {
-          "label": "Separate hosting",
-          "value": "28/75"
-        },
-        {
-          "label": "Target scale",
-          "value": "500+ sites"
-        }
-      ]
+      "kicker": "Explainer",
+      "title": "What a provider website is, and how one program runs hundreds",
+      "subtitle": "A rental company gets its own public site. We build and run every one of them."
     },
     {
       "type": "section",
       "number": "01",
-      "title": "What a provider website has to deliver",
-      "lede": "A branded shell around parts RentRemote already owns, multiplied across tenants."
+      "title": "Why one program instead of one copy per company?",
+      "lede": "Start with what the whole thing is, before any of its parts."
     },
     {
-      "type": "comparison",
-      "vs": "vs",
-      "left": {
-        "label": "Proposed",
-        "headline": "One hosting account per provider",
-        "points": [
-          "N environments to patch",
-          "Shared code, shared blast radius",
-          "Cost scales with tenants",
-          "No central control"
-        ]
+      "id": "one-or-many",
+      "type": "analogy",
+      "title": "One shared application, the way one hotel holds many rooms",
+      "known": {
+        "label": "A hotel",
+        "glyph": "building"
       },
-      "right": {
-        "label": "Recommended",
-        "headline": "One multi-tenant deployment",
-        "points": [
-          "One place to patch",
-          "One CDN edge",
-          "Cost flat in tenants",
-          "Tenant from the Host header"
-        ]
+      "new": {
+        "label": "One shared application",
+        "glyph": "server"
       },
-      "note": "Separate hosting combines the cost of N environments with the blast radius of one."
+      "pairs": [
+        {
+          "known": "One building, one staff",
+          "new": "One program, running once"
+        },
+        {
+          "known": "Many rooms, one key each",
+          "new": "Many company sites, one address each"
+        },
+        {
+          "known": "The desk knows whose room is whose",
+          "new": "Something must know whose site is whose"
+        }
+      ],
+      "note": "Unlike a hotel, no company can ever see inside another company's site."
     },
     {
-      "type": "definitions",
-      "title": "Terms used in this document",
+      "type": "figure",
+      "span": 12,
+      "title": "Three hundred company sites, one shared application",
+      "viewbox": "0 0 640 110",
+      "alt": "A column of company site names on the left, with a note that three hundred more exist, fans in and meets one box on the right holding a single running copy of the program.",
+      "encodes": "concept",
+      "svg": "<text class=\"ig-fig-kicker\" x=\"4\" y=\"11\">WHAT VISITORS TYPE</text><text class=\"ig-fig-mono\" x=\"4\" y=\"36\">sunhomes.com</text><text class=\"ig-fig-mono\" x=\"4\" y=\"56\">casalisboa.pt</text><text class=\"ig-fig-mono\" x=\"4\" y=\"76\">atlasrentals.ma</text><text class=\"ig-fig-mute\" x=\"4\" y=\"98\">and 300 more</text><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"32\" x2=\"372\" y2=\"46\"/><line class=\"ig-fig-edge\" x1=\"150\" y1=\"52\" x2=\"372\" y2=\"56\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"72\" x2=\"372\" y2=\"66\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"94\" x2=\"372\" y2=\"76\"/><rect class=\"ig-fig-node-strong\" x=\"380\" y=\"12\" width=\"252\" height=\"92\" rx=\"8\"/><text class=\"ig-fig-kicker\" x=\"506\" y=\"34\" text-anchor=\"middle\">ONE SHARED APPLICATION</text><text class=\"ig-fig-figure ig-fig-accent\" x=\"506\" y=\"74\" text-anchor=\"middle\">1</text><text class=\"ig-fig-mute\" x=\"506\" y=\"95\" text-anchor=\"middle\">deployment, not 300 copies</text>"
+    },
+    {
+      "type": "misconception",
+      "title": "What people assume about running hundreds of sites",
+      "assumed_title": "What people assume",
+      "actual_title": "What is actually true",
       "items": [
         {
-          "term": "Tenant",
-          "text": "One provider website, keyed by website_id and provider_id."
+          "assumed": "Each company gets its own copy of the code",
+          "actual": "Every company site runs the same one program"
         },
         {
-          "term": "Tenant resolution",
-          "text": "Host header looked up in a cached domains table."
+          "assumed": "A change has to be made site by site",
+          "actual": "One change reaches every site at once"
         },
         {
-          "term": "Modular monolith",
-          "text": "One deployable, split internally by defined interfaces."
-        },
-        {
-          "term": "SSR + cache",
-          "text": "Blade server-side, held full-page in Redis and at the edge."
-        },
-        {
-          "term": "ACME / SNI",
-          "text": "Why thousands of domains need no thousands of IPs."
-        },
-        {
-          "term": "Read model",
-          "text": "Property and pricing data, consumed and never authored."
+          "assumed": "More companies means proportionally more machines",
+          "actual": "Cost barely moves as companies are added"
         }
       ]
     },
     {
-      "type": "callout",
-      "tone": "key",
-      "title": "The provider website is never a second source of truth",
-      "text": "The provider website consumes RentOS data. It is never a second source of truth."
-    },
-    {
       "type": "section",
       "number": "02",
-      "title": "How responsibilities divide across the three layers",
-      "lede": "Three layers, one deployment, one database."
+      "title": "How does one program know whose site to show?",
+      "lede": "The answer is the only thing a visitor actually types."
     },
     {
-      "type": "stack",
-      "title": "The three layers, edge to core",
-      "layers": [
+      "id": "how-it-knows",
+      "type": "progressive",
+      "title": "The parts, added one at a time",
+      "parts": [
+        "A visitor",
+        "The web address",
+        "The shared application",
+        "One company's site"
+      ],
+      "stages": [
         {
-          "label": "Edge",
-          "meta": "80% of traffic stops here",
-          "items": [
-            "CDN + WAF",
-            "TLS / ACME",
-            "SNI",
-            "Full-page cache"
-          ]
+          "label": "1. One company",
+          "adds": [
+            "A visitor",
+            "The shared application"
+          ],
+          "detail": "One program, one site, nothing to decide"
         },
         {
-          "label": "Provider website app",
-          "meta": "One Laravel deployment",
-          "items": [
-            "Tenant resolution",
-            "Website config",
-            "Content",
-            "Render + cache",
-            "SEO",
-            "Media"
-          ]
+          "label": "2. Many companies",
+          "adds": "The web address",
+          "detail": "The address typed decides whose site loads"
         },
         {
-          "label": "RentOS core",
-          "meta": "Source of truth",
-          "items": [
-            "Property + pricing",
-            "Availability",
-            "Booking + payment",
-            "Shared database"
-          ]
+          "label": "3. The right site",
+          "adds": "One company's site",
+          "detail": "The program answers as that one company"
         }
       ],
-      "note": "One database with provider_id and website_id keys, not database-per-tenant."
+      "note": "The company a visit belongs to is called its tenant."
     },
     {
-      "type": "process",
-      "title": "The path of one request through the three layers",
-      "orientation": "vertical",
-      "steps": [
-        {
-          "title": "DNS to shared edge",
-          "text": "CNAME to the edge. All domains land on one CDN."
-        },
-        {
-          "title": "Edge cache check",
-          "text": "A hit returns HTML without touching the app."
-        },
-        {
-          "title": "TLS termination",
-          "text": "Wildcard or per-domain certificate, Host header intact."
-        },
-        {
-          "title": "ResolveTenant middleware",
-          "text": "Host to website_id, cached in Redis."
-        },
-        {
-          "title": "TenantContext bound",
-          "text": "Every later query is scoped, never client-supplied."
-        },
-        {
-          "title": "Render or serve cached",
-          "text": "Redis key site:{website_id}:page:{route_hash}."
-        },
-        {
-          "title": "Live call for the real-time slice",
-          "text": "Availability and payment bypass cache entirely."
-        }
-      ],
-      "note": "A miss at step four is a controlled 404, never a fallthrough to a default tenant."
+      "type": "bridge",
+      "text": "So far, one visitor at a time. A hundred thousand arrive next, and almost none of them will reach the program at all."
     },
     {
       "type": "section",
       "number": "03",
-      "title": "Custom domains and TLS certificate issuance",
-      "lede": "The two highest-risk engineering surfaces.",
-      "break": "before"
+      "title": "Who actually answers, when everyone arrives at once?"
     },
     {
+      "id": "who-answers",
+      "type": "stack",
+      "title": "The three layers a visit passes through",
+      "layers": [
+        {
+          "label": "The edge",
+          "meta": "Answers most visits",
+          "items": [
+            "A cache of finished pages",
+            "Encryption",
+            "Nearest location to the visitor",
+            "Blocks bad traffic"
+          ]
+        },
+        {
+          "label": "The shared application",
+          "meta": "Answers the rest",
+          "items": [
+            "Works out the tenant",
+            "Builds the page",
+            "Keeps its own cache",
+            "Search and enquiries"
+          ]
+        },
+        {
+          "label": "RentOS itself",
+          "meta": "Holds the real data",
+          "items": [
+            "Properties and prices",
+            "Availability",
+            "Bookings and payment"
+          ]
+        }
+      ],
+      "note": "Most visits stop at the edge and never reach the application at all."
+    },
+    {
+      "type": "process",
+      "title": "What happens between typing an address and seeing a page",
+      "steps": [
+        {
+          "title": "The address is looked up",
+          "text": "Every company address points at the same edge."
+        },
+        {
+          "title": "The edge checks its cache",
+          "text": "If the page is ready, it goes straight back."
+        },
+        {
+          "title": "The connection is secured",
+          "text": "Encryption is agreed before anything else is sent."
+        },
+        {
+          "title": "The tenant is worked out",
+          "text": "The address is matched to exactly one company."
+        },
+        {
+          "title": "The page is built or reused",
+          "text": "A recent copy is reused wherever one exists."
+        },
+        {
+          "title": "Live details are fetched",
+          "text": "Availability and prices are never served from cache."
+        }
+      ],
+      "note": "An address matching no company gets a plain error, never somebody else's site."
+    },
+    {
+      "type": "section",
+      "number": "04",
+      "title": "How is a new company's site switched on?"
+    },
+    {
+      "id": "adding-a-site",
       "type": "swimlane",
-      "title": "Which actor performs each step of domain setup",
+      "title": "Who does what when a new address goes live",
       "stages": [
-        "Add domain",
-        "Verify",
-        "Issue cert",
+        "Add address",
+        "Prove it is theirs",
+        "Get certificate",
         "Go live",
         "Suspend"
       ],
       "lanes": [
         {
-          "label": "Provider",
+          "label": "The company",
           "cells": [
-            "Adds domain in RentOS",
-            "Sets DNS records",
+            "Enters their address",
+            "Points it at us",
             null,
             null,
             null
@@ -209,162 +272,81 @@
         {
           "label": "RentOS",
           "cells": [
-            "Issues token",
-            "Polls until match",
+            "Gives them a token",
+            "Waits for the match",
             null,
-            "Flips to Published",
-            "Serves notice page"
+            "Switches the site on",
+            "Shows a notice page"
           ]
         },
         {
-          "label": "Proxy",
+          "label": "The edge",
           "cells": [
             null,
             null,
-            "ACME issues cert",
-            "Routes by SNI",
-            "Keeps cert warm"
+            "A certificate is issued",
+            "Routes by address",
+            "Keeps the certificate valid"
           ]
         }
       ],
-      "note": "No CMS login, no control panel, no FTP. Configuration happens inside RentOS."
-    },
-    {
-      "type": "chips",
-      "title": "The ten states a provider website can hold",
-      "items": [
-        {
-          "label": "Draft",
-          "tone": "mute"
-        },
-        {
-          "label": "Configuring",
-          "tone": "mute"
-        },
-        {
-          "label": "Domain pending",
-          "tone": "warn"
-        },
-        {
-          "label": "Verified",
-          "tone": "plain"
-        },
-        {
-          "label": "SSL pending",
-          "tone": "warn"
-        },
-        {
-          "label": "Ready for preview",
-          "tone": "plain"
-        },
-        {
-          "label": "Published",
-          "tone": "good"
-        },
-        {
-          "label": "Suspended",
-          "tone": "danger"
-        },
-        {
-          "label": "Failed",
-          "tone": "danger"
-        },
-        {
-          "label": "Archived",
-          "tone": "mute"
-        }
-      ],
-      "note": "Suspension degrades to a branded notice. DNS and certificate state are preserved."
-    },
-    {
-      "type": "checklist",
-      "title": "What the provider website may and may not do",
-      "do_title": "Enforced by design",
-      "dont_title": "Explicitly rejected",
-      "do": [
-        "Bookings execute in RentOS services",
-        "Double-booking prevented centrally",
-        "Idempotency keys on every write",
-        "Theming constrained to approved tokens",
-        "Analytics limited to allow-listed vendors",
-        "Every site carries a template_version"
-      ],
-      "dont": [
-        "A second payment surface",
-        "Per-website booking rules",
-        "Free-form HTML or JS from providers",
-        "Dedicated IPs as a default",
-        "Shared filesystem across accounts",
-        "Database-per-tenant"
-      ]
+      "note": "No control panel and no file uploads. Everything is configured inside RentOS."
     },
     {
       "type": "section",
-      "number": "04",
-      "title": "How the five candidate architectures scored",
-      "break": "before"
+      "number": "05",
+      "title": "What the site is never allowed to do"
     },
     {
-      "type": "bar",
-      "title": "Total score of five candidate architectures, out of 75",
-      "subtitle": "Fifteen criteria scored 1 to 5 each. Judgement, not measurement.",
+      "id": "who-owns-data",
+      "type": "checklist",
+      "title": "Where the real data lives, and what a site may do with it",
+      "do_title": "Always",
+      "dont_title": "Never",
+      "do": [
+        "Bookings are made in RentOS itself",
+        "Prices come from one source of truth",
+        "Double bookings are prevented centrally",
+        "Every site records which template it uses"
+      ],
+      "dont": [
+        "A second place to pay",
+        "Its own booking rules",
+        "Free-form code written by a company",
+        "Its own copy of the property data"
+      ],
+      "note": "The site shows RentOS data. It is never a second source of truth."
+    },
+    {
+      "type": "definitions",
+      "title": "The words the team uses for the same things",
       "items": [
         {
-          "label": "E, Hybrid (recommended)",
-          "value": 66
+          "term": "Tenant",
+          "text": "One company's site, keyed by website_id and provider_id."
         },
         {
-          "label": "B, Central Laravel multi-tenant",
-          "value": 62
+          "term": "Host header",
+          "text": "The web address, as the program actually receives it."
         },
         {
-          "label": "C, Headless shared frontend",
-          "value": 55
+          "term": "ACME / SNI",
+          "text": "How thousands of addresses share a handful of machines."
         },
         {
-          "label": "D, Static site generation",
-          "value": 54
-        },
-        {
-          "label": "A, Separate hosting per provider",
-          "value": 28
+          "term": "Read model",
+          "text": "Data the site reads from RentOS and never writes."
         }
       ],
-      "emphasis": 0,
-      "unit": "/75",
-      "note": "The ranking is only as good as the criteria weighting, which is uniform here."
-    },
-    {
-      "type": "gauge",
-      "span": 4,
-      "value": 66,
-      "max": 75,
-      "label": "Hybrid",
-      "caption": "recommended"
-    },
-    {
-      "type": "gauge",
-      "span": 4,
-      "value": 62,
-      "max": 75,
-      "label": "Central multi-tenant",
-      "caption": "runner-up"
-    },
-    {
-      "type": "gauge",
-      "span": 4,
-      "value": 28,
-      "max": 75,
-      "label": "Separate hosting",
-      "caption": "the proposal"
+      "note": "Kept last on purpose: the page teaches in words, this maps them back."
     },
     {
       "type": "footnotes",
       "title": "Method",
       "items": [
-        "Scores are judgement, 1-5 per criterion across 15 criteria, uniform weighting. They rank options against each other and are not a measurement of any deployed system.",
-        "Traffic split at the edge (80% cache hit) is a design target for the full-page cache, not an observed figure.",
-        "Tenant scale of 500+ sites is the planning target agreed for the first two years."
+        "The claim that most visits stop at the edge is a design target for the full-page cache, not a figure observed in production.",
+        "The planning target agreed for the first two years is 500 or more company sites.",
+        "This document explains what the thing is. The choice between the five candidate designs, and the scores behind it, is a separate document written for the team that has to build it."
       ]
     }
   ]

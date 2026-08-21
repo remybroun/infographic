@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import math
 
-from . import chrome, svg
+from . import chrome, pictograms, svg
 from .blocks_editorial import inline
 from .theme import Ctx
 
@@ -167,15 +167,34 @@ def chips(b: dict, ctx: Ctx) -> str:
             item = {"label": item}
         tone = tones.get(str(item.get("tone", "plain")), "plain")
         icon = item.get("icon", icons.get(tone, ""))
-        glyph = (f'<span class="ig-chip-icon" aria-hidden="true">{svg.esc(icon)}</span>'
-                 if icon else "")
+        # An `icon` has always been a literal character, and still is. A name
+        # from the pictogram library is recognised instead, which is the
+        # difference between a chip row about apartments carrying "◆" and
+        # carrying an apartment. Neither is required; the tone marks are the
+        # default and they say the thing that usually matters, which is whether
+        # the item is good or bad.
+        if pictograms.has(icon):
+            glyph = (f'<svg class="ig-chip-icon ig-chip-pic" aria-hidden="true" '
+                     f'focusable="false" viewBox="0 0 24 24" fill="currentColor">'
+                     f'<use href="#{pictograms.ID_PREFIX}{icon}"/></svg>')
+        elif icon:
+            glyph = f'<span class="ig-chip-icon" aria-hidden="true">{svg.esc(icon)}</span>'
+        else:
+            glyph = ""
         value = (f'<span class="ig-chip-value">{inline(item["value"])}</span>'
                  if item.get("value") is not None else "")
         note = (f'<span class="ig-chip-note">{inline(item["note"])}</span>'
                 if item.get("note") else "")
-        cells.append(f'<li class="ig-chip ig-chip-{tone}">{glyph}'
-                     f'<span class="ig-chip-label">{inline(item.get("label", ""))}</span>'
-                     f"{value}{note}</li>")
+        cells.append((glyph, f'<li class="ig-chip ig-chip-{tone}">',
+                      f'<span class="ig-chip-label">{inline(item.get("label", ""))}</span>'
+                      f"{value}{note}</li>"))
+    # A grid whose labels start at different distances from the left edge is not
+    # a grid. Once ONE chip carries a mark, the plain ones hold the gutter open
+    # rather than sliding under it; a block where nothing is toned keeps the
+    # gutter closed and reads as the plain list it is.
+    blank = ('<span class="ig-chip-icon" aria-hidden="true"></span>'
+             if any(glyph for glyph, _, _ in cells) else "")
+    cells = [open_tag + (glyph or blank) + rest for glyph, open_tag, rest in cells]
     # Column count is decided here for the same reason the KPI row decides its
     # own: CSS cannot see how wide this block's grid column actually is.
     requested = int(b.get("columns", 0) or 0)

@@ -75,7 +75,7 @@ and the validator runs them; the sixth is structural.
 
 `validate_theme.py` additionally checks the ordinal ramp (monotone lightness,
 ΔL ≥ 0.06 between steps, light end ≥ 2:1) and WCAG text contrast for every ink
-role against every surface.
+role, and every status text role, against every surface.
 
 ## Waivers, not exceptions
 
@@ -109,7 +109,12 @@ colour hides the next real failure.
    close together to serve as discrete ordered marks.
 5. Set `ink.accent_text` separately from `accent`: the accent as small text needs
    4.5:1 while the accent as a fill needs only 3:1. Collapsing them is how a good
-   mark colour becomes an unreadable link.
+   mark colour becomes an unreadable link. `status.good_text`,
+   `status.warning_text` and `status.critical_text` are the same split for the
+   status family, and warning is the one that always needs it: every amber light
+   enough to signal caution as a fill lands near 1.6:1 as a mark. A theme that
+   omits these roles does not fail loudly, it inherits `status.good` and prints
+   its warnings in green.
 6. Run `ig.py validate <name>` until it is green, then
    `ig.py catalog --sheet out/sheet.pdf --theme <name>` and look at the whole
    vocabulary at once.

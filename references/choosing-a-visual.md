@@ -17,15 +17,10 @@ drawing. Every sentence that survives into the document as a sentence is a form
 you did not choose, and at graphic density body prose is a build error rather
 than a style note.
 
-The five forms that most often replace a paragraph:
-
-| The sentence you were about to write | Draw |
-|---|---|
-| "the edge handles X, the app handles Y" | `stack` |
-| "first they do A, then we do B" | `swimlane` |
-| "we scored five options against fifteen criteria" | `scorecard` |
-| "it scored 66 out of 75" | `gauge` |
-| "the states are draft, pending, live" | `chips` |
+The move is **draw the paragraph**, and the table from sentence to block is in
+[graphic-first.md](graphic-first.md#the-procedure). Have it open. The rest of
+this file assumes the sentence has already survived it and genuinely wants a
+chart.
 
 ---
 
@@ -55,10 +50,19 @@ Read your sentence and find its **verb**. The verb picks the family.
 | X contains / depends on / connects to Y | structure | [catalog/structure-and-relation.md](catalog/structure-and-relation.md) |
 | X and Y trade off against each other | position | [catalog/structure-and-relation.md](catalog/structure-and-relation.md) |
 | X means this; here is why it matters | editorial | [catalog/editorial.md](catalog/editorial.md) |
+| X is a kind of thing you have never met | teaching | [catalog/teaching.md](catalog/teaching.md) |
 
 **A claim with no verb of comparison is not a chart.** "Churn is when customers
 leave" is a `definitions` block. "We should assign an owner at triage" is a
 `callout`. Neither improves by being plotted.
+
+**Before any of the above: what must the reader *do* with this sentence?** Meet
+it for the first time, compare, follow, locate, or weigh? Four of those five
+presume the reader already has the concept and is now operating on it, which is
+why "meet it for the first time" was missing from this file for three versions
+and why every document it produced read as though written for an insider. When
+that is the answer, the family is teaching, and the next question is not *which
+chart* but **what does this reader already own that has the same shape?**
 
 ## Step 3: Ask whether it is a chart at all
 
@@ -70,9 +74,12 @@ genre is plotting a number that was already the whole message.
 |---|---|---|
 | One current value, maybe with a trend | `stat` | a one-bar bar chart |
 | The number the page leads with | `hero_figure` (one per view) | none |
-| Three or four headline numbers **the document does not explain further down** | `kpi` | a grouped bar of unrelated measures; a row restating figures the charts below already carry properly |
+| Three or four numbers, **none of which the document explains further down** | `kpi`, and answer per tile why it is not its own chart | a row restating figures the charts below carry properly. `kpi` is not a slot: see [narrative.md](narrative.md#the-spine-that-works-for-almost-every-argument) |
 | One ratio against a limit | `meter` | a two-slice pie |
 | A rule, a caveat, a definition | `callout`, `definitions` | a chart with two bars |
+| A subject the reader has never met | `analogy` | a diagram of its parts |
+| A thing with more parts than anyone can meet at once | `progressive` | one complete diagram |
+| A wrong belief the reader arrives with | `misconception` | stating the right answer and hoping |
 | More than ~7 classes that all matter | `table`, or table + chart | more colours |
 | Options scored on criteria, no numeric axis | `matrix` | a "score" bar chart |
 | A person's own words | `quote` | a paraphrase in a box |
@@ -132,15 +139,15 @@ Each of these overrides the table above.
 
 ## Step 6: Decide how many visuals
 
-A document is not improved by having a visual per paragraph.
+A document is not improved by having a visual per paragraph. **One claim, one
+block**: if two blocks make the same point, cut one.
 
-- **One claim, one block.** If two blocks make the same point, cut one.
-- **Vary the family.** Six bar charts in a row read as a data dump. If your
-  document is all one family, the argument is probably one-note too.
-- **Alternate register.** Chart, then prose, then chart. The prose is where the
-  reader is told what the chart means; without it the chart is decoration.
-- **Budget roughly.** A4 explainer: 6-12 blocks, of which 3-6 are charts. A3
-  poster: 12-20 blocks. More than that and nothing is the focus.
+Rough budget: an A4 explainer runs 6-12 blocks, of which 3-6 are charts; an A3
+poster 12-20. Past that, nothing is the focus.
+
+Rhythm (alternating register, varying the family and the span, one dominant
+element) is ordering rather than form choice, and lives in
+[narrative.md](narrative.md#rhythm).
 
 ## Step 7: Write down what you rejected
 
@@ -158,10 +165,12 @@ able to count → `unit` with 100 cells. Not a donut: three parts of very
 different size compared by angle is exactly what donuts are bad at.
 
 **"Ticket volume fell but total work did not."**
-→ Two facts in tension. Not one chart. A `kpi` row states both numbers side by
-side, then a `dumbbell` per category shows the fall is concentrated, and a
-`share_bar` of handling time shows where the work went. Three blocks, one
-argument.
+→ Two facts in tension. Not one chart. The tension goes in the `hero` subtitle, a
+`dumbbell` per category shows the fall is concentrated, and a `share_bar` of
+handling time shows where the work went. Two blocks, one argument. **No `kpi`
+row:** both numbers are explained properly by the blocks below, so a tile would
+be those facts with their denominator, comparison and shape stripped off,
+printed before the reader has a frame for them.
 
 **"Reply time degrades as portfolio grows."**
 → Verb is *degrades as* → a relationship across an ordered axis. Five ordered

@@ -26,12 +26,12 @@ taste under time pressure always chooses "one more clarifying sentence".
 
 ![Six labelled groups, each showing three miniature specimens: bars, lollipops and heatmaps for quantity; lines, slopes and dumbbells for change; rings, waffles and share bars for part-to-whole; chains, trees and venns for structure; layers, lanes and chips for diagram; tiles, callouts and rules for editorial.](assets/forms.png)
 
-52 block types across six families, plus 49 aliases so a spec can be written in
+57 block types across seven families, plus 64 aliases so a spec can be written in
 ordinary words (`pie` → `donut`, `waffle` → `unit`, `2x2` → `quadrant`,
-`flow` → `process`).
+`flow` → `process`, `myth` → `misconception`).
 
 That figure is a map. Below it are the blocks themselves, rendered: three sheets
-out of nine in **[the specimen gallery](GALLERY.md)**, which draws all 36 forms
+out of ten in **[the specimen gallery](GALLERY.md)**, which draws all 41 forms
 this repository has honest data for. Every number in it is read out of the repo
 at build time, from the registry, the word budget, the five shipped fixtures,
 the linter's own checks and `git log`, so it cannot drift from the code it
@@ -39,7 +39,7 @@ documents and nothing in it is invented to complete a shape.
 
 ![Six quantity charts rendered: a lollipop of how graphic each shipped example is, a heatmap of blocks per family, a bar chart of printable area for the nine render targets, a grouped column chart of graphic against text blocks, a scatter of blocks against graphic blocks, and a diverging bar chart of family use in the poster against the scrolling page.](assets/gallery-quantity.png)
 
-![Five structure blocks rendered: a venn of what an authored figure shares with the built-in blocks, a process of the five commands, a cycle of render, look, find, fix, a quadrant of the six families, and a sankey from 52 block types through the families to whether each draws or sets text.](assets/gallery-structure.png)
+![Five blocks rendered: a pyramid of the five principles in the order they override each other, a venn of what an authored figure shares with the built-in blocks, a process of the five commands, a cycle of render, look, find, fix, and a quadrant of the families by whether a claim needs numbers and whether it needs an order.](assets/gallery-principles-structure.png)
 
 When the catalog has no shape for an idea, you draw it. A `figure` block takes
 authored SVG and keeps every guarantee the built-in blocks make: required `alt`,
@@ -47,9 +47,9 @@ a required data twin, refused colour literals, and its labels charged against th
 budget. Capped at three per document, because without a cap "draw the shape the
 catalog lacks" becomes "hand-draw everything" and the consistency is gone.
 
-![Five blocks rendered: a tree of the repository, an authored figure of three arguments over one set of facts with the chosen one highlighted, a scorecard of colour checks each theme passes, a gauge of 39 of 52 block types demonstrated by a shipped example, and a swimlane of the eleven pipeline steps across a you lane and a tooling lane.](assets/gallery-structure-diagram.png)
+![Four blocks rendered: a sankey from 57 block types through the families to whether each draws or sets text, a tree of the repository, an authored figure of three arguments over one set of facts with the chosen one highlighted, and a scorecard of the colour checks each theme passes beside a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
 
-The top-right panel there is a `figure`. Three spines over one set of facts is
+The authored drawing on that sheet is a `figure`. Three spines over one set of facts is
 not a tree (they partition nothing), not a process (they are alternatives, not
 steps) and not a quadrant (there are no axes). Naming the closest block type
 needs a "well, sort of", which is the test for authoring the shape instead.
@@ -59,23 +59,64 @@ needs a "well, sort of", which is the test for authoring the shape instead.
 Steps 1–6 are judgement and cannot be automated. 7–11 mostly are.
 
 1. **Source**: read it, or `ig.py extract source.pdf`
-2. **Reader and claim**: who reads this, and which words are they missing?
+2. **Reader and mode**: who reads this, do they have the concept, which words
+   are they missing?
+2.5. **The ladder** (`lesson` mode): the explanation, before any form is chosen.
+   `ig.py ladder out/ladder.json --brief`
 3. **Three spines**: three arguments over the same facts, then choose one
 4. **Target**: paper, poster, slide, or a continuous scrolling page
 5. **Scenes**: which images does this live or die by, *before* opening the catalog
 6. **Forms**: one per remaining claim
-7. **Spec**: `ig.py new out/spec.json`
+7. **Spec**: `ig.py new out/spec.json`, and every authored figure drawn twice,
+   both compositions rendered alone with `ig.py sketch`
 8. **Theme**: validated, never hand-picked
 9. **Render**: `ig.py render out/spec.json --out-dir out`
-10. **Look at it**: `ig.py shoot out/doc.html`. The linter never has.
+10. **Look at it**: `ig.py shoot out/doc.html`. The linter never has. Then
+    `ig.py blind out/doc.html`, because you cannot read your own document.
 11. **Hand off**: the spec, the document, and how it was made
 
-Two orderings are load-bearing. **Three spines before one is chosen**, because
-the first argument to arrive is nearly always the *mechanism*. That is the shape
-the source is already in, and it is rarely the one the reader has a stake in.
-And **scenes named before the catalog is opened**, because once it is open the
-question silently changes from *what does this look like?* to *which of the 52
-shapes is closest?*
+Three orderings are load-bearing. **The explanation before the argument**, because
+a spine is a claim plus the reasoning that carries it, which is the frame of a
+document for somebody who already knows what the subject is. **Three spines
+before one is chosen**, because the first argument to arrive is nearly always the
+*mechanism*. That is the shape the source is already in, and it is rarely the one
+the reader has a stake in. And **scenes named before the catalog is opened**,
+because once it is open the question silently changes from *what does this look
+like?* to *which of the 57 shapes is closest?*
+
+## Explaining, as opposed to arguing
+
+For three versions this skill could choose a good form for any fact and could not
+teach anything, and the cause was structural. Its first artifact was a fact
+ledger. Its second was a claim, defined as *one sentence the reader should
+believe by the end*. Both are the frame of an argument, so every document opened
+on its conclusion and worked backwards, which is the shape of a page written for
+somebody who already knows what the subject is.
+
+```json
+{"meta": {"mode": "lesson", "ladder": [
+  {"says": "One program can run many separate company websites.",
+   "introduces": ["application"], "at": "one-program"},
+  {"says": "The web address is what tells it which company you want.",
+   "introduces": ["web address"], "at": "address-picks"}
+]}}
+```
+
+A ladder is the explanation, written before a single form is chosen: rungs in the
+order a reader climbs them, each naming the terms it teaches and the block it
+lands on. **A term used in a block that comes before the rung teaching it is a
+build error.** That is the only check here that can see the insider register.
+Every other one measures density, form or geometry, and a document passes all of
+them while opening on a word the reader will not meet for four more blocks.
+
+Each rung is capped at 24 words, and the cap is the point. "Reflect completely on
+how to explain this before drawing anything" is the instruction that produced the
+worst document this skill has shipped. An explanation written out in full before
+the drawing starts is an essay, and the pictures get added to illustrate it.
+
+`ig.py ladder --brief` hands the rungs alone to a reader with no context, before
+anything is rendered, which is the same test `ig.py blind` runs at the end for
+the price of a rebuild.
 
 ## What the build refuses to render
 
@@ -97,6 +138,7 @@ have:
 | Graphic forms compared against the last version | A regeneration came back 93% identical, with every step performed honestly |
 | A `kpi` row is measured against the document | Four numbers led a page, and all four were explained better further down |
 | `invert` without `bleed` | It flips the ink but paints no ground, so a drawing renders light-on-light |
+| A term used before the rung that teaches it | An explainer opened on a score and a glossary, and taught nobody anything, while passing every check above |
 
 The pattern is worth stating plainly, because it recurs:
 
@@ -143,26 +185,28 @@ references/           one file per decision; load the one that owns it
   graphic-first.md      the word budget, and why it is code
   scenes.md             deciding what gets drawn by hand
   anti-patterns.md      check every document against this before shipping
-  catalog/              the 52 block types, by family
+  teaching.md           the ladder, and the mode that enforces it
+  catalog/              the 57 block types, by family
 scripts/
   ig.py                 the CLI
   build.py              spec → HTML
   check_document.py     the linter
   lib/density.py        the word budget
+  lib/ladder.py         is anything explained before the thing it depends on
   lib/derivation.py     did a regeneration change anything
   lib/leading_numbers.py  is that stat row carrying its weight
-fixtures/specs/       five complete, rendering worked examples
+fixtures/specs/       six complete, rendering worked examples
 GALLERY.md            every form the skill draws, drawn
 assets/
   gen_readme.py         the three slides on this page
-  gen_gallery.py        the nine specimen sheets, from this repo's own data
+  gen_gallery.py        the ten specimen sheets, from this repo's own data
   build_gallery.sh      rebuilds every image here in one command
   measure_blocks.py     how tall does each block lay out, so rows can be paired
   trim_png.py           crops the blank tail off a rasterised page
 ```
 
 ```bash
-python3 scripts/ig.py selftest          # 276 assertions
+python3 scripts/ig.py selftest          # 357 assertions
 python3 scripts/ig.py selftest --render # also builds all five fixtures
 ```
 
@@ -177,7 +221,7 @@ through `pdftoppm`. No pip installs, no npm, no matplotlib.
 ## Notes on this page
 
 Every image here was produced by the skill. `sh assets/build_gallery.sh` rebuilds
-all twelve from source in one command.
+all thirteen from source in one command.
 
 The three wide ones are 16:9 slides from [`gen_readme.py`](assets/gen_readme.py),
 built as a paginated target because a README image is a fixed frame and a
@@ -206,11 +250,12 @@ Two things are still wrong, and neither is faked:
 
 - **The images are light, so they glare in dark mode.** Fixing that properly
   needs a validated dark theme, which does not exist yet.
-- **The gallery build reports one warning.** `near-empty-page` fires on the alias
-  sheet at 8% ink. It is measuring correctly and measuring the wrong thing: that
-  sheet is 94% full by area and 8% full by ink, because a grid of outlined chips
-  is mostly the page showing through. The check is tuned for documents rather
-  than specimen sheets, and it is reported rather than suppressed.
+- **The gallery build reports two warnings.** `near-empty-page` fires on the
+  closing alias sheet at 3% ink. It is measuring correctly and measuring the
+  wrong thing: that sheet is mostly full by area and almost empty by ink, because
+  a grid of outlined chips is mostly the page showing through. The check is tuned
+  for documents rather than specimen sheets, and it is reported rather than
+  suppressed.
 - **The `rentos` theme's fonts live outside this repo.** Its `fonts_dir` points
   at a sibling brand directory, so a fresh clone renders it in Georgia and Helvetica
   instead of Instrument Serif and Inter. The build now warns when a declared font
@@ -223,4 +268,13 @@ The linter checks structure. It has never once looked at a document, and it
 cannot tell you that a label collided, that an arrow points at nothing, that the
 drawing was the wrong drawing, or that the argument does not land.
 
-`ig.py shoot` exists so that you can.
+`ig.py shoot` exists so that you can, and `ig.py sketch` so that looking at one
+drawing costs two seconds rather than a full render, which is the difference
+between a composition chosen and a composition settled for.
+
+Then there is the part you cannot do either. The skill's whole claim is that a
+stranger understands the page by looking at it, and the author is the one reader
+who is not a stranger: you know what every label means and what the page was
+meant to say, so you see the intended document rather than the printed one.
+`ig.py blind` prints a brief for a reader with no context at all. What they say
+it is about is what it is about.

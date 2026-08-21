@@ -108,6 +108,7 @@
     "serious": "#ec835a",
     "critical": "#d03b3b",
     "good_text": "#006300",
+    "warning_text": "#946000",
     "critical_text": "#b02c2c"
   },
   "type": {

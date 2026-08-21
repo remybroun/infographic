@@ -60,7 +60,7 @@ two.
 
 ## `matrix`: options against criteria
 
-See [quantity.md](quantity.md#matrix--options-against-criteria).
+See [quantity.md](quantity.md#matrix-options-against-criteria).
 
 The most under-used block here, and the correct answer far more often than it
 gets chosen. Whenever someone asks to "score" qualitative options and chart the
@@ -69,7 +69,7 @@ evidence does not support, and the reader acts on the invented ranking.
 
 ## `sankey`: flow between stages
 
-See [process-and-time.md](process-and-time.md#sankey--a-quantity-moving-between-stages).
+See [process-and-time.md](process-and-time.md#sankey-a-quantity-moving-between-stages).
 
 ## `anatomy`: a real image with numbered callouts
 

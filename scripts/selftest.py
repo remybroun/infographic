@@ -159,6 +159,10 @@ MINIMAL = {
                             {"date": "2025", "title": "Ship", "text": "Launched."}]},
     "share_bar": {"parts": [{"label": "Direct", "value": 60}, {"label": "Partner", "value": 40}]},
     "unit": {"parts": [{"label": "Retained", "value": 68}, {"label": "Churned", "value": 32}]},
+    "pictogram": {"glyph": "person", "unit_value": 50, "unit_label": "residents",
+                  "rows": [{"label": "Lisbon", "value": 420},
+                           {"label": "Porto", "value": 260},
+                           {"label": "Faro", "value": 95}]},
     "donut": {"parts": [{"label": "A", "value": 3}, {"label": "B", "value": 7}]},
     "treemap": {"parts": [{"label": "Big", "value": 60}, {"label": "Mid", "value": 25},
                           {"label": "Small", "value": 15}]},
@@ -215,6 +219,18 @@ MINIMAL = {
     "swimlane": {"stages": ["Add", "Verify"],
                  "lanes": [{"label": "Provider", "cells": ["Adds domain", None]},
                            {"label": "System", "cells": [None, "Polls DNS"]}]},
+
+    "analogy": {"known": {"label": "A hotel", "glyph": "building"},
+                "new": {"label": "One shared program", "glyph": "server"},
+                "pairs": [{"known": "One building", "new": "One program"},
+                          {"known": "Many rooms", "new": "Many company sites"}]},
+    "progressive": {"parts": ["A visitor", "The front door", "The program"],
+                    "stages": [{"label": "1. One site", "adds": ["A visitor", "The program"]},
+                               {"label": "2. Many sites", "adds": "The front door",
+                                "detail": "Something has to choose"}]},
+    "misconception": {"items": [{"assumed": "Each site is its own copy",
+                                 "actual": "Every site is the same program"}]},
+    "bridge": {"text": "So far every visitor has arrived at the same place."},
 }
 
 
@@ -246,6 +262,22 @@ def test_block_contracts():
     print("\nblock contracts")
     c = ctx()
 
+    # A cycle's height IS its width, so a narrow column does not shorten it, it
+    # makes it illegible: the node radius falls with the column and the label
+    # text does not. Nothing in the payload hints at that, because `size` reads
+    # like a control and behaves like a ceiling.
+    steps = [{"label": "Book"}, {"label": "Stay"}, {"label": "Pay out"}]
+    squeezed = ctx(width=326)
+    registry.render_block({"type": "cycle", "steps": steps}, squeezed)
+    check("a cycle squeezed by its column warns",
+          any("cycle asked for" in w for w in squeezed.warnings), str(squeezed.warnings))
+    check("the warning names the width it got and offers `process`",
+          any("326px" in w and "process" in w for w in squeezed.warnings))
+    roomy = ctx(width=640)
+    registry.render_block({"type": "cycle", "steps": steps}, roomy)
+    check("a cycle with room does not warn",
+          not any("cycle asked for" in w for w in roomy.warnings), str(roomy.warnings))
+
     # A legend is always present for >= 2 series and NEVER for one: a single
     # swatch just restates the title.
     one = registry.render_block({"type": "column", "categories": ["A", "B"],
@@ -255,6 +287,17 @@ def test_block_contracts():
                                             {"name": "Two", "values": [2, 1]}]}, c)
     check("no legend for a single series", "ig-legend" not in one)
     check("legend present for two series", "ig-legend" in two)
+
+    # `compact` is opt-in, exactly as catalog/README.md documents it. The code
+    # defaulted it on once and quietly rendered a real count of 8,231 as
+    # "8.2K", so this is pinned rather than left to the renderer's mood.
+    plain = registry.render_block({"type": "stat", "label": "Bookings",
+                                   "value": 8231}, c)
+    short = registry.render_block({"type": "stat", "label": "Bookings",
+                                   "value": 8231, "compact": True}, c)
+    check("a stat prints the number it was given", "8,231" in plain)
+    check("compact is opt-in, never assumed", "8.2K" not in plain)
+    check("compact still compacts when asked", "8.2K" in short)
 
     # Every chart ships its table-view twin so no value is gated.
     for name in ("bar", "column", "line", "share_bar", "funnel", "heatmap", "unit"):
@@ -560,6 +603,43 @@ def test_linter():
                   "dashed-rule", "no-table-view", "empty"):
         check(f"a good document does not trip '{bogus}'", bogus not in codes, str(sorted(codes)))
 
+    # The one finding that fires on what is NOT on the page. Every pressure on
+    # an authored figure is a hard error and every catalog block is free, so the
+    # document that drew nothing by hand was the risk-free document and this
+    # skill reliably shipped it. Absence has to cost something or step 5 never
+    # runs at all.
+    undeclared = json.loads(json.dumps(spec))
+    undeclared["meta"].pop("scenes", None)
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(Document(undeclared).render())
+    check("a document that authored no figure is flagged",
+          "no-authored-figure" in {f["code"] for f in cd.check(tmp)})
+
+    with open(os.path.join(FIXTURES, "specs", "architecture-explainer.json"),
+              encoding="utf-8") as fh:
+        drawn = json.load(fh)
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(Document(drawn).render())
+    check("a document with an authored figure is not",
+          "no-authored-figure" not in {f["code"] for f in cd.check(tmp)})
+
+    # …and a document that genuinely needed no scene says so, in writing. The
+    # warning has a legitimate "no", so it asks for the answer rather than
+    # assuming one; a linter that fires on correct documents gets ignored.
+    declared = json.loads(json.dumps(spec))
+    declared["meta"]["scenes"] = ("Every claim here is a comparison of values "
+                                  "or a share, and the catalog draws both "
+                                  "better than a hand-drawn version would.")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(Document(declared).render())
+    check("a declared `meta.scenes` clears the finding",
+          "no-authored-figure" not in {f["code"] for f in cd.check(tmp)})
+    short = json.loads(json.dumps(spec))
+    short["meta"]["scenes"] = "n/a"
+    check("a token declaration is refused", _raises(lambda: Document(short).render()))
+    check("the refusal says what the sentence has to name",
+          "step 5" in _error(lambda: Document(short).render()))
+
     css, body = cd.split_document(html)
     check("the splitter finds a stylesheet", len(css) > 2000)
     check("the splitter finds a body", "<main" in body)
@@ -609,6 +689,159 @@ def test_linter():
           cd._visible_words("<p>one two three</p><p>four</p>") == 4)
 
     os.remove(tmp)
+
+
+def test_ladder():
+    """The explanation order, checked before anything is drawn.
+
+    Expectations are written from the failure this exists to catch: a document
+    whose third block relies on a word its seventh block introduces. That is
+    invisible to every other check here, because the words are few, correct and
+    in plain English. The rules are stated before the implementation is
+    consulted: a term used earlier than the rung teaching it is an error in
+    lesson mode; rungs that land out of page order are an error; a rung is one
+    line; and none of it binds a document that never claimed to be a lesson.
+    """
+    from lib import ladder as lad
+
+    print("\nthe ladder, the explanation checked as an artifact")
+
+    ordered = {"meta": {"mode": "lesson", "ladder": [
+        {"says": "One program runs many company sites.",
+         "introduces": ["program"], "at": "a"},
+        {"says": "The address decides whose site you see.",
+         "introduces": ["address"], "at": "b"},
+        {"says": "Adding a company adds an address.", "at": "c"},
+    ]}, "blocks": [
+        {"id": "a", "type": "callout", "text": "One program, many sites."},
+        {"id": "b", "type": "callout", "text": "The address picks one."},
+        {"id": "c", "type": "callout", "text": "A new company brings an address."},
+    ]}
+    errors, warnings = lad.audit(ordered, registry)
+    check("a ladder in order passes", not errors, errors)
+    check("and warns about nothing", not warnings, warnings)
+
+    early = json.loads(json.dumps(ordered))
+    early["blocks"][0]["text"] = "The address is looked up first."
+    errors, _ = lad.audit(early, registry)
+    check("a term used before its rung is a forward reference",
+          any("forward-reference" in e for e in errors), errors)
+    check("and the message names the block and the term",
+          any('"address"' in e and "blocks[0]" in e for e in errors), errors)
+
+    scrambled = json.loads(json.dumps(ordered))
+    scrambled["meta"]["ladder"][0]["at"] = "c"
+    scrambled["meta"]["ladder"][2]["at"] = "a"
+    errors, _ = lad.audit(scrambled, registry)
+    check("rungs landing out of page order are reported",
+          any("ladder-order" in e for e in errors), errors)
+
+    essay = json.loads(json.dumps(ordered))
+    essay["meta"]["ladder"][0]["says"] = " ".join(["word"] * (lad.RUNG_WORDS + 1))
+    errors, _ = lad.audit(essay, registry)
+    check("a rung longer than a line is refused",
+          any(f"cap is {lad.RUNG_WORDS}" in e for e in errors), errors)
+
+    missing = json.loads(json.dumps(ordered))
+    missing["meta"]["ladder"][1]["at"] = "nowhere"
+    errors, _ = lad.audit(missing, registry)
+    check("a rung pointing at no block is refused",
+          any("which no block has" in e for e in errors), errors)
+
+    # A ladder is written at step 2.5, before the spec exists. Failing on an
+    # unresolvable `at` there made the step impossible to run at the one moment
+    # it is meant to be run, which is how it was found: on the first real use.
+    unbuilt = {"meta": dict(ordered["meta"]), "blocks": []}
+    errors, _ = lad.audit(unbuilt, registry)
+    check("a ladder with no spec yet is legal", not errors, errors)
+
+    unused = json.loads(json.dumps(ordered))
+    unused["meta"]["ladder"][2]["introduces"] = ["certificate"]
+    _errors, warnings = lad.audit(unused, registry)
+    check("a term the page never uses is a warning, not an error",
+          any("ladder-unused" in w for w in warnings), warnings)
+
+    check("a lesson with no ladder at all is refused",
+          any("no meta.ladder" in e for e in
+              lad.audit({"meta": {"mode": "lesson"}, "blocks": []}, registry)[0]))
+
+    # The same fault, in a document that never claimed to be a lesson: reported,
+    # never fatal. A ladder on an argument document is a courtesy, and making a
+    # courtesy fatal is how it stops being offered.
+    loose = json.loads(json.dumps(early))
+    loose["meta"]["mode"] = "argument"
+    lad.enforce(loose, registry)
+    check("an argument document is warned, not stopped",
+          any("forward-reference" in w for w in lad.check(loose, registry)))
+    raised = False
+    try:
+        lad.enforce(early, registry)
+    except SystemExit:
+        raised = True
+    check("a lesson document is stopped", raised)
+
+    plural = json.loads(json.dumps(ordered))
+    plural["meta"]["ladder"][1]["introduces"] = ["address"]
+    plural["blocks"][0]["text"] = "Many addresses arrive here."
+    check("plurals do not slip past the check",
+          any("forward-reference" in e for e in lad.audit(plural, registry)[0]))
+
+    # A citation naming a constant is not the page teaching a word to someone.
+    exempt = json.loads(json.dumps(ordered))
+    exempt["blocks"].insert(0, {"type": "footnotes", "items": ["The address, per RFC."]})
+    for rung in exempt["meta"]["ladder"]:
+        rung["at"] = rung["at"]
+    errors, _ = lad.audit(exempt, registry)
+    check("footnotes and twins do not trigger it", not errors, errors)
+
+
+def test_lesson_density():
+    """The density that resolves the budget's conflict with teaching."""
+    print("\nlesson density, graphic density with room to teach")
+
+    check("lesson sits between graphic and report",
+          density.WORDS_PER_PAGE["graphic"] < density.WORDS_PER_PAGE["lesson"]
+          < density.WORDS_PER_PAGE["report"])
+    check("body prose is still refused", density.CAPS["lesson"]["body"] == 0)
+    check("a bridge exists only at lesson density and above",
+          density.CAPS["graphic"]["bridge"] == 0 and density.CAPS["lesson"]["bridge"] > 0)
+
+    spec = {"blocks": [{"type": "bridge", "text": "So far, one visitor."}]}
+    check("a bridge at graphic density is a violation",
+          [v for v in density.audit(spec, "graphic", registry) if v.role == "bridge"])
+    check("and the refusal names the density that has it",
+          "lesson" in str(density.audit(spec, "graphic", registry)[0]))
+    check("the same bridge passes at lesson density",
+          not density.audit(spec, "lesson", registry))
+
+    long_bridge = {"blocks": [{"type": "bridge",
+                               "text": " ".join(["word"] * 41)}]}
+    check("a bridge over its cap is still refused at lesson density",
+          density.audit(long_bridge, "lesson", registry))
+
+    import build as build_mod
+    doubled = {"meta": {"density": "lesson"}, "blocks": [
+        {"type": "bridge", "text": "One."}, {"type": "bridge", "text": "Two."}]}
+    raised = ""
+    try:
+        build_mod.Document(doubled)
+    except SystemExit as exc:
+        raised = str(exc)
+    check("two bridges in a row are refused", "back to back" in raised, raised)
+
+    many = {"meta": {"density": "lesson"}, "blocks": []}
+    for _ in range(4):
+        many["blocks"].append({"type": "bridge", "text": "A hand-off."})
+        many["blocks"].append({"type": "callout", "text": "A picture would go here."})
+    raised = ""
+    try:
+        build_mod.Document(many)
+    except SystemExit as exc:
+        raised = str(exc)
+    check("more bridges than sections are refused", "the cap is" in raised, raised)
+
+    check("lesson counts as graphic-first for renderers",
+          Ctx(Theme.load("default"), density="lesson").graphic)
 
 
 def test_leading_numbers():
@@ -1055,12 +1288,440 @@ def test_scroll():
           "no-bleed" not in codes, str(sorted(codes)))
 
 
+def test_sketch_inputs():
+    """`ig.py sketch` accepts the three shapes an author actually has on disk.
+
+    A comp file mid-draft is usually a bare block or a list of two, not a spec,
+    and a loop that only accepts finished specs is a loop nobody runs while the
+    drawing is still in question, which is the only moment it is worth running.
+    Chrome is not involved here: this covers parsing and selection only.
+    """
+    import argparse as _argparse
+    import contextlib
+    import io
+
+    import ig
+
+    print("\nsketch inputs")
+    flat = re.sub(r"\s+", " ", ig.BLIND_BRIEF)
+    block = {"type": "figure", "id": "one", "viewbox": "0 0 640 100",
+             "alt": "a", "encodes": "concept", "svg": "<g/>"}
+    other = dict(block, id="two")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        def written(payload):
+            path = os.path.join(tmp, "in.json")
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(payload, fh)
+            return ig._sketch_load(path)
+
+        meta, blocks = written({"meta": {"page": "scroll"}, "blocks": [block]})
+        check("sketch reads a full spec", meta.get("page") == "scroll" and len(blocks) == 1)
+        _meta, blocks = written([block, other])
+        check("sketch reads a list of blocks", len(blocks) == 2)
+        _meta, blocks = written(block)
+        check("sketch reads one bare block", len(blocks) == 1)
+        _meta, blocks = written({"title": "not a spec"})
+        check("sketch refuses something that is neither", blocks is None)
+
+    def select(blocks, **kw):
+        args = _argparse.Namespace(id=None, index=None)
+        for key, value in kw.items():
+            setattr(args, key, value)
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            return ig._sketch_selection(blocks, args)
+
+    mixed = [{"type": "bar"}, block, {"type": "stat"}, other]
+    check("sketch defaults to the authored figures", select(mixed) == [1, 3])
+    check("sketch takes every block when none is authored",
+          select([{"type": "bar"}, {"type": "stat"}]) == [0, 1])
+    check("sketch selects by id", select(mixed, id=["two"]) == [3])
+    check("sketch selects by index", select(mixed, index=[0, 2]) == [0, 2])
+    check("sketch refuses an id that is not there", select(mixed, id=["missing"]) is None)
+
+    # The brief is sent verbatim to a reader with no context. Anything in it
+    # that names the subject, the claim or the source hands over the answer to
+    # the one question being asked.
+    leaks = [word for word in ("claim is", "the source says", "this document is about a")
+             if word in flat.lower()]
+    check("the blind brief leaks nothing", not leaks, str(leaks))
+    check("the blind brief asks what it is about",
+          "what is this document about" in flat.lower())
+    check("the blind brief asks for undefined terms",
+          "could not confidently define" in flat)
+    check("the blind brief forbids a review",
+          "do not review the design" in flat.lower())
+
+
+def test_catalog_lookup():
+    """`ig.py catalog <type>` is the answer to "what keys does this block take".
+
+    It exists because the list form answers "which block" and nothing answered
+    the second question, which sent readers sed-hunting through files whose
+    names they had to guess. These assertions keep it honest: a renamed heading
+    in references/catalog/ silently degrades the lookup to a stub otherwise.
+    """
+    import contextlib
+    import io
+
+    import ig
+
+    print("\ncatalog lookup, one block in full")
+
+    def run(query):
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            code = ig._catalog_block(query)
+        return code, buffer.getvalue()
+
+    index = ig._doc_index()
+    # `heading` and `bullets` have no section of their own; both are one-liners
+    # fully described by the registry. Everything else must be reachable.
+    undocumented = sorted(n for n in registry.REGISTRY if n not in index)
+    check("every block but the two one-liners has a doc section",
+          undocumented == ["bullets", "heading"], f"missing: {undocumented}")
+
+    broken = []
+    for name in registry.REGISTRY:
+        code, out = run(name)
+        if code != 0 or f"{name}   " not in out or "README.md" not in out:
+            broken.append(name)
+    check("every registered type prints without raising", not broken,
+          f"broken: {broken}")
+
+    # A payload example is the whole point: the list form already carries the
+    # use-when, so a section with no JSON in it has not answered the question.
+    keyless = [n for n in index if "```json" not in index[n][0][2]]
+    check("every documented block shows a payload example",
+          not keyless, f"no json: {keyless}")
+
+    code, out = run("lanes")
+    check("an alias resolves and says so",
+          code == 0 and "alias for swimlane" in out and "swimlane   diagram" in out)
+
+    code, out = run("swimlanes")
+    check("an unknown type fails and suggests the near miss",
+          code == 1 and "swimlane" in out and "unknown block type" in out)
+
+    _, out = run("funnel")
+    check("a block documented twice cross-references the other family",
+          "Also documented in" in out and "process-and-time.md" in out)
+
+    _, out = run("bullets")
+    check("an undocumented block falls back to the registry, not a crash",
+          "No section in" in out and "a paragraph wearing a disc" in out)
+
+    # A key the renderer accepts and the prose omits is a key someone goes
+    # looking for in `scripts/`. `checklist` documents `do_title` and not
+    # `dont_title`, and that is the case that sent an author into the source.
+    _, out = run("checklist")
+    check("a key the renderer reads is never invisible", "dont_title" in out)
+
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        ig._catalog_list()
+    listing = buffer.getvalue()
+    check("the list names the file documenting each family",
+          all(f"references/catalog/{f}" in listing for f in
+              ("editorial.md", "diagram.md", "quantity.md", "change.md",
+               "part-to-whole.md", "structure-and-relation.md",
+               "process-and-time.md")))
+    check("the list points at the per-block form",
+          "catalog <type>" in listing)
+
+
+def test_pictograms():
+    """The optional shape library, and the ways it could stop being optional.
+
+    Two properties are load-bearing and neither is visible in a render. A
+    pictogram must carry no paint of its own, or a drawing placed inside an
+    authored figure would either ignore the kit or trip the colour-literal
+    check. And an unknown name must fail loudly, because the failure mode of a
+    silent fallback is a document that ships with the wrong picture in it.
+    """
+    from lib import pictograms
+
+    print("\npictograms, the library that has to stay optional")
+
+    check("the library is not empty", len(pictograms.PICTOGRAMS) > 40)
+    check("every pictogram is in a listed category",
+          {c for c, _ in pictograms.PICTOGRAMS.values()} <= set(pictograms.CATEGORY_ORDER))
+    check("by_category lists every pictogram exactly once",
+          sorted(n for _c, members in pictograms.by_category() for n in members)
+          == sorted(pictograms.PICTOGRAMS))
+
+    # The whole reason a `<use>` can take a kit class inside a figure.
+    from lib.blocks_figure import paint_literals
+    painted = [name for name, (_c, markup) in pictograms.PICTOGRAMS.items()
+               if paint_literals(markup)]
+    check("no pictogram carries its own paint", not painted, str(painted))
+    check("the symbol defs carry no paint either",
+          not paint_literals(pictograms.symbol_defs()))
+    check("every pictogram is emitted as a symbol",
+          all(f'id="{pictograms.ID_PREFIX}{n}"' in pictograms.symbol_defs()
+              for n in pictograms.PICTOGRAMS))
+
+    check("an unknown name is refused", _raises(lambda: pictograms.resolve("horse")))
+    check("the refusal lists what does exist",
+          "home" in _error(lambda: pictograms.resolve("horse")))
+    check("a near miss is suggested",
+          "home" in (pictograms.suggest("hom") or []))
+    # The count in the error message drifted once already: it said fifty-one
+    # after a fifty-second shape landed, in the one place a reader is about to
+    # distrust the list printed underneath it. Counted now, and asserted.
+    check("the refusal counts the library rather than quoting a number",
+          f"{len(pictograms.PICTOGRAMS)} silhouettes" in
+          _error(lambda: pictograms.resolve("horse")))
+    # A name for something the library does not have is not a typo, and
+    # answering it with "did you mean suitcase?" is worse than not answering.
+    check("a word for a thing that does not exist gets no near miss",
+          not pictograms.suggest("hospital"))
+    check("and is told the honest thing instead",
+          "no shape for it" in _error(lambda: pictograms.resolve("hospital")))
+    check("a real typo is still caught", pictograms.suggest("aparment") == ["apartment"])
+
+    # `<main>` only, never the whole document: the stylesheet carries every
+    # `ig-chip-pic` rule and the shared defs carry every `ig-pic-` symbol, so a
+    # negative assertion against the full HTML passes in both directions.
+    def drawn_in(*blocks):
+        html = Document({"meta": {}, "blocks": list(blocks)}).render()
+        return re.search(r"<main.*?</main>", html, re.S).group(0)
+
+    # Optional means optional: the defaults must not have moved.
+    check("a unit chart with no glyph still draws squares",
+          "<rect" in (plain := drawn_in(dict(MINIMAL["unit"], type="unit")))
+          and pictograms.ID_PREFIX not in plain)
+    check("a unit chart naming a glyph draws it",
+          f'href="#{pictograms.ID_PREFIX}home"' in
+          drawn_in(dict(MINIMAL["unit"], type="unit", glyph="home")))
+    check("a unit chart naming a glyph that does not exist is refused",
+          _raises(lambda: drawn_in(dict(MINIMAL["unit"], type="unit", glyph="horse"))))
+
+    chips_plain = drawn_in({"type": "chips",
+                            "items": [{"label": "Live", "tone": "good"}]})
+    check("a chip with no icon name keeps its tone mark",
+          "ig-chip-pic" not in chips_plain and "ig-chip-icon" in chips_plain)
+    check("a chip naming a pictogram draws it",
+          "ig-chip-pic" in drawn_in({"type": "chips",
+                                     "items": [{"label": "Keys", "icon": "key"}]}))
+    chips_char = drawn_in({"type": "chips",
+                           "items": [{"label": "Live", "icon": "★"}]})
+    check("a chip icon that is a character is still a character",
+          "★" in chips_char and "ig-chip-pic" not in chips_char)
+
+    # The pictogram block's own contract.
+    def picto(**kw):
+        base = dict(MINIMAL["pictogram"], type="pictogram")
+        base.update(kw)
+        return drawn_in(base)
+
+    check("a well-formed pictogram block compiles",
+          f'href="#{pictograms.ID_PREFIX}person"' in picto())
+    check("it states its unit in a key", "= 50 residents" in picto())
+    check("a missing unit_value is refused", _raises(lambda: picto(unit_value=0)))
+    check("the refusal explains what a unit value is for",
+          "one symbol" in _error(lambda: picto(unit_value=None)).lower())
+    check("a row too long to count is refused",
+          _raises(lambda: picto(unit_value=1)))
+    check("the refusal names a unit value that would fit",
+          "unit_value" in _error(lambda: picto(unit_value=1)))
+    check("a row may override the glyph",
+          f'href="#{pictograms.ID_PREFIX}car"' in
+          picto(rows=[{"label": "Fleet", "value": 100, "glyph": "car"}]))
+    check("a pictogram block ships its table twin", "ig-table-view" in picto())
+    # The value column used to be pinned to the block's right edge, which left
+    # a short row's own number 300px away from it.
+    ctx_width = float(re.search(r'viewBox="0 0 ([\d.]+)', picto()).group(1))
+    value_x = max(float(x) for x in
+                  re.findall(r'<text x="([\d.]+)"[^>]*text-anchor="end"', picto()))
+    check("row values sit beside the rows, not at the block's right edge",
+          value_x < ctx_width * 0.85, f"{value_x:.0f} of {ctx_width:.0f}")
+    # drawing.md's own threshold is "under about 16px turns to mud", so a
+    # default sitting at 18 put the block on the wrong side of its own advice.
+    check("the default symbol size clears the legibility threshold",
+          float(re.search(r'<use [^>]*width="([\d.]+)"', picto()).group(1)) >= 24)
+
+    # Drawing costs no words, which is the argument for drawing.
+    entry = registry.REGISTRY["pictogram"]
+    check("a pictogram block's glyph names are not charged as text",
+          density.block_words(dict(MINIMAL["pictogram"], type="pictogram"), registry)
+          == density.block_words(
+              dict(MINIMAL["pictogram"], type="pictogram", glyph="apartment"), registry),
+          str(entry.get("family")))
+
+
 def _error(fn) -> str:
     try:
         fn()
     except BaseException as exc:  # noqa: BLE001
         return str(exc)
     return ""
+
+
+def test_authored():
+    """Authored composition: the model writes the page, the skill keeps four
+    promises. Each of those promises is a build error, and each is asserted
+    here, because the whole argument for authoring being a mode of this skill
+    rather than "go write HTML somewhere else" is that they still hold."""
+    print("\nauthored composition, where the page is written rather than assembled")
+    from build import Document
+    from lib import authored as auth
+    import check_document as cd
+
+    def build(body, style="", **spec):
+        base = {"meta": dict({"title": "t", "encodes": "concept"},
+                             **spec.pop("meta", {}))}
+        base.update({"body": body, "style": style}, **spec)
+        return Document(base).render()
+
+    page = '<section id="one"><svg viewBox="0 0 10 10" role="img" aria-label="A dot.">' \
+           '<circle cx="5" cy="5" r="4" fill="var(--ig-accent)"/></svg></section>'
+
+    html = build(page, ".x{color:var(--ig-ink)}")
+    check("an authored page compiles", "ig-authored" in html and "<circle" in html)
+    check("its CSS reaches the document", ".x{color:var(--ig-ink)}" in html)
+    check("the 12-column grid is not emitted", 'class="ig-grid"' not in html)
+    check("a block spec still emits the grid",
+          'class="ig-grid"' in Document({"meta": {"title": "t"},
+                                         "blocks": [{"type": "callout", "text": "x"}]}).render())
+
+    # R1: colour is computed, not chosen. The value test, not a property list,
+    # so a shorthand cannot smuggle one past.
+    check("a hex literal in the CSS is refused",
+          _raises(lambda: build(page, ".x{color:#c0392b}")))
+    check("the refusal names the literal",
+          "#c0392b" in _error(lambda: build(page, ".x{color:#c0392b}")))
+    check("a named colour in a shorthand is refused",
+          _raises(lambda: build(page, ".x{border:1px solid red}")))
+    check("a literal in the markup is refused",
+          _raises(lambda: build('<svg role="img" aria-label="a"><rect fill="#fff"/></svg>')))
+    check("a selector may be called .gold-rule",
+          build(page, ".gold-rule{color:var(--ig-ink)}"))
+    check("color-mix over tokens passes",
+          build(page, ".x{background:color-mix(in srgb, var(--ig-accent) 12%, transparent)}"))
+    check("a gradient over tokens passes",
+          build(page, ".x{background:linear-gradient(to right, var(--ig-page), var(--ig-card))}"))
+    check("a literal hiding inside a gradient is still refused",
+          _raises(lambda: build(page, ".x{background:linear-gradient(to right, var(--ig-page), red)}")))
+    check("url(#ig-arrow) is not read as a hex colour",
+          build('<svg role="img" aria-label="a"><line marker-end="url(#ig-arrow)"/></svg>'))
+
+    # R2: the accessibility floor.
+    check("an svg with no accessible name is refused",
+          _raises(lambda: build('<svg viewBox="0 0 4 4"><circle r="1"/></svg>')))
+    check("a <title> child satisfies it",
+          build('<svg viewBox="0 0 4 4"><title>A dot.</title><circle r="1"/></svg>'))
+    check("aria-hidden satisfies it",
+          build('<svg aria-hidden="true"><circle r="1"/></svg><p>text</p>'))
+    check("an img with no alt is refused",
+          _raises(lambda: build('<img src="data:image/gif;base64,R0lGOD">')))
+
+    # R3: one honest declaration about data.
+    check("an authored page with no `encodes` is refused",
+          _raises(lambda: Document({"meta": {"title": "t"}, "body": page}).render()))
+    twin = {"columns": ["Year", "Cost"], "rows": [[2024, 12]]}
+    with_twin = build(page, meta={"encodes": twin})
+    check("a declared twin renders", "ig-table-view" in with_twin)
+    check("the twin carries the values", ">2024<" in with_twin and ">12<" in with_twin)
+
+    # R4: the page is inert and self-contained, because it is printed.
+    check("a <script> is refused", _raises(lambda: build(page + "<script>x()</script>")))
+    check("an inline handler is refused",
+          _raises(lambda: build('<p onclick="x()">hi</p>' + page)))
+    check("a remote asset is refused",
+          _raises(lambda: build('<img alt="a" src="https://example.com/a.png">' + page)))
+    check("a <style> tag in the body is refused",
+          _raises(lambda: build(page + "<style>.y{color:var(--ig-ink)}</style>")))
+
+    # Catalog blocks placed into the page's own layout, which is what keeps
+    # authoring from meaning "hand-draw a bar chart".
+    placed = build('<div class="side"><div data-block="b1" data-width="300"></div></div>' + page,
+                   blocks=[{"id": "b1", "type": "bar", "title": "T",
+                            "items": [{"label": "A", "value": 3}]}])
+    check("a placed catalog block renders", "ig-placed" in placed and "T" in placed)
+    check("it keeps its table twin", "ig-table-view" in placed)
+    check("a placeholder naming no block is refused",
+          _raises(lambda: build('<div data-block="nope"></div>' + page)))
+
+    unplaced = Document({"meta": {"title": "t", "encodes": "concept"}, "body": page,
+                         "blocks": [{"id": "ghost", "type": "callout", "text": "x"}]})
+    unplaced.render()
+    check("a block no placeholder calls for is a warning",
+          any("authored-unplaced" in w for w in unplaced.warnings), str(unplaced.warnings))
+
+    # The linter's block-shaped findings must not fire on a page with no blocks.
+    tmp = os.path.join(SKILL, "examples", "out", "_authored_probe.html")
+    os.makedirs(os.path.dirname(tmp), exist_ok=True)
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(build(page))
+    codes = {f["code"] for f in cd.check(tmp)}
+    for bogus in ("thin", "empty", "no-authored-figure", "no-table-view", "no-graphics"):
+        check(f"the linter does not trip '{bogus}' on an authored page",
+              bogus not in codes, str(sorted(codes)))
+    os.remove(tmp)
+
+    # The ladder still checks order, against ids in the markup instead of blocks.
+    marks = auth.landmarks('<h1 id="a">First thing</h1><p id="b">Second thing</p>')
+    check("landmarks read ids in document order", [m[0] for m in marks] == ["a", "b"])
+    check("each landmark carries its own text",
+          "First" in marks[0][1] and "First" not in marks[1][1], str(marks))
+
+    # A gradient id is a reference target, not a place on the page. Counting one
+    # inserts a phantom position and shifts every real rung after it, so a
+    # correct document starts failing `ladder-order` for a reason no error
+    # message could explain.
+    defs = auth.landmarks('<h1 id="a">First</h1><svg><defs>'
+                          '<linearGradient id="grad"/></defs></svg>'
+                          '<p id="b">Second</p>')
+    check("an id inside <defs> is not a landmark", [m[0] for m in defs] == ["a", "b"],
+          str(defs))
+    check("a marker id is not a landmark",
+          [m[0] for m in auth.landmarks(
+              '<h1 id="a">x</h1><marker id="m"/><p id="b">y</p>')] == ["a", "b"])
+
+    # A placed block is an empty placeholder in the source, so its payload has
+    # to be handed in or the ladder cannot see a word of it.
+    placed_marks = auth.landmarks(
+        '<h1 id="a">Intro</h1><div data-block="chart"></div><p id="b">After</p>',
+        {"chart": "widget counts by crate"})
+    check("a placed block's text belongs to the landmark before it",
+          "widget" in placed_marks[0][1], str(placed_marks))
+
+    hidden = {"meta": {"title": "t", "encodes": "concept", "mode": "lesson",
+                       "ladder": [{"says": "A widget is a small thing.",
+                                   "introduces": ["widget"], "at": "one"},
+                                  {"says": "Widgets are counted in crates.",
+                                   "introduces": ["crate"], "at": "two"},
+                                  {"says": "A crate ships weekly.",
+                                   "introduces": ["shipment"], "at": "three"}]},
+              "body": '<p id="one">A widget.</p>'
+                      '<div data-block="early"></div>'
+                      '<p id="two">Counted somehow.</p><p id="three">One shipment.</p>',
+              "blocks": [{"id": "early", "type": "callout",
+                          "title": "A crate of them", "text": "Counting."}]}
+    check("a forward reference hiding inside a placed block is caught",
+          _raises(lambda: Document(hidden).render()),
+          "the placeholder's payload must be visible to the ladder")
+
+    lesson = {"meta": {"title": "t", "encodes": "concept", "mode": "lesson",
+                       "ladder": [{"says": "A widget is a small thing.",
+                                   "introduces": ["widget"], "at": "one"},
+                                  {"says": "Widgets are counted in crates.",
+                                   "introduces": ["crate"], "at": "two"},
+                                  {"says": "A crate ships weekly.",
+                                   "introduces": ["shipment"], "at": "three"}]},
+              "body": '<p id="one">A widget.</p><p id="two">A crate of them.</p>'
+                      '<p id="three">One shipment.</p>'}
+    check("a lesson-mode authored page passes its ladder", Document(lesson).render())
+
+    broken = json.loads(json.dumps(lesson))
+    broken["body"] = '<p id="one">A widget in a crate.</p><p id="two">A crate.</p>' \
+                     '<p id="three">One shipment.</p>'
+    check("a forward reference in authored markup is still caught",
+          _raises(lambda: Document(broken).render()))
+    check("the refusal names it a forward reference",
+          "forward-reference" in _error(lambda: Document(broken).render()))
 
 
 def main():
@@ -1072,9 +1733,12 @@ def main():
     test_theme()
     test_density()
     test_figure()
+    test_authored()
     test_scroll()
     test_graphic_layout()
     test_every_block_renders()
+    test_sketch_inputs()
+    test_catalog_lookup()
     test_block_contracts()
     test_delta_direction()
     test_label_fitting()
@@ -1082,7 +1746,10 @@ def main():
     test_extractor()
     test_linter()
     test_derivation()
+    test_ladder()
+    test_lesson_density()
     test_leading_numbers()
+    test_pictograms()
     test_fixtures(args.render)
 
     print(f"\n{len(PASSED)} passed, {len(FAILED)} failed")

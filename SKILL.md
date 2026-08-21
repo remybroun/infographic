@@ -1,211 +1,270 @@
 ---
 name: infographic
-description: Turn text, a document, or a topic into a designed, graphic-first visual explainer: a print-ready PDF or a continuous scrolling page. Extracts the facts, decides which images the document lives on, draws them, and renders a themed document where the pictures carry the ideas and the text is titles and indicators only. Use when the user wants an infographic, a visual explainer, a one-pager, a data poster, a concept diagram, an architecture diagram, a chart-driven report, or asks to "visualize", "explain visually", "make a diagram of", or "turn this into a graphic". Covers 52 visual forms (bar, line, dumbbell, slope, funnel, sankey, treemap, waffle, quadrant, venn, tree, timeline, process, cycle, matrix, stack, swimlane, scorecard, gauge, chips, plus authored figures for shapes the catalog lacks), an enforced text budget, validated colour, print and screen layout, and accessibility. Not for interactive web dashboards or slide decks.
-version: 3.0.0
+description: Turn text, a document, or a topic into a graphic-first explainer: a print-ready PDF or a continuous scrolling page where the pictures carry the ideas and the text is titles only. Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks.
+version: 3.1.1
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
   - Bash(python3 *)
 ---
 
-You are producing a **graphic document**, not a written one. The pictures carry
-the ideas. The text is titles and small indicators.
+You are making something **a stranger can understand by looking at it**: a
+beautiful one-page explainer, a concept drawn, a chart that settles a question.
+Write for a reader outside the team. They are intelligent and they do not know
+your vocabulary, your service names or your database columns.
 
-**The catalog is a floor, not a ceiling. When a claim has a shape the catalog
-does not, draw the shape.**
+Three tests, and a document has to pass **all three**:
 
-Those two lines are in tension, and both are enforced. The first is a word budget
-that fails the build: `scripts/lib/density.py` runs before anything renders, and
-version 1 of this skill made it advice and shipped an eight-page explainer with
-2,086 words and one chart. The second is the `figure` block, capped at three per
-document: version 2 fixed the word count and then shipped an airless document
-because the catalog had quietly become the boundary of imagination.
+> **1. Cover the text.** Does the page still teach you anything?
+>
+> **2. Cover the pictures.** Can a reader outside the team define every word
+> left on it?
+>
+> **3. Read it in order.** Does anything appear before the thing it depends on?
 
-Five principles, in priority order:
+The second gets skipped because a page can pass the first perfectly while every
+label on it is a lookup key.
+→ [graphic-first.md](references/graphic-first.md#checking-it-landed)
 
-1. **The graphic makes the point.** Cover the text: if the page still teaches
-   you something, it is working. If not, start again from the claim.
-2. **Draw the idea, not the nearest available shape.** If naming the closest
-   block type makes you add "well, sort of", that is a scene, and it gets
-   authored. → [scenes.md](references/scenes.md)
-3. **The claim comes before the chart.** Every block earns its space by carrying
-   one sentence. If you cannot write the sentence, do not draw the block.
-4. **Never fabricate to complete a shape.** A missing series stays missing and
-   gets said in words. Invented data is worse than no chart because it looks
-   like evidence.
-5. **Colour and contrast are computed, not chosen.** There is a validator. Run
-   it. This holds inside an authored figure too, where the build refuses colour
-   literals outright.
+## Blocks, or author the page
 
-## Setup
+**The catalog is a library. It is not the runtime.** The choice is the first
+real decision after naming the reader:
 
-Run once per session, from the skill directory:
+- **Blocks.** A list of payloads on a 12-column grid. Consistent, re-themable,
+  table twins for free. Right for a report, a data poster, a findings summary.
+- **Authored.** You write the page: `style` is its CSS, `body` is its markup and
+  inline SVG. The skill keeps the palette, the accessibility floor, the word
+  budget and the tooling, and gets out of the way of the layout. Right for an
+  explainer that lives on its pictures.
+  → [authored.md](references/authored.md)
 
-```bash
-cd <skill-base-dir> && python3 scripts/ig.py catalog
-```
+**If naming the nearest block is how you are deciding what the document looks
+like, you are in the wrong mode.** Authoring is not a licence to hand-draw a bar
+chart: place the `bar` inside your layout with `<div data-block="id"></div>` and
+it renders with its axis maths and its twin intact. Within block mode, when a
+claim has a shape the catalog does not, draw the shape: that is `figure`.
 
-That prints every block with its "use when". If anything downstream misbehaves,
-`python3 scripts/ig.py selftest` should be green before you debug your own spec.
+## Rules that never bend
+
+The per-chart invariants are not here: **one axis, bars from zero, fixed colour
+slots never cycled, a table twin on every chart, and colour never the only
+channel** are owned by [integrity.md](references/integrity.md) and
+[color-and-type.md](references/color-and-type.md). Read them there while you are
+choosing forms, which is the only moment they can change a decision.
+
+- **Name the reader before anything else, then pick the mode.** `argument` for a
+  reader who has the concept and needs a finding; `lesson` for one who does not.
+  It follows from the reader, not the subject. When the request says "explain
+  X", it is a lesson. Then list what the reader will not know: every term is
+  either **introduced by being drawn** at the rung that teaches it, or rewritten
+  into words with the identifier demoted to the table twin. A `definitions`
+  block is the fallback, not the destination, and a glossary before the lesson
+  is the back of a textbook printed at the front.
+- **Say what the thing is before how it works.** Name the subject in plain words
+  a stranger owns, then the mechanism. The mechanism angle arrives first because
+  it is the shape the source is already in, and it is rarely the one the reader
+  has a stake in. → [teaching.md](references/teaching.md)
+- **In `lesson` mode the ladder is written before a single form is chosen, and
+  the build checks it.** Rungs, one line each, in the order a reader climbs
+  them, each naming the terms it teaches and the block it lands on. A term used
+  before the rung that introduces it is `forward-reference`, a build error.
+  **The rung cap is 24 words, and that cap is the point:** a ladder is a
+  skeleton, not a draft.
+- **Three spines before one is chosen. Then choose, and say which.** Write three
+  one-line arguments and name the images each would live on, then pick the
+  strongest yourself and build it, saying in one line why that spine and not the
+  other two. Deciding is the job. Ask only when the three would serve genuinely
+  different readers *and* nothing in the request says which reader is at the
+  table, and then ask once, with a recommendation.
+  **A regeneration never opens the previous spec before the scenes are named**,
+  and declares `meta.supersedes`. **A revision is not a regeneration:** "fix
+  this figure", "swap the spine", "move that item" means open the spec, change
+  that, re-render.
+- **Draw the idea, not the nearest available shape.** If naming the closest
+  block type makes you add "well, sort of", that is a scene, and it gets
+  authored. **Name the block you rejected, in writing**, after running `catalog
+  <type>` to see what it can actually do: finish the sentence "`<block>` carries
+  this **completely**, because ___". Cannot finish it? The scene gets drawn.
+  → [scenes.md](references/scenes.md)
+- **At most three authored figures in block mode.** Not a budget, a ranking
+  exercise: which two or three images does this document live or die by? A
+  document of five or more blocks that authored nothing is a linter warning,
+  cleared by one sentence in `meta.scenes` naming what the catalog carried
+  instead.
+- **A figure keeps every guarantee.** `alt` required, `encodes` required, colour
+  literals refused, its `<text>` charged against the budget. It is not `raw`
+  with a nicer name.
+- **Every figure gets drawn twice, and the loser gets a line.** Two rough
+  versions that differ in something structural, `ig.py sketch` both, keep one,
+  write one sentence saying what the other could not show.
+  → [scenes.md](references/scenes.md#draw-it-twice)
+- **The claim comes before the chart.** Every block earns its space by carrying
+  one sentence. If you cannot write the sentence, do not draw the block.
+- **Never fabricate to complete a shape.** A missing series stays missing and
+  gets said in words. Invented data looks like evidence.
+- **Colour and contrast are computed, not chosen.** There is a validator. Run
+  it. This holds inside an authored figure too.
+- **Text is titles and indicators.** Body prose is refused at graphic and
+  `lesson` density. `--density report` is opt-in only. **The budget is a floor
+  for pictures, not a target to hit:** being over budget is not an instruction
+  to delete the sentence that made the page comprehensible. Draw more, cut a
+  figure, or change the target.
+- **Titles are literal, specific and sober. Never slogans.** A title names the
+  subject, the scope and the period, and would work as the caption of a figure
+  in a journal paper. The finding goes in the `subtitle`, stated flatly. The fix
+  for a vague title is always **more specific, never more clever**.
+  **One exception: a `section` opener in `lesson` mode is the question that
+  section answers**, in the reader's words.
+  → [anti-patterns.md](references/anti-patterns.md#titles)
+- **Look at it, then give it to someone who has not.** `ig.py shoot` renders the
+  document to PNGs; `ig.py blind` prints the brief for a reader with no context,
+  which is the only instrument here that measures the two cover-tests above.
 
 ## The pipeline
 
 ```bash
 python3 scripts/ig.py extract source.pdf -o out/ledger.json   # 1. facts
-                                                              # 2. name the reader, write the claim
+                                                              # 2. name the reader, PICK THE MODE
+python3 scripts/ig.py ladder out/ladder.json --brief          # 2.5 WRITE THE EXPLANATION
                                                               # 3. THREE SPINES, then pick one
                                                               # 4. pick the target
+                                                              # 4.5 BLOCKS, OR AUTHOR THE PAGE
                                                               # 5. NAME THE SCENES
                                                               # 6. pick a form per claim
 python3 scripts/ig.py new out/spec.json                       # 7. write the spec
+python3 scripts/ig.py sketch out/comps.json                   #    EVERY FIGURE DRAWN TWICE
 python3 scripts/ig.py render out/spec.json --out-dir out      # 8-9. build, render, lint
 python3 scripts/ig.py shoot out/doc.html                      # 10. LOOK AT IT
+python3 scripts/ig.py blind out/doc.html                      #     then a stranger looks
 ```
 
-Steps 2, 3, 5 and 6 are the skill. The rest is tooling. Two orderings are
-load-bearing: step 3 forces three candidate arguments before one is chosen,
-because the first one to arrive always wins otherwise and it is nearly always
-the *mechanism* rather than the thing the reader cares about; and step 5 comes
-before the catalog is opened, because once it is open it frames every idea and
-the question silently changes from *what does this look like?* to *which of the
-52 shapes is closest?* Full detail in [pipeline.md](references/pipeline.md).
+Steps 2, 2.5, 3, 4.5, 5, 6 and the drawing half of 7 are the skill. Three
+orderings are load-bearing: **2.5 before 3** (the explanation before the
+argument), **3 forces three candidates** before one is chosen, and **5 before
+the catalog is opened**, because once it is open the question silently changes
+from *what does this look like?* to *which of the 57 shapes is closest?*
+Full detail in [pipeline.md](references/pipeline.md).
 
 ## Which reference to load
 
 Load the one that owns the decision in front of you. Do not read them all.
 
-| You are… | Load |
-|---|---|
-| writing any spec at all | **[graphic-first.md](references/graphic-first.md)** |
-| deciding what the document lives on | **[scenes.md](references/scenes.md)** |
-| drawing one of those by hand | **[drawing.md](references/drawing.md)** |
-| deciding what form a claim needs | **[choosing-a-visual.md](references/choosing-a-visual.md)** |
-| running the whole job | [pipeline.md](references/pipeline.md) |
-| reading a source document | [extraction.md](references/extraction.md) |
-| ordering the blocks into an argument | [narrative.md](references/narrative.md) |
-| writing block payloads | [catalog/](references/catalog/README.md) · [spec-schema.md](references/spec-schema.md) |
-| building a scrolling page | [continuous.md](references/continuous.md) |
-| setting spans, or fixing a half-empty page | [layout-grid.md](references/layout-grid.md) |
-| adding a brand theme, or picking colours | [color-and-type.md](references/color-and-type.md) |
-| debugging the PDF | [print-pdf.md](references/print-pdf.md) |
-| checking honesty and accessibility | [integrity.md](references/integrity.md) |
-| reviewing the finished document | **[anti-patterns.md](references/anti-patterns.md)** |
+- **Always, before writing a spec:** [graphic-first.md](references/graphic-first.md)
+  and [anti-patterns.md](references/anti-patterns.md#before-you-write)
+- **Deciding what to build:** [scenes.md](references/scenes.md) ·
+  [teaching.md](references/teaching.md) (a reader who has never met the subject) ·
+  [choosing-a-visual.md](references/choosing-a-visual.md) (what form a claim needs)
+- **Drawing it:** [authored.md](references/authored.md) (your CSS, markup and
+  SVG) · [drawing.md](references/drawing.md) (by hand) ·
+  [integrity.md](references/integrity.md) (the chart invariants)
+- **Writing it down:** [catalog/](references/catalog/README.md) ·
+  [spec-schema.md](references/spec-schema.md) ·
+  [layout-grid.md](references/layout-grid.md) ·
+  [narrative.md](references/narrative.md) ·
+  [continuous.md](references/continuous.md) (scrolling page)
+- **Running the job:** [pipeline.md](references/pipeline.md) ·
+  [extraction.md](references/extraction.md) ·
+  [color-and-type.md](references/color-and-type.md) ·
+  [print-pdf.md](references/print-pdf.md)
+- **Reviewing the finished document:**
+  [anti-patterns.md](references/anti-patterns.md#before-you-ship)
 
-## The block catalog
+`anti-patterns.md` appears twice on purpose. Its first half is process failures
+that can only be avoided *before* you write; its second half is the review
+checklist.
 
-52 block types across six families. Full detail in
-[references/catalog/](references/catalog/README.md).
+## The catalog
 
-- **Diagram:** `figure` `stack` `swimlane` `scorecard` `gauge` `chips`
-  → **reach here first when you catch yourself writing a paragraph**
-  → `figure` is the authored drawing, for the shape nothing else has
-- **Structure:** `process` `cycle` `quadrant` `venn` `tree` `sankey` `anatomy`
-- **Quantity:** `bar` `column` `lollipop` `diverging` `likert` `scatter`
-  `heatmap` `matrix`
-- **Change:** `line` `area` `dumbbell` `slope` `timeline`
-- **Part-to-whole:** `share_bar` `unit` `donut` `treemap` `funnel` `pyramid`
-  `meter`
-- **Editorial:** `hero` `section` `heading` `stat` `kpi` `hero_figure`
-  `definitions` `checklist` `comparison` `callout` `quote` `table` `image`
-  `footnotes` `chips` `divider` `spacer` `raw` · plus `prose` and `bullets`,
-  which are report-density only
+57 block types in seven families: **teaching**, **diagram**, **structure**,
+**quantity**, **change**, **part-to-whole**, **editorial**. The teaching family
+(`analogy` `progressive` `misconception` `bridge`) is the one to know by name:
+every other family draws a relation between things the reader already accepts,
+and these draw the moment before that. `figure` is the authored drawing, for the
+shape nothing else has.
 
-Aliases mean a spec can be written in ordinary words: `pie` → `donut`,
-`waffle` → `unit`, `2x2` → `quadrant`, `flow` → `process`, `layers` → `stack`,
-`criteria` → `scorecard`, `list` → `chips`, `draw`/`scene` → `figure`.
+```bash
+cd <skill-base-dir> && python3 scripts/ig.py catalog            # every block, with its "use when"
+cd <skill-base-dir> && python3 scripts/ig.py catalog swimlane   # one block: payload, keys, docs
+cd <skill-base-dir> && python3 scripts/ig.py pictograms         # 52 drawn objects, opt-in
+```
+
+That listing is the whole decision surface for step 6 and names the file
+documenting each family. **Never guess a filename to find out how a block is
+written.** Aliases mean a spec can be written in ordinary words (`pie` →
+`donut`, `2x2` → `quadrant`, `draw` → `figure`, `myth` → `misconception`);
+`catalog` prints them all.
 
 **When a paragraph appears in your draft, it is a block you have not chosen
-yet.** A sequence is a `process`; a sequence that changes hands is a `swimlane`;
-layers are a `stack`; options against criteria are a `scorecard`; a score
-against a ceiling is a `gauge`; parallel short facts are `chips`. And when the
-paragraph is asking you to *imagine* something (a beam thinning, a boundary
-holding, a blast spreading), it is a `figure`.
+yet.** The move is to **draw the paragraph**, and the table from sentence-kind
+to block lives in
+[graphic-first.md](references/graphic-first.md#the-procedure). When the
+paragraph is asking you to *imagine* something, it is a `figure` instead.
 
-## Rules that never bend
-
-- **Text is titles and indicators.** Body prose is refused at graphic density.
-  `--density report` exists for real prose documents and is opt-in only.
-- **Titles are literal, specific and sober. Never slogans.** A title names the
-  subject, the scope and the period, and would work as the caption of a figure in
-  a journal paper: "Compound and simple interest on £10,000 at 7% over 30 years",
-  not "Compound interest is a shape, not a rate". No antithesis ("X, not Y"), no
-  metaphor, no bare verb phrases, no one-word section labels. The finding goes in
-  the `subtitle`, stated flatly. A vague topic title is equally wrong: the fix is
-  always **more specific, never more clever**.
-  → [anti-patterns.md](references/anti-patterns.md#titles)
-- **Three spines before one is chosen, and ask which.** The same facts support
-  several documents; the first that occurs to you describes the mechanism,
-  because that is the shape the source is already in. Write three, name the
-  images each would live on, and present them with `AskUserQuestion`.
-  **A regeneration never opens the previous spec before the scenes are named**,
-  and declares `meta.supersedes` so the build can measure what actually moved.
-  → [pipeline.md](references/pipeline.md) steps 1 and 3
-- **Name the reader before the claim, and list what they will not know.** Every
-  such term is either defined in `definitions` before it is used, or rewritten
-  into words with the identifier demoted to the table twin. **An identifier is
-  not a free word:** the budget makes `skipped_bucket` cost one and "recipient
-  opted out" cost three, so jargon wins unless you spend against it.
-  → [pipeline.md](references/pipeline.md) step 2
-- **At most three authored figures.** Not a budget, a ranking exercise: which
-  two or three images does this live or die by? Everything else goes on rails.
-- **A figure keeps every guarantee.** `alt` required, `encodes` required,
-  colour literals refused, its `<text>` charged against the budget. It is not
-  `raw` with a nicer name.
-- **One axis.** Never two y-scales. Two measures of different scale → two charts,
-  small multiples, or `index_to_100`.
-- **Fixed colour slots, never cycled.** A ninth series folds into "Other",
-  facets, or changes form. It never gets a generated hue.
-- **Every value stays reachable.** Every chart ships a table-view twin, and the
-  twin does not count against the word budget. Never pass `--no-tables` on
-  something that will be printed or read by assistive tech.
-- **Colour is never the only channel.** Legends for ≥2 series, icons on status,
-  arrows on deltas, shapes in matrix cells.
-- **Bars start at zero.** Length encodes magnitude.
-- **Look at it.** `ig.py shoot` renders the document to PNGs so you can. The
-  linter checks structure; it has never once looked at the document.
-
-## Targets
+## Targets, modes, densities, themes
 
 `a4` `a4-land` `letter` `a3` `a3-land` `slide` `poster` are paginated and print.
-
 `scroll` is not paginated: full-bleed sections, real vertical air, and the HTML
-is the deliverable. Choose it when the document will be read on a screen and at
-least one section earns going edge to edge. → [continuous.md](references/continuous.md)
+is the deliverable. → [continuous.md](references/continuous.md)
 
-## Themes
+| `meta.mode` | For a reader who… | Opens on | Ladder |
+|---|---|---|---|
+| `argument` (default) | has the concept, needs a finding | the claim | optional |
+| `lesson` | does not have the concept | what the thing **is**, drawn | **required** |
 
-`default` (neutral editorial) · `rentos` (RentRemote / RentOS olive editorial,
+A lesson opens on an **establishing shot**: a title saying exactly what the
+document is about, a question worth answering, and one big custom drawing of the
+subject itself, wide rather than tall. Good practice rather than a rule, and the
+first thing to reach for when the reader may not be able to picture the subject.
+→ [teaching.md](references/teaching.md#the-establishing-shot)
+
+| `meta.density` | Words / page | Body prose | `bridge` |
+|---|---|---|---|
+| `graphic` (default) | 150 | refused | refused |
+| `lesson` | 260 | refused | 40 words, one per section |
+| `report` | 900 | allowed | allowed |
+
+`lesson` density is not a step towards `report` and not the answer to "my text
+did not fit". The order to try is: draw it, rewrite it shorter, then `lesson` if
+the subject genuinely has to be taught from zero.
+→ [teaching.md](references/teaching.md)
+
+Themes: `default` (neutral editorial) · `rentos` (RentRemote / RentOS olive,
 Instrument Serif headings) · `mono` (greyscale, print-safe, texture forced on).
-
-All three pass the computable colour checks. Verify with
-`python3 scripts/ig.py validate --all`, and preview a theme across the whole
-vocabulary with `python3 scripts/ig.py catalog --sheet out/sheet.pdf --theme X`.
-
-A new brand theme is a JSON file, not code. Do not hand-pick a slot order:
-enumerate orderings and keep only those that clear the gates. See
-[color-and-type.md](references/color-and-type.md).
+All three pass the computable colour checks. Verify with `ig.py validate --all`,
+preview with `ig.py catalog --sheet out/sheet.pdf --theme X`. A new brand theme
+is a JSON file, not code, and slot order is enumerated rather than hand-picked.
+→ [color-and-type.md](references/color-and-type.md)
 
 ## Worked examples
 
-`fixtures/specs/` holds five complete, rendering documents. Read one before
-writing your first spec:
+`fixtures/specs/` holds six complete, rendering documents. Read one before
+writing your first spec. `python3 scripts/ig.py selftest --render` builds all
+six.
 
-- **`scroll-architecture.json`**: the reference for authored work. A continuous
-  page with three drawings the catalog could not do: hostnames converging on
-  one door, a blast radius on a full-bleed dark field, a request beam narrowing
-  through four layers. Plus a stack, a swimlane and a chip grid on rails.
-- **`architecture-explainer.json`**: A4, rentos. The reference for paginated
-  graphic-first work: 117 words per page across four pages.
+- **`authored-tides.json`**: the reference for authored composition. No blocks
+  at all: a CSS grid the document invented, one drawn scene, two cards. Read its
+  `style` and `body` before writing your first authored spec.
+- **`scroll-architecture.json`**: the reference for `figure` work inside block
+  mode. Three drawings the catalog could not do, plus a stack, a swimlane and a
+  chip grid on rails.
+- **`architecture-explainer.json`**: the reference for `lesson` mode. A six-rung
+  ladder, an `analogy` before any mechanism, a `progressive`, a `misconception`,
+  glossary last. Read the ladder in its `meta` first.
 - `concept-explainer.json`: A4 explainer, default theme, teaches a concept
 - `data-report.json`: A4 report, rentos theme, findings from data
 - `poster-a3.json`: A3 one-page poster, exercises the structure blocks
-
-`python3 scripts/ig.py selftest --render` builds all five.
 
 ## Requirements
 
 Python 3.9+ standard library only, and Google Chrome / Chromium / Edge / Brave
 for PDF rendering and screenshots (set `CHROME_PATH` if it is not found).
-`poppler` (`pdftotext`, `pdftoppm`) is optional: it reads PDF sources, powers the
-linter's per-page ink measurement, and rasterises paginated documents for
+`poppler` (`pdftotext`, `pdftoppm`) is optional: it reads PDF sources, powers
+the linter's per-page ink measurement, and rasterises paginated documents for
 `shoot`. No pip installs, no npm, no matplotlib.
+
+`python3 scripts/ig.py selftest` should be green before you debug your own spec.
+It is a check on the skill, not a step in producing a document.
+
+Why each rule above exists, and the document that produced it:
+[HISTORY.md](HISTORY.md).

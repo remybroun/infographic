@@ -194,19 +194,58 @@ def fig_specimens():
                for i in range(4)]
         return out
 
+    def mapping(x, y):
+        """analogy: two columns, paired row by row."""
+        out = []
+        for i in range(3):
+            yy = y + 10 + i * 13
+            out.append(f'<rect class="ig-fig-node-mute" x="{x}" y="{yy}" width="20" height="9" rx="2"/>')
+            out.append(f'<rect class="ig-fig-node-strong" x="{x + 32}" y="{yy}" width="20" height="9" rx="2"/>')
+            out.append(f'<line class="ig-fig-rule" x1="{x + 22}" y1="{yy + 4.5}" '
+                       f'x2="{x + 30}" y2="{yy + 4.5}"/>')
+        return out
+
+    def buildup(x, y):
+        """progressive: the same picture three times, gaining a part."""
+        out = []
+        for panel in range(3):
+            px = x + panel * 20
+            for row in range(3):
+                yy = y + 10 + row * 12
+                if row < panel + 1:
+                    cls = "ig-fig-node-strong" if row == panel else "ig-fig-node"
+                    out.append(f'<rect class="{cls}" x="{px}" y="{yy}" width="15" height="9" rx="2"/>')
+                else:
+                    out.append(f'<rect class="ig-fig-node-mute" x="{px}" y="{yy}" width="15" '
+                               f'height="9" rx="2" opacity="0.35"/>')
+        return out
+
+    def correction(x, y):
+        """misconception: what is assumed, struck; what is true, kept."""
+        out = []
+        for i in range(2):
+            yy = y + 12 + i * 18
+            out.append(f'<rect class="ig-fig-node-mute" x="{x}" y="{yy}" width="22" height="11" rx="2"/>')
+            out.append(f'<line class="ig-fig-edge-mute" x1="{x + 4}" y1="{yy + 5.5}" '
+                       f'x2="{x + 18}" y2="{yy + 5.5}"/>')
+            out.append(f'<rect class="ig-fig-node-strong" x="{x + 30}" y="{yy}" width="22" height="11" rx="2"/>')
+            out.append(f'<circle class="ig-fig-solid-accent" cx="{x + 41}" cy="{yy + 5.5}" r="2.5"/>')
+        return out
+
     families = [
         ("Quantity", 8, (bars, lolli, heat)),
         ("Change", 5, (line, slope, dumb)),
         ("Part-to-whole", 7, (ring, waffle, sharebar)),
         ("Structure", 7, (proc, tree, venn)),
         ("Diagram", 6, (stack, lanes, chips)),
+        ("Teaching", 4, (mapping, buildup, correction)),
         ("Editorial", 19, (kpis, callout, rows)),
     ]
 
     p = []
     for i, (name, count, glyphs) in enumerate(families):
         cx = 12 + (i % 3) * 352
-        cy = 44 + (i // 3) * 226
+        cy = 44 + (i // 3) * 150
         p.append(f'<text class="ig-fig-title" x="{cx}" y="{cy}">{name}</text>')
         p.append(f'<text class="ig-fig-mute" x="{cx + 250}" y="{cy}" text-anchor="end">{count}</text>')
         p.append(f'<line class="ig-fig-rule" x1="{cx}" y1="{cy + 12}" x2="{cx + 250}" y2="{cy + 12}"/>')
@@ -216,14 +255,15 @@ def fig_specimens():
         "type": "figure",
         "span": 12,
         "id": "specimens",
-        "title": "The six families of block, three specimens from each",
-        "subtitle": "52 forms. Editorial is the largest and the one to reach for least.",
-        "viewbox": "0 0 1060 430",
-        "alt": "Six labelled groups, each showing three miniature specimens of the block shapes in that family: bars and grids for quantity, lines and slopes for change, rings and waffles for part-to-whole, chains and trees for structure, layers and lanes for diagram, tiles and rules for editorial.",
+        "title": "The seven families of block, three specimens from each",
+        "subtitle": "57 forms. Editorial is the largest and the one to reach for least.",
+        "viewbox": "0 0 1060 424",
+        "alt": "Seven labelled groups, each showing three miniature specimens of the block shapes in that family: bars and grids for quantity, lines and slopes for change, rings and waffles for part-to-whole, chains and trees for structure, layers and lanes for diagram, paired columns and a three-stage build-up for teaching, tiles and rules for editorial.",
         "encodes": {
             "columns": ["Family", "Block types"],
             "rows": [["Editorial", 19], ["Quantity", 8], ["Part-to-whole", 7],
-                     ["Structure", 7], ["Diagram", 6], ["Change", 5]],
+                     ["Structure", 7], ["Diagram", 6], ["Change", 5],
+                     ["Teaching", 4]],
         },
         "svg": "".join(p),
     }

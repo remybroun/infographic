@@ -7,6 +7,7 @@
 <style>{{FONTS}}</style>
 <style>{{TOKENS}}</style>
 <style>{{CSS}}</style>
+<style>{{AUTHOR_CSS}}</style>
 </head>
 <body class="{{BODY_CLASS}}">
 
@@ -48,13 +49,21 @@
             markerWidth="4.5" markerHeight="4.5" orient="auto">
       <circle cx="5" cy="5" r="4" class="ig-fig-arrowhead"/>
     </marker>
+
+    <!-- The pictogram library, here for the same reason as the arrowheads:
+         `href="#ig-pic-home"` resolves against the document, so a chart and a
+         hand-drawn figure on the same page share one copy.
+
+         Not one of these shapes carries a `fill`, so each inherits colour from
+         wherever it is placed. That is what lets a `<use>` inside an authored
+         figure take a kit class and still pass the colour-literal check: there
+         is no colour in the symbol to be a literal. -->
+    {{PICTOGRAMS}}
   </defs>
 </svg>
 
 <main class="ig-doc">
-<div class="ig-grid">
-{{BLOCKS}}
-</div>
+{{MAIN}}
 </main>
 {{FOOTER}}
 </body>
