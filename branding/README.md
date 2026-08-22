@@ -12,6 +12,16 @@ python3 branding/gen_brand.py
   <img src="iris-mono.svg" width="200" alt="the iris mark, one colour">
 </p>
 
+## The line
+
+> **Give the world a shape.**
+
+It is a claim about what the tool is for, not a description of what it runs on.
+The thing being made is a representation, and the work is finding the shape a
+subject already has rather than decorating it with one. Set it in caps under the
+wordmark, in `w2` from the ramp, or in italic on its own. Do not append a
+product or platform name to it.
+
 ## What it is
 
 A disc split down the middle, with an ordered colour ramp in each half, and the

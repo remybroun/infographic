@@ -44,6 +44,12 @@ import re
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
+# The line under the wordmark. It is a claim about what the tool is for, not a
+# description of what it runs on: the thing being made is a representation, and
+# the work is finding the shape a subject already has rather than decorating it.
+# Four words, no verb to spare, and it survives being set in caps at 24px.
+SLOGAN = "Give the world a shape"
+
 # ── palette ─────────────────────────────────────────────────────────────────
 # Ground and ink only. The mark's own colour is in RAMPS.
 BASE = {
@@ -201,7 +207,7 @@ def lockup_svg(scheme="light"):
   <text x="272" y="118" fill="{p['ink']}" font-size="96"
         font-family="Instrument Serif, Georgia, Times New Roman, serif">infographic</text>
   <text x="276" y="176" fill="{p['w2']}" font-size="24" letter-spacing="3.4"
-        font-family="Helvetica Neue, Arial, sans-serif">A CLAUDE CODE SKILL</text>
+        font-family="Helvetica Neue, Arial, sans-serif">{SLOGAN.upper()}</text>
 </svg>
 '''
 

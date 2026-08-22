@@ -7,6 +7,8 @@
 
 <h1 align="center">infographic</h1>
 
+<p align="center"><em>Give the world a shape.</em></p>
+
 <p align="center">
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
 <a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.2.0-5C6B2E" alt="version 3.2.0"></a>
@@ -17,9 +19,9 @@
 <a href="branding/"><img src="https://img.shields.io/badge/branding-iris-5C6B2E" alt="branding"></a>
 </p>
 
-A [Claude Code](https://claude.com/claude-code) skill that turns a document, a
-dataset or a topic into a designed visual explainer: a print-ready PDF, or a
-continuous scrolling page whose HTML is the deliverable.
+A skill that turns a document, a dataset or a topic into a designed visual
+explainer: a print-ready PDF, or a continuous scrolling page whose HTML is the
+deliverable.
 
 It is not a chart library. It is a set of constraints that make a model produce
 a graphic document instead of an essay with figures stapled to it, and most of
