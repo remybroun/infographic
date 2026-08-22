@@ -14,13 +14,16 @@ python3 branding/gen_brand.py
 
 ## The line
 
-> **Give the world a shape.**
+> **Represent the world.**
 
-It is a claim about what the tool is for, not a description of what it runs on.
-The thing being made is a representation, and the work is finding the shape a
-subject already has rather than decorating it with one. Set it in caps under the
-wordmark, in `w2` from the ramp, or in italic on its own. Do not append a
-product or platform name to it.
+"Represent" is the discipline's own word rather than a borrowed one: a figure
+*is* a representation in the strict sense, and this whole skill is a set of
+constraints on making an honest one. "The world" fixes the scope. Not your data,
+not your slides, anything you can point at.
+
+Set it in caps under the wordmark, in `w2` from the ramp, or in italic on its
+own. Do not append a product or platform name to it. It lives in exactly one
+place, `SLOGAN` in `gen_brand.py`, so the lockup and the docs cannot disagree.
 
 ## What it is
 

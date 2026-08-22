@@ -233,7 +233,7 @@ def lockup_svg(scheme="light"):
     {body}
   </g>
   <text class="word" x="272" y="118">infographic</text>
-  <text class="tag" x="276" y="176">give the world a shape</text>
+  <text class="tag" x="276" y="176">represent the world</text>
 </svg>
 '''
 
@@ -373,7 +373,7 @@ def page():
       {inline("m", 132)}
       <div>
         <div style="font-family:'Instrument Serif',Georgia,serif; font-size:64px; line-height:1;">infographic</div>
-        <div style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:var(--warm); margin-top:10px;">give the world a shape</div>
+        <div style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:var(--warm); margin-top:10px;">represent the world</div>
       </div>
     </div>
   </div>

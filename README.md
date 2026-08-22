@@ -7,7 +7,7 @@
 
 <h1 align="center">infographic</h1>
 
-<p align="center"><em>Give the world a shape.</em></p>
+<p align="center"><em>Represent the world.</em></p>
 
 <p align="center">
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>

@@ -44,11 +44,15 @@ import re
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
-# The line under the wordmark. It is a claim about what the tool is for, not a
-# description of what it runs on: the thing being made is a representation, and
-# the work is finding the shape a subject already has rather than decorating it.
-# Four words, no verb to spare, and it survives being set in caps at 24px.
-SLOGAN = "Give the world a shape"
+# The line under the wordmark. Change it here and nowhere else: the lockup, the
+# root README and branding/README.md all take it from this constant, so they
+# cannot end up disagreeing about what the tool says it is for.
+#
+# "Represent" is the discipline's own word rather than a borrowed one. A figure
+# *is* a representation in the strict sense, and the whole skill is a set of
+# constraints on making an honest one. "The world" fixes the scope: not your
+# data, not your slides, anything you can point at.
+SLOGAN = "Represent the world"
 
 # ── palette ─────────────────────────────────────────────────────────────────
 # Ground and ink only. The mark's own colour is in RAMPS.

@@ -45,5 +45,5 @@
     <circle cx="120.0" cy="120.0" r="8" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
   </g>
   <text class="word" x="272" y="118">infographic</text>
-  <text class="tag" x="276" y="176">give the world a shape</text>
+  <text class="tag" x="276" y="176">represent the world</text>
 </svg>
