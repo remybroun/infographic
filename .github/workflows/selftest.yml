@@ -1,0 +1,33 @@
+name: selftest
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    name: assertions, themes, fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Only the --render leg needs these: the fixtures print through the
+      # headless Chrome the runner already ships, and poppler is what reads PDF
+      # sources and measures per-page ink coverage.
+      - name: install poppler
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
+      - name: assertions
+        run: python3 scripts/ig.py selftest
+
+      - name: every theme through the colour checks
+        run: python3 scripts/ig.py validate --all
+
+      - name: every fixture built and printed
+        run: python3 scripts/ig.py selftest --render

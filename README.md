@@ -1,5 +1,12 @@
 # infographic
 
+[![selftest](https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg)](https://github.com/remybroun/infographic/actions/workflows/selftest.yml)
+[![version 3.2.0](https://img.shields.io/badge/version-3.2.0-5C6B2E)](SKILL.md)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-5C6B2E)](#requirements)
+[![57 block types](https://img.shields.io/badge/block%20types-57-5C6B2E)](GALLERY.md)
+[![dependencies 0](https://img.shields.io/badge/dependencies-0-5C6B2E)](#requirements)
+[![license MIT](https://img.shields.io/badge/license-MIT-5C6B2E)](LICENSE)
+
 A [Claude Code](https://claude.com/claude-code) skill that turns a document, a
 dataset or a topic into a designed visual explainer: a print-ready PDF, or a
 continuous scrolling page whose HTML is the deliverable.
@@ -11,6 +18,29 @@ those constraints fail the build rather than advise.
 ```
 /infographic <a topic, a path, or a pasted document>
 ```
+
+## Install
+
+```bash
+git clone https://github.com/remybroun/infographic.git ~/.claude/skills/infographic
+```
+
+That is the whole install: a skill is a directory with a `SKILL.md` in it, and
+Claude Code finds it on the next session. To scope it to one project instead of
+every project, clone into `<project>/.claude/skills/infographic` instead.
+
+## Verify
+
+```bash
+python3 scripts/ig.py selftest          # 409 assertions
+python3 scripts/ig.py validate --all    # every theme through the colour checks
+python3 scripts/ig.py selftest --render # also builds all six fixtures, to PDF
+sh assets/build_gallery.sh              # rebuilds every image on this page
+```
+
+The first three are what CI runs on every push, and the badge above is that run.
+The fourth is the reproduction command for the figures below: every image on this
+page is output of the skill, and one command rebuilds all thirteen from source.
 
 ## What it produces
 
@@ -205,11 +235,6 @@ assets/
   trim_png.py           crops the blank tail off a rasterised page
 ```
 
-```bash
-python3 scripts/ig.py selftest          # 357 assertions
-python3 scripts/ig.py selftest --render # also builds all five fixtures
-```
-
 ## Requirements
 
 Python 3.12+ standard library, and a Chromium-family browser for rendering and
@@ -246,7 +271,7 @@ The accessibility twin is a `<details>` element, and inside a raster image that
 is a control nobody can operate, so the values it would carry sit in the prose
 beside each figure instead. The specimen sheets keep their twins in the HTML.
 
-Two things are still wrong, and neither is faked:
+Three things are still wrong, and none of them is faked:
 
 - **The images are light, so they glare in dark mode.** Fixing that properly
   needs a validated dark theme, which does not exist yet.
@@ -278,3 +303,7 @@ who is not a stranger: you know what every label means and what the page was
 meant to say, so you see the intended document rather than the printed one.
 `ig.py blind` prints a brief for a reader with no context at all. What they say
 it is about is what it is about.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
