@@ -190,6 +190,13 @@ names the subject, the scope and the period, and it is boring. The finding is no
 lost, it moves to the `subtitle` and is stated flatly there: "Compounding ends
 2.5 times higher."
 
+**❌ A subtitle with nothing to say.** A restated title, a mood, a category:
+"An overview of the pipeline."
+Why: it spends the reader's first line teaching them that the small text on
+this page can be skipped.
+✅ A subtitle exists only when there is a finding to state flatly. Otherwise it
+is deleted, not filled.
+
 This applies to `hero`, block and step titles alike. Section titles are where the
 slogan register returns first, because a one-word title feels clean: "The
 mechanism", "The guard", "Answering". Name what the section establishes.
@@ -256,6 +263,35 @@ reader.
 
 **❌ No method block.** Numbers with no source, period, or exclusions.
 ✅ `footnotes`, always, on anything carrying figures.
+
+### The look
+
+**❌ Emoji or icon-font glyphs anywhere.**
+✅ An icon is SVG, drawn in the page's own visual language, or absent.
+
+**❌ The AI-slop look.** Gradient heroes, glassmorphism cards, glow effects,
+generic dashboard chrome.
+Why: it is the costume of a thousand generated pages, and a reader who has
+seen it discounts the content on sight.
+✅ The page looks composed for this subject and no other.
+
+**❌ Your own default composition.** Every mechanism a left-to-right chain of
+rounded rectangles and arrows, every establishing shot one centred object
+floating in whitespace, three spines that are one spine reworded.
+Why: these are not decisions, they are the shapes a model reaches for on any
+subject, which makes them the drawn equivalent of slop.
+✅ Treat the first composition that comes to mind as already spent, and draw
+the second. When a default is caught, rewrite the element; a softened cliché
+is still the cliché.
+
+**❌ Decoration that encodes nothing.** Abstract shapes, dividers and
+flourishes placed to fill space.
+✅ Every visual element encodes something. The whitespace is the ornament.
+
+**❌ Marketing words, anywhere.** "Unlock", "seamless", "powerful", and the
+slogan cadence they travel in, including labels and legends.
+✅ Museum-plaque register: sober, literal, flat. The imagination is spent on
+the drawings, never the words.
 
 ## Form choice
 
@@ -354,9 +390,10 @@ mark beside the text carries identity.
 
 ## Print
 
-**❌ Shipping without opening the PDF.** The linter checks structure, not whether
-the argument lands or whether a label collided.
-✅ Render it, read it end to end at 100%.
+**❌ Shipping without looking at the render.** The linter checks structure, not
+whether the argument lands or whether a label collided.
+✅ `shoot` it and read the shots end to end at 100%; when a PDF was asked for,
+read the PDF too.
 
 **❌ `--no-tables` on anything that will be printed or read by assistive
 technology.**

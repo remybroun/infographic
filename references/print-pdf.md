@@ -1,8 +1,10 @@
 # Print & PDF
 
-The output is a PDF, so the page is a real constraint rather than a scroll with
-a border. Everything here is verified behaviour of headless Chrome, which is the
-renderer this skill uses.
+**This file applies only when the user asked for a PDF or for print.**
+Otherwise the HTML is the deliverable and none of the checks below are owed.
+When a PDF was asked for, the page is a real constraint rather than a scroll
+with a border. Everything here is verified behaviour of headless Chrome, which
+is the renderer this skill uses.
 
 ```bash
 python3 scripts/ig.py render spec.json --out-dir out

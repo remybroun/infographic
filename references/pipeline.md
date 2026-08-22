@@ -22,6 +22,12 @@ framing the work before you have decided what the work is:
   silently changes from *what does this look like?* to *which of the 57 shapes
   is closest?* → [scenes.md](scenes.md)
 
+One economy rule spans the whole pipeline: **build cheap, then look, then
+spend.** Steps 1 to 9 are one improvised pass, made without re-reading
+references already read and without polishing a page nobody has seen. The
+effort belongs after step 10, where the shots are compared against the goal
+the document must explain and the page is modified until it does.
+
 ---
 
 ## 1 · Establish the source
@@ -54,7 +60,8 @@ An edit is not a regeneration; call it an edit and skip the ceremony.
 before anything else. "A provider-operations lead who has never seen the
 codebase" produces a different document from "the engineer who wrote the
 branch", and the difference is not tone, it is which words are allowed to appear
-at all.
+at all. When the request names no reader, the reader is the curious educated
+stranger: intelligent, outside the team, owning none of your vocabulary.
 
 **Then pick the mode, and say which.** `argument` if the reader has the concept
 and wants a finding; `lesson` if they do not have it. It follows from the
@@ -130,15 +137,23 @@ That sets `meta.page`, which sets type scale, margins and block heights. Choose
 earns going edge to edge; choose paper when it will be printed, attached, or
 read as a reference sheet.
 
+**The HTML file is the deliverable for every target.** A paginated target
+still emits a PDF during `render`, because the linter measures pages with it,
+but that file is a byproduct: hand it over, and spend time in
+[print-pdf.md](print-pdf.md), only when the user asked for a PDF or for print.
+
 → [continuous.md](continuous.md) · [print-pdf.md](print-pdf.md)
 
-## 4.5 · Blocks, or author the page
+## 4.5 · An improvised page, with a library at hand
 
-Run the step 5 test on the page instead of one block: finish "the 12-column grid
-carries this document **completely**, because ___". A report, a data poster, a
-findings summary, easily. An explainer that lives on two or three images, not at
-the point where the third of them wants to overlap the second, fill the sheet,
-or be the layout rather than sit in a cell.
+The document is improvised for its subject; the catalog is the library it
+borrows from, never the plan. Run the step 5 test on the page instead of one
+block: finish "the 12-column grid carries this document **completely**, because
+___". A report, a data poster, a findings summary, easily. An explainer that
+lives on two or three images, not at the point where the third of them wants to
+overlap the second, fill the sheet, or be the layout rather than sit in a cell.
+Past that point, blocks are word art pasted into a page you write, where a
+claim happens to have their shape, and custom HTML carries everything else.
 
 → [authored.md](authored.md)
 
@@ -225,7 +240,8 @@ python3 scripts/ig.py render out/spec.json --out-dir out
 Compiles, renders with headless Chrome, and lints. Read the warnings: they name
 real problems (too many series, tiles that will not fit, a scatter past its
 cap). A `scroll` document skips the PDF unless you ask for one, and shoots its
-sections automatically.
+sections automatically. A paginated document emits one as the linter's
+measuring stick; it becomes the deliverable only when the user asked for it.
 
 → [print-pdf.md](print-pdf.md) · [continuous.md](continuous.md)
 
@@ -236,8 +252,11 @@ python3 scripts/ig.py shoot out/doc.html
 ```
 
 PNGs: pages for a paginated document, sections for a continuous one. **Then open
-them and look.** Be honest about what this catches: geometry. It cannot tell you
-the drawing was the wrong drawing.
+them and look, and form your verdict before re-reading the linter.** Its
+findings are defect evidence, not a quality score; read first, they anchor what
+you then see, and a clean lint proves nothing about whether the page explains.
+Be honest about what looking catches: geometry. It cannot tell you the drawing
+was the wrong drawing.
 
 - every chart's point stated in words nearby;
 - no clipped or overlapping labels;
@@ -257,7 +276,8 @@ rather than the printed one. No amount of care fixes that.
 
 `blind` renders the shots if they are missing and prints a brief to hand to a
 subagent with no context: what is this about, what is it claiming, which words
-could you not define, what did you look at first, what did you have to read.
+could you not define, what did you look at first, what did you have to read,
+which image would stay with you.
 Send it **verbatim**, with no source, no spec, no claim, and no summary of any
 of them.
 
@@ -265,13 +285,19 @@ What comes back is evidence, not a change request. A term they could not define
 needed `definitions` or a rewrite. A first-look landing on the wrong picture is
 a hierarchy problem. A summary describing the layout rather than the subject
 means the spine never made it onto the page, and polish will not put it there.
+A reader who would remember no image an hour later, or only "a nice diagram",
+is telling you the spine landed on no picture.
 If no subagent is available, say in the handoff that this check did not run.
 
 → [anti-patterns.md](anti-patterns.md#before-you-ship) · [integrity.md](integrity.md)
 
 ## 11 · Iterate, then hand off
 
-Fix, re-render, look again. Then say, in the handoff:
+Fix in this order, and bring the whole page up one level before perfecting any
+corner of it: wrong or misleading encodings; comprehension blockers (an
+undefined term, a forward reference, a first look that lands on the wrong
+picture); hierarchy and layout; cosmetics. Re-render, look again. Then say, in
+the handoff:
 
 - **which mode you chose and why**, in one line, naming the reader it follows
   from. A lesson that should have been an argument is obvious to the person who

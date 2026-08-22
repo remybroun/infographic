@@ -130,7 +130,8 @@ small font.
 
 - **Titles** name what the reader is looking at, literally: subject, scope,
   period. Descriptive, never rhetorical.
-- **Subtitles** state the conclusion, once, in one plain line.
+- **Subtitles** state the conclusion, once, in one plain line, and are
+  deleted when there is no conclusion to state.
 - **Labels** sit on marks: axis names, chip text, node names, step titles.
 - **Indicators** are the small values beside a mark: a delta, a share, a count,
   a status word.
@@ -184,7 +185,8 @@ python3 scripts/ig.py render spec.json --out-dir out
 
 The linter reports `text-heavy` (over budget per page), `text-heavy-mix` (prose
 blocks outnumbering graphics), `near-empty-page` (measured ink coverage) and
-`no-graphics`. Then open the PDF and apply the real test:
+`no-graphics`. Then open the shots (or the PDF, when one was asked for) and
+apply the real test:
 
 > **Cover the text. Does the page still teach you anything?**
 

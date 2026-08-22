@@ -58,8 +58,9 @@ same techniques that make a finding land make a false finding land harder.
 
 # Accessibility
 
-The output is a PDF, so most interactive escape hatches are unavailable. That
-raises the bar rather than lowering it.
+The output is a static page, printed to PDF when the user asks, so most
+interactive escape hatches are unavailable. That raises the bar rather than
+lowering it.
 
 ## Never colour alone
 
@@ -97,8 +98,8 @@ of it.
 
 ## Structure
 
-- Real heading elements (`h1`/`h2`/`h3`) in document order, so the PDF has an
-  outline.
+- Real heading elements (`h1`/`h2`/`h3`) in document order, so the document,
+  and any PDF made from it, has an outline.
 - Every `<img>` has `alt`; the linter errors without it.
 - Charts are `role="img"`; their content is reachable via the table view.
 - Text stays selectable, legends, labels and tables are HTML, not paths.

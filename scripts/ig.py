@@ -426,7 +426,7 @@ Read these images, in order:
 
 {paths}
 
-Then answer five things, briefly and literally:
+Then answer six things, briefly and literally:
 
 1. What is this document about? One sentence, in your own words.
 2. What is it claiming? The single thing it wants you to believe by the end.
@@ -437,6 +437,8 @@ Then answer five things, briefly and literally:
 4. Which picture did you look at first, and which did you understand last?
 5. Was there anything you had to read the body text to understand, that the
    pictures should have carried?
+6. An hour from now, which single image from this page would you still be able
+   to describe to someone? If none would stay with you, say so.
 
 Do not review the design, suggest improvements, praise it, or soften anything.
 If you cannot tell what the document is about, say exactly that and stop.\

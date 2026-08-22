@@ -1,7 +1,7 @@
 """SVG primitives, text metrics, scales and color math.
 
 Dependency-free on purpose: every renderer in this skill emits SVG as a string,
-so an infographic can be built on any machine with Python 3.9+ and printed with
+so an infographic can be built on any machine with Python 3.12+ and printed with
 headless Chrome. No matplotlib, no cairo, no font binaries required at build time.
 
 The two things worth knowing before editing:

@@ -1,5 +1,8 @@
 # Authored composition: when you write the page
 
+Custom HTML is not a fallback, it is the medium of an improvised page. Blocks
+are word art, called in where a claim happens to have their shape.
+
 **The catalog is a library. It is not the runtime.** Every block in it turns a
 payload into a picture the skill already knows how to draw, and the page they
 land on is a 12-column grid of stacked full-width rows that no document may
@@ -101,7 +104,8 @@ nowhere else".
 ### The page is inert and self-contained
 
 No `<script>`, no `on*=` handlers, no remote `src`/`href`/`url()`, no `@import`.
-The deliverable is a PDF or a screenshot: the page is printed as a snapshot, so
+The page is consumed as a snapshot (shots always, a PDF when one was asked
+for), so
 anything that needs a script to appear is blank on paper, and anything fetched
 over the network is a race the renderer usually loses. CSS transforms,
 gradients, `clip-path`, `mask` and `mix-blend-mode` all render. Behaviour does

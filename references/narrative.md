@@ -110,7 +110,8 @@ sentence lives in one of three places, in order of preference:
 
 The `title` names what is plotted, literally and specifically. The `subtitle`
 says what to notice, in one flat sentence. Do not make the title do both, and do
-not compress the two into an aphorism that does neither.
+not compress the two into an aphorism that does neither. A subtitle with
+nothing to notice is deleted, not filled.
 
 ## Length discipline
 

@@ -161,8 +161,11 @@ begin from the assumption that the subject exists and is worth having.
 
 ## The establishing shot
 
-**Good practice, not a rule.** Nothing enforces it and some lessons do not want
-it. Reach for it whenever the reader may not be able to picture the subject.
+**Good practice, not a rule, and not only for lessons.** Any document whose
+subject can be drawn may open this way, in either mode. A subject with no
+picturable body (a policy, a ratio, an abstraction) is not given a forced one:
+that document opens on the claim instead. Reach for it whenever the reader may
+not be able to picture the subject.
 
 > The reader does not know what they are about to open. Before anything is
 > explained, show them **the thing**, drawn large enough that they recognise it

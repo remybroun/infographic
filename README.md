@@ -212,7 +212,7 @@ python3 scripts/ig.py selftest --render # also builds all five fixtures
 
 ## Requirements
 
-Python 3.9+ standard library, and a Chromium-family browser for rendering and
+Python 3.12+ standard library, and a Chromium-family browser for rendering and
 screenshots (set `CHROME_PATH` if it is not found). `poppler` is optional for
 building documents, where it reads PDF sources and measures per-page ink
 coverage, and required for rebuilding the images on this page, which rasterise

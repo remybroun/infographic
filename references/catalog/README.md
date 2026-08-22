@@ -41,7 +41,7 @@ Every block accepts these; block-specific keys are documented per family.
 | `id` | string | anchor id, and what warnings are reported against |
 | `span` | 1-12 | grid columns; defaults to the registry's value for the type |
 | `title` | string | figure caption above the visual |
-| `subtitle` | string | one line under the title; say what the reader should notice |
+| `subtitle` | string | one line under the title; say what the reader should notice, omitted when there is nothing to notice |
 | `note` | string | small print under the visual: method, caveat, definition |
 | `source` | string | rendered as "Source: …" under the note |
 | `frame` | `card` \| `tint` | draw the block as a bordered card or a tinted panel |
