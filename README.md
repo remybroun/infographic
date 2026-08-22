@@ -11,12 +11,12 @@
 
 <p align="center">
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
-<a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.2.0-5C6B2E" alt="version 3.2.0"></a>
-<a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-5C6B2E" alt="Python 3.12+"></a>
-<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-57-5C6B2E" alt="57 block types"></a>
-<a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-5C6B2E" alt="dependencies 0"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-5C6B2E" alt="license MIT"></a>
-<a href="branding/"><img src="https://img.shields.io/badge/branding-iris-5C6B2E" alt="branding"></a>
+<a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.3.0-B66346" alt="version 3.3.0"></a>
+<a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-B66346" alt="Python 3.12+"></a>
+<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-57-B66346" alt="57 block types"></a>
+<a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-B66346" alt="dependencies 0"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-B66346" alt="license MIT"></a>
+<a href="branding/"><img src="https://img.shields.io/badge/branding-iris-B66346" alt="branding"></a>
 </p>
 
 A skill that turns a document, a dataset or a topic into a designed visual
@@ -44,7 +44,7 @@ every project, clone into `<project>/.claude/skills/infographic` instead.
 ## Verify
 
 ```bash
-python3 scripts/ig.py selftest          # 409 assertions
+python3 scripts/ig.py selftest          # 420 assertions
 python3 scripts/ig.py validate --all    # every theme through the colour checks
 python3 scripts/ig.py selftest --render # also builds all six fixtures, to PDF
 sh assets/build_gallery.sh              # rebuilds every image on this page
@@ -195,23 +195,35 @@ identifiers only their author could read.
 
 ## Themes
 
-`default` (neutral editorial) · `rentos` (olive editorial, Instrument Serif) ·
-`mono` (greyscale, print-safe).
+`default` (neutral editorial) · `iris` (the house theme, clay and blue) ·
+`rentos` (olive editorial, Instrument Serif) · `mono` (greyscale, print-safe).
 
-Every image on this page is `rentos`, so what you are looking at is a theme
-doing its whole job: the olive lead, terracotta as the warm secondary, blue and
-plum as separable companions, and Instrument Serif on the block titles over
-Inter everywhere else. The serif is opt-in per theme (`type.block_title`), since
-a theme whose display face *is* its sans gains nothing from it.
+Every image on this page is `iris`, so what you are looking at is a theme doing
+its whole job, and it is the same theme as the mark at the top of the page. Its
+page is the mark's cream ground, its accent is the mark's clay, and both its
+sequential ramps are struck from the mark's own two hue angles, 39.9° and
+251.1° in OKLCH. Its diverging scale runs blue to clay, which is the same
+inversion the mark is built on. Block titles are set in the display face over
+the sans everywhere else; the serif is opt-in per theme (`type.block_title`),
+since a theme whose display face *is* its sans gains nothing from it.
 
-All three pass the computable colour checks: contrast, categorical separation,
-and colour-vision-deficiency distance. A new brand theme is a JSON file, not
-code, and its slot order is found by enumerating orderings and keeping the ones
-that clear the gates, never by picking what looks nice. Brand olive and
-terracotta are deliberately not adjacent slots: that pair measures a CVD ΔE of
-4.5, so a protanope cannot separate them. The scorecard in the sheet above counts
-the checks per theme; `mono` runs fewer of them because greyscale has fewer
-categorical slots to separate, not because it scores worse.
+**The eight categorical slots are deliberately not the brand.** A chart needs
+eight separable identities and a brand has two, so forcing the slots to the
+brand hues is how "brand-safe" palettes end up unreadable. Clay and blue lead,
+and the other six were found by enumerating a hue grid and keeping only the sets
+that clear every gate, with a minimum 32° hue gap so that no two slots collapse
+into the same family. The first search passed the gate with four oranges and
+four blues, which is legal, because the gate measures adjacent pairs and the
+first three slots, and useless in an eight-series scatter. The gate is a floor,
+not a target.
+
+All four themes pass the computable colour checks: contrast, categorical
+separation, and colour-vision-deficiency distance. `iris` is the only one that
+needs no waiver; `rentos` records one, because brand olive measures a chroma of
+0.087 against a 0.10 floor and a brand colour cannot be re-stepped. A new theme
+is a JSON file, not code. The scorecard in the sheet above counts the checks per
+theme; `mono` runs fewer of them because greyscale has fewer categorical slots
+to separate, not because it scores worse.
 
 ```bash
 python3 scripts/ig.py validate --all

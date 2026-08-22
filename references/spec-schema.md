@@ -41,7 +41,7 @@ places itself, with `<div data-block="the-id"></div>`.
 | Key | Default | Meaning |
 |---|---|---|
 | `title` | `"Infographic"` | browser/PDF title; a literal description of the subject and scope, never a slogan |
-| `theme` | `"default"` | `default` · `rentos` · `mono`, or a path to a theme JSON |
+| `theme` | `"default"` | `default` · `iris` · `rentos` · `mono`, or a path to a theme JSON |
 | `page` | `"a4"` | `a4` `a4-land` `letter` `letter-land` `a3` `a3-land` `slide` `poster` |
 | `mode` | `"argument"` | `argument` for a reader who has the concept; `lesson` for one who does not, which makes `ladder` required and enforced. See [teaching.md](teaching.md) |
 | `ladder` | none | the explanation, as ordered rungs. Required in `lesson` mode, checked in both. See below |

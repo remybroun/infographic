@@ -276,7 +276,7 @@ spec = {
         # the gallery on `rentos`, the README read as two documents: the figure
         # above the vocabulary section and the sheets below it disagreed about
         # what a heading and an accent look like.
-        "theme": "rentos",
+        "theme": "iris",
         "page": "slide",
         "density": "graphic",
         "tables": False,

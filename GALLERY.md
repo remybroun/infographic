@@ -3,7 +3,7 @@
 Every form this skill draws, drawn. Nothing on this page is a mock-up or a
 sketch of a chart: each sheet is a rendered A4 page out of the same pipeline any
 document goes through, and each one is trimmed to its content. Forty-one
-specimens over ten sheets, in the `rentos` theme.
+specimens over ten sheets, in the `iris` theme.
 
 **The data is this repository.** Every number here is read at build time from the
 block registry, `density.CAPS`, the five shipped fixture specs, the linter's own
@@ -85,7 +85,7 @@ named, not when the dots are precise.
 
 ## Structure, and diagram
 
-![Four blocks. A sankey from 57 block types through the families to whether each draws or sets text. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the three themes passes, and a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
+![Four blocks. A sankey from 57 block types through the families to whether each draws or sets text. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the four themes passes, and a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
 
 `sankey` `tree` `figure` `scorecard` `gauge`.
 

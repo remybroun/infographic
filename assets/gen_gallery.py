@@ -617,7 +617,7 @@ spec = {
         # in this repo where the theme is the subject as much as the blocks are,
         # and a validated brand theme shows more of what a theme can do than the
         # neutral default, whose whole job is to get out of the way.
-        "theme": "rentos",
+        "theme": "iris",
         "page": "a4",
         "density": "graphic",
         # The blocks ARE the subject here, so the air between them is dead space

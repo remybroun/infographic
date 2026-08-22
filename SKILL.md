@@ -1,9 +1,9 @@
 ---
 name: infographic
 description: Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks.
-version: 3.2.0
+version: 3.3.0
 user-invocable: true
-argument-hint: "[source file, or the topic to explain] [--theme default|rentos|mono] [--page a4|a3|slide|scroll]"
+argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
   - Bash(python3 *)
 ---
@@ -275,7 +275,7 @@ did not fit". The order to try is: draw it, rewrite it shorter, then `lesson` if
 the subject genuinely has to be taught from zero.
 → [teaching.md](references/teaching.md)
 
-Themes: `default` (neutral editorial) · `rentos` (RentRemote / RentOS olive,
+Themes: `default` (neutral editorial) · `iris` (house theme, clay and blue) · `rentos` (RentRemote / RentOS olive,
 Instrument Serif headings) · `mono` (greyscale, print-safe, texture forced on).
 All three pass the computable colour checks. Verify with `ig.py validate --all`,
 preview with `ig.py catalog --sheet out/sheet.pdf --theme X`. A new brand theme

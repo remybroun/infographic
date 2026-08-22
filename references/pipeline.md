@@ -227,7 +227,8 @@ one figure defect with no other detector.
 
 ## 8 · Pick the theme
 
-`default` unless the work is branded. `rentos` for RentRemote / RentOS. `mono`
+`iris` for anything of our own. `default` when it must look unbranded. `rentos`
+for RentRemote / RentOS. `mono`
 when it will be photocopied. A new brand theme is a data file, not code, and it
 must pass the checks before it ships. → [color-and-type.md](color-and-type.md)
 
