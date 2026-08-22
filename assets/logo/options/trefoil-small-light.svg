@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic, trefoil</title>
+  <style>
+    :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; --w1: #451A0B; --w2: #893411; --w3: #B66346; --w4: #CE9581; --c1: #082A4A; --c2: #065494; --c3: #4481BF; --c4: #82A8D3; }
+  </style>
+  <g>
+    <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="3.4"/>
+    <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+    <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+    <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+    <circle cx="120.0" cy="120.0" r="30" fill="var(--ground)" stroke="var(--ink)" stroke-width="3.4"/>
+    <path d="M 94.0,120.0 A 26,26 0 0 1 146.0,120.0 Z" fill="var(--cool)"/>
+    <path d="M 146.0,120.0 A 26,26 0 0 1 94.0,120.0 Z" fill="var(--warm)"/>
+  </g>
+</svg>

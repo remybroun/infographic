@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>infographic, three more marks</title>
+<style>
+  :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; --w1: #451A0B; --w2: #893411; --w3: #B66346; --w4: #CE9581; --c1: #082A4A; --c2: #065494; --c3: #4481BF; --c4: #82A8D3; }
+  .on-dark { --ground: #1F1D1A; --ink: #F2EFE6; --warm: #CE7454; --warmt: #8A4C36; --cool: #3F86C6; --coolt: #2A4E70; --w1: #84432D; --w2: #B75D3D; --w3: #D4896F; --w4: #E7B8A7; --c1: #2B5A8B; --c2: #3A7DC1; --c3: #6EA3DB; --c4: #A8C8EA; }
+  .on-mono { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #1F1D1A; --warmt: #F2EFE6; --cool: #F2EFE6; --coolt: #F2EFE6; --w1: #1F1D1A; --w2: #1F1D1A; --w3: #F2EFE6; --w4: #F2EFE6; --c1: #1F1D1A; --c2: #1F1D1A; --c3: #F2EFE6; --c4: #F2EFE6; }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 64px 48px 120px; background: var(--ground); color: var(--ink);
+         font-family: ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
+         font-size: 15px; line-height: 1.6; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400;
+       font-size: 52px; line-height: 1.05; margin: 0 0 10px; }
+  h2 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 32px;
+       margin: 84px 0 4px; }
+  .src { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+         color: var(--warm); margin: 0 0 18px; }
+  .rule { border: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+          margin: 10px 0 22px; }
+  p { max-width: 66ch; color: color-mix(in srgb, var(--ink) 78%, transparent); margin: 0 0 14px; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: 13px;
+         background: color-mix(in srgb, var(--ink) 7%, transparent);
+         padding: 2px 6px; border-radius: 3px; }
+  .row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  .plate { padding: 34px; border-radius: 4px;
+           border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); }
+  .plate.light { background: #F2EFE6; }
+  .plate.dark  { background: #1F1D1A; }
+  .cap { margin-top: 12px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+         color: color-mix(in srgb, var(--ink) 55%, transparent); }
+  .ramp { display: flex; gap: 30px; align-items: flex-end; margin-top: 26px; }
+  .ramp figure { margin: 0; text-align: center; }
+  .ramp figcaption { margin-top: 10px; font-size: 11px;
+                     color: color-mix(in srgb, var(--ink) 55%, transparent); }
+  .note { border-left: 2px solid var(--warm); padding-left: 14px; margin-top: 22px;
+          font-size: 14px; }
+  svg { display: block; }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Options for the mark</h1>
+  <p>The mandala in <code>assets/logo/</code> is untouched. These are options next
+  to it, each traced to a named painting rather than to a style, so the design can
+  be argued with.</p>
+  <p>The first three reuse the mandala's six colours exactly, so its colour result
+  carries over: both schemes clear all six categorical checks in
+  <code>scripts/validate_palette.py</code>. The fourth is a ramp rather than a set
+  of categories, so it is gated as one, with <code>--ordinal</code>, and it too
+  passes on both schemes. It introduces no new hue: its eight steps are struck
+  from the same two hue angles as everything above.</p>
+  <p>Every mark is SVG driven by CSS custom properties, which is why the same
+  source is a live page and a clean vector file. Rebuild with
+  <code>python3 assets/logo/gen_options.py</code>.</p>
+
+  <h2 id="dove">dove</h2>
+  <p class="src">after What a Human Being Is (1910), The Dove No. 12 (1915)</p>
+  <hr class="rule">
+  <p>A great circle split down the vertical, a heart at the centre carrying that split reversed, and a prism fanning up from the foot of the circle. The double helix runs the whole height and vanishes behind the heart, which is what she does with it.</p>
+  <div class="row">
+    <div><div class="plate light"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg></div><div class="cap">light</div></div>
+    <div><div class="plate dark on-dark"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg></div><div class="cap">dark</div></div>
+    <div><div class="plate light on-mono"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg></div><div class="cap">mono</div></div>
+  </div>
+  <div class="ramp">
+        <figure><svg viewBox="0 0 240 240" width="96" height="96" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg><figcaption>96px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="64" height="64" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg><figcaption>64px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="48" height="48" role="img" aria-label="dove">
+      <path d="M 120.0,16.0 A 104,104 0 0 0 120.0,224.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,16.0 A 104,104 0 0 1 120.0,224.0 Z" fill="var(--coolt)"/>
+      <path d="M 120.0,224.0 L 69.2,184.3 A 64.5,64.5 0 0 1 86.6,168.8 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 86.6,168.8 A 64.5,64.5 0 0 1 108.4,160.6 Z" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 108.4,160.6 A 64.5,64.5 0 0 1 131.6,160.6 Z" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 131.6,160.6 A 64.5,64.5 0 0 1 153.4,168.8 Z" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <path d="M 120.0,224.0 L 153.4,168.8 A 64.5,64.5 0 0 1 170.8,184.3 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.0" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="104" fill="none" stroke="var(--ink)" stroke-width="2.0"/>
+      <line x1="120.0" y1="16.0" x2="120.0" y2="224.0" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 120.0,4.0 L 123.7,7.0 L 126.8,10.0 L 128.6,13.0 L 128.9,16.0 L 127.6,19.0 L 124.9,22.0 L 121.3,25.0 L 117.5,28.0 L 114.1,31.0 L 111.8,34.0 L 111.0,37.0 L 111.8,40.0 L 114.1,43.0 L 117.5,46.0 L 121.3,49.0 L 124.9,52.0 L 127.6,55.0 L 128.9,58.0 L 128.6,61.0 L 126.8,64.0 L 123.7,67.0 L 120.0,70.0 L 116.3,73.0 L 113.2,76.0 L 111.4,79.0 L 111.1,82.0 L 112.4,85.0 L 115.1,88.0 L 118.7,91.0 L 122.5,94.0 L 125.9,97.0 L 128.2,100.0 L 129.0,103.0 L 128.2,106.0 L 125.9,109.0 L 122.5,112.0 L 118.7,115.0 L 115.1,118.0 L 112.4,121.0 L 111.1,124.0 L 111.4,127.0 L 113.2,130.0 L 116.3,133.0 L 120.0,136.0 L 123.7,139.0 L 126.8,142.0 L 128.6,145.0 L 128.9,148.0 L 127.6,151.0 L 124.9,154.0 L 121.3,157.0 L 117.5,160.0 L 114.1,163.0 L 111.8,166.0 L 111.0,169.0 L 111.8,172.0 L 114.1,175.0 L 117.5,178.0 L 121.3,181.0 L 124.9,184.0 L 127.6,187.0 L 128.9,190.0 L 128.6,193.0 L 126.8,196.0 L 123.7,199.0 L 120.0,202.0 L 116.3,205.0 L 113.2,208.0 L 111.4,211.0 L 111.1,214.0 L 112.4,217.0 L 115.1,220.0 L 118.7,223.0 L 122.5,226.0 L 125.9,229.0 L 128.2,232.0 L 129.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,4.0 L 116.3,7.0 L 113.2,10.0 L 111.4,13.0 L 111.1,16.0 L 112.4,19.0 L 115.1,22.0 L 118.7,25.0 L 122.5,28.0 L 125.9,31.0 L 128.2,34.0 L 129.0,37.0 L 128.2,40.0 L 125.9,43.0 L 122.5,46.0 L 118.7,49.0 L 115.1,52.0 L 112.4,55.0 L 111.1,58.0 L 111.4,61.0 L 113.2,64.0 L 116.3,67.0 L 120.0,70.0 L 123.7,73.0 L 126.8,76.0 L 128.6,79.0 L 128.9,82.0 L 127.6,85.0 L 124.9,88.0 L 121.3,91.0 L 117.5,94.0 L 114.1,97.0 L 111.8,100.0 L 111.0,103.0 L 111.8,106.0 L 114.1,109.0 L 117.5,112.0 L 121.3,115.0 L 124.9,118.0 L 127.6,121.0 L 128.9,124.0 L 128.6,127.0 L 126.8,130.0 L 123.7,133.0 L 120.0,136.0 L 116.3,139.0 L 113.2,142.0 L 111.4,145.0 L 111.1,148.0 L 112.4,151.0 L 115.1,154.0 L 118.7,157.0 L 122.5,160.0 L 125.9,163.0 L 128.2,166.0 L 129.0,169.0 L 128.2,172.0 L 125.9,175.0 L 122.5,178.0 L 118.7,181.0 L 115.1,184.0 L 112.4,187.0 L 111.1,190.0 L 111.4,193.0 L 113.2,196.0 L 116.3,199.0 L 120.0,202.0 L 123.7,205.0 L 126.8,208.0 L 128.6,211.0 L 128.9,214.0 L 127.6,217.0 L 124.9,220.0 L 121.3,223.0 L 117.5,226.0 L 114.1,229.0 L 111.8,232.0 L 111.0,235.0" fill="none" stroke="var(--ink)" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M 120.0,148.0 C 64.0,106.0 64.0,61.6 92.0,61.6 C 108.8,61.6 117.8,76.0 120.0,85.6 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+      <path d="M 120.0,148.0 C 176.0,106.0 176.0,61.6 148.0,61.6 C 131.2,61.6 122.2,76.0 120.0,85.6 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="2.0" stroke-linejoin="round"/>
+    </svg><figcaption>48px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="32" height="32" role="img" aria-label="dove">
+      <path d="M 120.0,12.0 A 108,108 0 0 0 120.0,228.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,12.0 A 108,108 0 0 1 120.0,228.0 Z" fill="var(--coolt)"/>
+      <circle cx="120.0" cy="120.0" r="108" fill="none" stroke="var(--ink)" stroke-width="3.4"/>
+      <line x1="120.0" y1="12.0" x2="120.0" y2="228.0" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 120.0,164.2 C 58.0,117.3 58.0,67.7 89.0,67.7 C 107.6,67.7 117.5,83.8 120.0,94.5 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+      <path d="M 120.0,164.2 C 182.0,117.3 182.0,67.7 151.0,67.7 C 132.4,67.7 122.5,83.8 120.0,94.5 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+    </svg><figcaption>32px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="24" height="24" role="img" aria-label="dove">
+      <path d="M 120.0,12.0 A 108,108 0 0 0 120.0,228.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,12.0 A 108,108 0 0 1 120.0,228.0 Z" fill="var(--coolt)"/>
+      <circle cx="120.0" cy="120.0" r="108" fill="none" stroke="var(--ink)" stroke-width="3.4"/>
+      <line x1="120.0" y1="12.0" x2="120.0" y2="228.0" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 120.0,164.2 C 58.0,117.3 58.0,67.7 89.0,67.7 C 107.6,67.7 117.5,83.8 120.0,94.5 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+      <path d="M 120.0,164.2 C 182.0,117.3 182.0,67.7 151.0,67.7 C 132.4,67.7 122.5,83.8 120.0,94.5 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+    </svg><figcaption>24px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="16" height="16" role="img" aria-label="dove">
+      <path d="M 120.0,12.0 A 108,108 0 0 0 120.0,228.0 Z" fill="var(--warmt)"/>
+      <path d="M 120.0,12.0 A 108,108 0 0 1 120.0,228.0 Z" fill="var(--coolt)"/>
+      <circle cx="120.0" cy="120.0" r="108" fill="none" stroke="var(--ink)" stroke-width="3.4"/>
+      <line x1="120.0" y1="12.0" x2="120.0" y2="228.0" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 120.0,164.2 C 58.0,117.3 58.0,67.7 89.0,67.7 C 107.6,67.7 117.5,83.8 120.0,94.5 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+      <path d="M 120.0,164.2 C 182.0,117.3 182.0,67.7 151.0,67.7 C 132.4,67.7 122.5,83.8 120.0,94.5 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+    </svg><figcaption>16px</figcaption></figure>
+        
+  </div>
+  <p class="note">Reads at 16px as a two-tone disc with a heart in it. The most legible of the three, and the least abstract.</p>
+
+  <h2 id="atom">atom</h2>
+  <p class="src">after Atom Series No. 8 (1917)</p>
+  <hr class="rule">
+  <p>A square sheet cut by one diagonal, and where the diagonal passes the centre, an orb half lit and half dark inside a spiked corona. Her own caption: the atom is in constant change between rest and activity.</p>
+  <div class="row">
+    <div><div class="plate light"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg></div><div class="cap">light</div></div>
+    <div><div class="plate dark on-dark"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg></div><div class="cap">dark</div></div>
+    <div><div class="plate light on-mono"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg></div><div class="cap">mono</div></div>
+  </div>
+  <div class="ramp">
+        <figure><svg viewBox="0 0 240 240" width="96" height="96" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg><figcaption>96px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="64" height="64" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg><figcaption>64px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="48" height="48" role="img" aria-label="atom">
+      <path d="M 16,16 L 224,16 L 224,224 Z" fill="var(--coolt)"/>
+      <path d="M 16,16 L 224,224 L 16,224 Z" fill="var(--warmt)"/>
+      <rect x="16" y="16" width="208" height="208" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <rect x="23" y="23" width="194" height="194" fill="none" stroke="var(--cool)" stroke-width="1.6"/>
+      <line x1="16" y1="16" x2="224" y2="224" stroke="var(--ink)" stroke-width="2.4"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(9.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(18.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(27.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(36.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(54.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(63.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(72.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(81.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(99.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(108.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(117.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(126.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(144.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(153.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(162.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(171.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(189.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(198.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(207.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(216.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(234.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(243.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(252.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(261.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(279.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(288.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(297.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(306.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(324.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(333.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(342.0)" fill="var(--warm)"/>
+      <path d="M -4.2,-34 L 0,-50 L 4.2,-34 Z" transform="translate(120.0 120.0) rotate(351.0)" fill="var(--warm)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 0 120.0,153.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,87.0 A 33,33 0 0 1 120.0,153.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="33" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+      <circle cx="120.0" cy="120.0" r="9" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.7"/>
+    </svg><figcaption>48px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="32" height="32" role="img" aria-label="atom">
+      <path d="M 10,10 L 230,10 L 230,230 Z" fill="var(--coolt)"/>
+      <path d="M 10,10 L 230,230 L 10,230 Z" fill="var(--warmt)"/>
+      <rect x="10" y="10" width="220" height="220" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <line x1="10" y1="10" x2="230" y2="230" stroke="var(--ink)" stroke-width="4.0"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 0 120.0,166.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 1 120.0,166.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="46" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <circle cx="120.0" cy="120.0" r="15" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.8"/>
+    </svg><figcaption>32px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="24" height="24" role="img" aria-label="atom">
+      <path d="M 10,10 L 230,10 L 230,230 Z" fill="var(--coolt)"/>
+      <path d="M 10,10 L 230,230 L 10,230 Z" fill="var(--warmt)"/>
+      <rect x="10" y="10" width="220" height="220" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <line x1="10" y1="10" x2="230" y2="230" stroke="var(--ink)" stroke-width="4.0"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 0 120.0,166.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 1 120.0,166.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="46" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <circle cx="120.0" cy="120.0" r="15" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.8"/>
+    </svg><figcaption>24px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="16" height="16" role="img" aria-label="atom">
+      <path d="M 10,10 L 230,10 L 230,230 Z" fill="var(--coolt)"/>
+      <path d="M 10,10 L 230,230 L 10,230 Z" fill="var(--warmt)"/>
+      <rect x="10" y="10" width="220" height="220" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <line x1="10" y1="10" x2="230" y2="230" stroke="var(--ink)" stroke-width="4.0"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 0 120.0,166.0 Z" fill="var(--ground)"/>
+      <path d="M 120.0,74.0 A 46,46 0 0 1 120.0,166.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="46" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+      <circle cx="120.0" cy="120.0" r="15" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.8"/>
+    </svg><figcaption>16px</figcaption></figure>
+        
+  </div>
+  <p class="note">The only square option, so it fills an avatar tile edge to edge with no wasted margin. Loses the corona under about 32px.</p>
+
+  <h2 id="trefoil">trefoil</h2>
+  <p class="src">after The Ten Largest, No. 2, Childhood (1907)</p>
+  <hr class="rule">
+  <p>Three clover lobes on a rose ground, ringed by a chain of beads, with a small flower at the hub. The lobes stay calm and the bead ring carries the warm and cool split instead.</p>
+  <div class="row">
+    <div><div class="plate light"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg></div><div class="cap">light</div></div>
+    <div><div class="plate dark on-dark"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg></div><div class="cap">dark</div></div>
+    <div><div class="plate light on-mono"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg></div><div class="cap">mono</div></div>
+  </div>
+  <div class="ramp">
+        <figure><svg viewBox="0 0 240 240" width="96" height="96" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg><figcaption>96px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="64" height="64" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg><figcaption>64px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="48" height="48" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+      <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+      <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+    </svg><figcaption>48px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="32" height="32" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="30" fill="var(--ground)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 94.0,120.0 A 26,26 0 0 1 146.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 146.0,120.0 A 26,26 0 0 1 94.0,120.0 Z" fill="var(--warm)"/>
+    </svg><figcaption>32px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="24" height="24" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="30" fill="var(--ground)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 94.0,120.0 A 26,26 0 0 1 146.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 146.0,120.0 A 26,26 0 0 1 94.0,120.0 Z" fill="var(--warm)"/>
+    </svg><figcaption>24px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="16" height="16" role="img" aria-label="trefoil">
+      <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <path d="M 0,0 C -52.8,-19.4 -59.1,-70.4 0,-88.0 C 59.1,-70.4 52.8,-19.4 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.7" stroke-linejoin="round"/>
+      <circle cx="120.0" cy="120.0" r="30" fill="var(--ground)" stroke="var(--ink)" stroke-width="3.4"/>
+      <path d="M 94.0,120.0 A 26,26 0 0 1 146.0,120.0 Z" fill="var(--cool)"/>
+      <path d="M 146.0,120.0 A 26,26 0 0 1 94.0,120.0 Z" fill="var(--warm)"/>
+    </svg><figcaption>16px</figcaption></figure>
+        
+  </div>
+  <p class="note">The most unmistakably hers, and the one least likely to be mistaken for a chart. Also the busiest at small sizes.</p>
+
+  <h2 id="iris">iris</h2>
+  <p class="src">after Series VIII, Utgångsbild (1920) and The Swan, Group IX/SUW (1915)</p>
+  <hr class="rule">
+  <p>Two paintings doing one job. The Swan gives the structure, a donut split down the middle with a different stack of rings in each half. The 1920 sheet gives the fill, an ordered ramp running from a hot core out to a pale rim. Here the two halves are the same ramp read in opposite directions, so the disc inverts across its own axis: pale outside and deep inside on the left, the reverse on the right. The line down the middle carries on below the rim as the stem she hangs under the disc.</p>
+  <div class="row">
+    <div><div class="plate light"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg></div><div class="cap">light</div></div>
+    <div><div class="plate dark on-dark"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg></div><div class="cap">dark</div></div>
+    <div><div class="plate light on-mono"><svg viewBox="0 0 240 240" width="220" height="220" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg></div><div class="cap">mono</div></div>
+  </div>
+  <div class="ramp">
+        <figure><svg viewBox="0 0 240 240" width="96" height="96" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg><figcaption>96px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="64" height="64" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg><figcaption>64px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="48" height="48" role="img" aria-label="iris">
+      <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="var(--w4)"/>
+      <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="var(--c1)"/>
+      <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="var(--w3)"/>
+      <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="var(--c2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="var(--w2)"/>
+      <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="var(--c3)"/>
+      <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="var(--w1)"/>
+      <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="104" r="92" fill="none" stroke="var(--ink)" stroke-width="2.20"/>
+      <circle cx="120.0" cy="104" r="69" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="46" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <circle cx="120.0" cy="104" r="23" fill="none" stroke="var(--ink)" stroke-width="1.32"/>
+      <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="var(--ink)" stroke-width="1.76" stroke-linecap="round"/>
+      <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="var(--w4)"/>
+      <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="var(--c1)"/>
+      <circle cx="120.0" cy="104" r="9" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </svg><figcaption>48px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="32" height="32" role="img" aria-label="iris">
+      <path d="M 120.0,14 A 106,106 0 0 0 120.0,226 L 120.0,176 A 56,56 0 0 1 120.0,64 Z" fill="var(--w4)"/>
+      <path d="M 120.0,14 A 106,106 0 0 1 120.0,226 L 120.0,176 A 56,56 0 0 0 120.0,64 Z" fill="var(--c1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 0 120.0,176 Z" fill="var(--w1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 1 120.0,176 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="120" r="106" fill="none" stroke="var(--ink)" stroke-width="3.80"/>
+      <circle cx="120.0" cy="120" r="56" fill="none" stroke="var(--ink)" stroke-width="2.28"/>
+      <line x1="120.0" y1="14" x2="120.0" y2="226" stroke="var(--ink)" stroke-width="3.04" stroke-linecap="round"/>
+    </svg><figcaption>32px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="24" height="24" role="img" aria-label="iris">
+      <path d="M 120.0,14 A 106,106 0 0 0 120.0,226 L 120.0,176 A 56,56 0 0 1 120.0,64 Z" fill="var(--w4)"/>
+      <path d="M 120.0,14 A 106,106 0 0 1 120.0,226 L 120.0,176 A 56,56 0 0 0 120.0,64 Z" fill="var(--c1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 0 120.0,176 Z" fill="var(--w1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 1 120.0,176 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="120" r="106" fill="none" stroke="var(--ink)" stroke-width="3.80"/>
+      <circle cx="120.0" cy="120" r="56" fill="none" stroke="var(--ink)" stroke-width="2.28"/>
+      <line x1="120.0" y1="14" x2="120.0" y2="226" stroke="var(--ink)" stroke-width="3.04" stroke-linecap="round"/>
+    </svg><figcaption>24px</figcaption></figure>
+        <figure><svg viewBox="0 0 240 240" width="16" height="16" role="img" aria-label="iris">
+      <path d="M 120.0,14 A 106,106 0 0 0 120.0,226 L 120.0,176 A 56,56 0 0 1 120.0,64 Z" fill="var(--w4)"/>
+      <path d="M 120.0,14 A 106,106 0 0 1 120.0,226 L 120.0,176 A 56,56 0 0 0 120.0,64 Z" fill="var(--c1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 0 120.0,176 Z" fill="var(--w1)"/>
+      <path d="M 120.0,64 A 56,56 0 0 1 120.0,176 Z" fill="var(--c4)"/>
+      <circle cx="120.0" cy="120" r="106" fill="none" stroke="var(--ink)" stroke-width="3.80"/>
+      <circle cx="120.0" cy="120" r="56" fill="none" stroke="var(--ink)" stroke-width="2.28"/>
+      <line x1="120.0" y1="14" x2="120.0" y2="226" stroke="var(--ink)" stroke-width="3.04" stroke-linecap="round"/>
+    </svg><figcaption>16px</figcaption></figure>
+        
+  </div>
+  <p class="note">The duality is carried by lightness, not by hue, which is why the mono plate is not a reduction of this one. Collapse eight ramp steps to two values and all four quadrants survive. It is also the only option here whose fill is a validated ordinal ramp rather than a set of flat picks.</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 240"
+     width="780" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic</title>
+  <g>
+    <path d="M 120.0,12 A 92,92 0 0 0 120.0,196 L 120.0,173 A 69,69 0 0 1 120.0,35 Z" fill="#E7B8A7"/>
+    <path d="M 120.0,12 A 92,92 0 0 1 120.0,196 L 120.0,173 A 69,69 0 0 0 120.0,35 Z" fill="#2B5A8B"/>
+    <path d="M 120.0,35 A 69,69 0 0 0 120.0,173 L 120.0,150 A 46,46 0 0 1 120.0,58 Z" fill="#D4896F"/>
+    <path d="M 120.0,35 A 69,69 0 0 1 120.0,173 L 120.0,150 A 46,46 0 0 0 120.0,58 Z" fill="#3A7DC1"/>
+    <path d="M 120.0,58 A 46,46 0 0 0 120.0,150 L 120.0,127 A 23,23 0 0 1 120.0,81 Z" fill="#B75D3D"/>
+    <path d="M 120.0,58 A 46,46 0 0 1 120.0,150 L 120.0,127 A 23,23 0 0 0 120.0,81 Z" fill="#6EA3DB"/>
+    <path d="M 120.0,81 A 23,23 0 0 0 120.0,127 Z" fill="#84432D"/>
+    <path d="M 120.0,81 A 23,23 0 0 1 120.0,127 Z" fill="#A8C8EA"/>
+    <circle cx="120.0" cy="104" r="92" fill="none" stroke="#F2EFE6" stroke-width="2.20"/>
+    <circle cx="120.0" cy="104" r="69" fill="none" stroke="#F2EFE6" stroke-width="1.32"/>
+    <circle cx="120.0" cy="104" r="46" fill="none" stroke="#F2EFE6" stroke-width="1.32"/>
+    <circle cx="120.0" cy="104" r="23" fill="none" stroke="#F2EFE6" stroke-width="1.32"/>
+    <line x1="120.0" y1="12" x2="120.0" y2="234" stroke="#F2EFE6" stroke-width="1.76" stroke-linecap="round"/>
+    <path d="M 120.0,95 A 9,9 0 0 0 120.0,113 Z" fill="#E7B8A7"/>
+    <path d="M 120.0,95 A 9,9 0 0 1 120.0,113 Z" fill="#2B5A8B"/>
+    <circle cx="120.0" cy="104" r="9" fill="none" stroke="#F2EFE6" stroke-width="1.2"/>
+  </g>
+  <text x="272" y="118" fill="#F2EFE6" font-size="96"
+        font-family="Instrument Serif, Georgia, Times New Roman, serif">infographic</text>
+  <text x="276" y="176" fill="#B75D3D" font-size="24" letter-spacing="3.4"
+        font-family="Helvetica Neue, Arial, sans-serif">A CLAUDE CODE SKILL</text>
+</svg>

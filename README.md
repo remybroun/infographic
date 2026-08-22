@@ -1,11 +1,21 @@
-# infographic
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="branding/iris-dark.svg">
+    <img src="branding/iris-light.svg" width="132" alt="the infographic mark">
+  </picture>
+</p>
 
-[![selftest](https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg)](https://github.com/remybroun/infographic/actions/workflows/selftest.yml)
-[![version 3.2.0](https://img.shields.io/badge/version-3.2.0-5C6B2E)](SKILL.md)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-5C6B2E)](#requirements)
-[![57 block types](https://img.shields.io/badge/block%20types-57-5C6B2E)](GALLERY.md)
-[![dependencies 0](https://img.shields.io/badge/dependencies-0-5C6B2E)](#requirements)
-[![license MIT](https://img.shields.io/badge/license-MIT-5C6B2E)](LICENSE)
+<h1 align="center">infographic</h1>
+
+<p align="center">
+<a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
+<a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.2.0-5C6B2E" alt="version 3.2.0"></a>
+<a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-5C6B2E" alt="Python 3.12+"></a>
+<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-57-5C6B2E" alt="57 block types"></a>
+<a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-5C6B2E" alt="dependencies 0"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-5C6B2E" alt="license MIT"></a>
+<a href="branding/"><img src="https://img.shields.io/badge/branding-iris-5C6B2E" alt="branding"></a>
+</p>
 
 A [Claude Code](https://claude.com/claude-code) skill that turns a document, a
 dataset or a topic into a designed visual explainer: a print-ready PDF, or a
@@ -303,6 +313,30 @@ who is not a stranger: you know what every label means and what the page was
 meant to say, so you see the intended document rather than the printed one.
 `ig.py blind` prints a brief for a reader with no context at all. What they say
 it is about is what it is about.
+
+## Branding
+
+<img src="branding/iris-light.svg" width="76" align="left" alt="">
+
+The mark at the top of this page is the **iris**: a disc split down the middle,
+an ordered colour ramp in each half, and the two halves running that ramp in
+opposite directions, so the disc inverts across its own axis. It is drawn after
+two Hilma af Klint paintings, *The Swan* (1915) for the structure and Series
+VIII *Utgångsbild* (1920) for the fill.
+
+<br clear="left">
+
+The duality is carried by lightness rather than hue, which is why the one-colour
+version is not a degraded copy of it and why it still reads at 16px. Its eight
+ramp steps pass the same validator this skill points at every theme, run in
+`--ordinal` mode because a ramp is not a set of categories.
+
+Files, usage rules and the exact gate commands are in
+[branding/](branding/README.md). Everything there is generated:
+
+```bash
+python3 branding/gen_brand.py
+```
 
 ## License
 

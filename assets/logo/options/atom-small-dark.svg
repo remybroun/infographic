@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic, atom</title>
+  <style>
+    :root { --ground: #1F1D1A; --ink: #F2EFE6; --warm: #CE7454; --warmt: #8A4C36; --cool: #3F86C6; --coolt: #2A4E70; --w1: #84432D; --w2: #B75D3D; --w3: #D4896F; --w4: #E7B8A7; --c1: #2B5A8B; --c2: #3A7DC1; --c3: #6EA3DB; --c4: #A8C8EA; }
+  </style>
+  <g>
+    <path d="M 10,10 L 230,10 L 230,230 Z" fill="var(--coolt)"/>
+    <path d="M 10,10 L 230,230 L 10,230 Z" fill="var(--warmt)"/>
+    <rect x="10" y="10" width="220" height="220" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+    <line x1="10" y1="10" x2="230" y2="230" stroke="var(--ink)" stroke-width="4.0"/>
+    <path d="M 120.0,74.0 A 46,46 0 0 0 120.0,166.0 Z" fill="var(--ground)"/>
+    <path d="M 120.0,74.0 A 46,46 0 0 1 120.0,166.0 Z" fill="var(--warm)"/>
+    <circle cx="120.0" cy="120.0" r="46" fill="none" stroke="var(--ink)" stroke-width="4.0"/>
+    <circle cx="120.0" cy="120.0" r="15" fill="var(--cool)" stroke="var(--ink)" stroke-width="2.8"/>
+  </g>
+</svg>

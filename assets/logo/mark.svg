@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic</title>
+  <style>
+    :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ground: #1F1D1A; --ink: #F2EFE6; --warm: #CE7454; --warmt: #8A4C36; --cool: #3F86C6; --coolt: #2A4E70; }
+    }
+  </style>
+  <g>
+    <circle cx="120.0" cy="120.0" r="108" fill="none" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="120.00" cy="12.00" r="5" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2"/>
+    <circle cx="120.00" cy="228.00" r="5" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2"/>
+    <circle cx="228.00" cy="120.00" r="3.5" fill="var(--ink)" stroke="var(--ink)" stroke-width="1.2"/>
+    <circle cx="12.00" cy="120.00" r="3.5" fill="var(--ink)" stroke="var(--ink)" stroke-width="1.2"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(15.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(45.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(75.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 9.45,-44.80 9.00,-64.24 0,-70.00 C -9.00,-64.24 -9.45,-44.80 0,-34.00 Z" transform="translate(120.0 120.0) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(30.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(60.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(120.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(150.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(210.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(240.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(300.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-34.00 C 14.18,-52.90 13.50,-86.92 0,-97.00 C -13.50,-86.92 -14.18,-52.90 0,-34.00 Z" transform="translate(120.0 120.0) rotate(330.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <circle cx="120.0" cy="120.0" r="30" fill="var(--ground)" stroke="var(--ink)" stroke-width="2"/>
+    <path d="M 94.0,120.0 A 26,26 0 0 1 146.0,120.0 Z" fill="var(--cool)"/>
+    <path d="M 146.0,120.0 A 26,26 0 0 1 94.0,120.0 Z" fill="var(--warm)"/>
+    <circle cx="120.0" cy="120.0" r="8" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+  </g>
+</svg>

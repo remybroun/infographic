@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic, dove</title>
+  <style>
+    :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; --w1: #451A0B; --w2: #893411; --w3: #B66346; --w4: #CE9581; --c1: #082A4A; --c2: #065494; --c3: #4481BF; --c4: #82A8D3; }
+  </style>
+  <g>
+    <path d="M 120.0,12.0 A 108,108 0 0 0 120.0,228.0 Z" fill="var(--warmt)"/>
+    <path d="M 120.0,12.0 A 108,108 0 0 1 120.0,228.0 Z" fill="var(--coolt)"/>
+    <circle cx="120.0" cy="120.0" r="108" fill="none" stroke="var(--ink)" stroke-width="3.4"/>
+    <line x1="120.0" y1="12.0" x2="120.0" y2="228.0" stroke="var(--ink)" stroke-width="2.0"/>
+    <path d="M 120.0,164.2 C 58.0,117.3 58.0,67.7 89.0,67.7 C 107.6,67.7 117.5,83.8 120.0,94.5 Z" fill="var(--cool)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+    <path d="M 120.0,164.2 C 182.0,117.3 182.0,67.7 151.0,67.7 C 132.4,67.7 122.5,83.8 120.0,94.5 Z" fill="var(--warm)" stroke="var(--ink)" stroke-width="3.4" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic, trefoil</title>
+  <style>
+    :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; --w1: #451A0B; --w2: #893411; --w3: #B66346; --w4: #CE9581; --c1: #082A4A; --c2: #065494; --c3: #4481BF; --c4: #82A8D3; }
+  </style>
+  <g>
+    <circle cx="120.0" cy="120.0" r="112" fill="var(--warmt)" stroke="var(--ink)" stroke-width="2.0"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(216.0 120.0) rotate(90.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 144.8) rotate(105.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 168.0) rotate(120.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 187.9) rotate(135.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 203.1) rotate(150.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 212.7) rotate(165.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 216.0) rotate(180.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 212.7) rotate(195.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 203.1) rotate(210.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 187.9) rotate(225.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 168.0) rotate(240.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 144.8) rotate(255.0)" fill="var(--coolt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(24.0 120.0) rotate(270.0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(27.3 95.2) rotate(285.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(36.9 72.0) rotate(300.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(52.1 52.1) rotate(315.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(72.0 36.9) rotate(330.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(95.2 27.3) rotate(345.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(120.0 24.0) rotate(360.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(144.8 27.3) rotate(375.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(168.0 36.9) rotate(390.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(187.9 52.1) rotate(405.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(203.1 72.0) rotate(420.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <ellipse cx="0" cy="0" rx="13" ry="8" transform="translate(212.7 95.2) rotate(435.0)" fill="var(--warmt)" stroke="var(--ink)" stroke-width="1.2"/>
+    <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(0)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(120)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M 0,0 C -48.0,-17.6 -53.8,-64.0 0,-80.0 C 53.8,-64.0 48.0,-17.6 0,0 Z" transform="translate(120.0 120.0) rotate(240)" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+    <circle cx="120.0" cy="120.0" r="24" fill="var(--ground)" stroke="var(--ink)" stroke-width="2.0"/>
+    <path d="M 100.0,120.0 A 20,20 0 0 1 140.0,120.0 Z" fill="var(--cool)"/>
+    <path d="M 140.0,120.0 A 20,20 0 0 1 100.0,120.0 Z" fill="var(--warm)"/>
+    <circle cx="120.0" cy="120.0" r="7" fill="var(--ground)" stroke="var(--ink)" stroke-width="1.5"/>
+  </g>
+</svg>

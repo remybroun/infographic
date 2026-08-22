@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic</title>
+  <style>
+    :root { --ground: #1F1D1A; --ink: #F2EFE6; --warm: #CE7454; --warmt: #8A4C36; --cool: #3F86C6; --coolt: #2A4E70; }
+  </style>
+  <g>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(0.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(60.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(120.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(180.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(240.0)" fill="var(--cool)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 0,-30.00 C 23.10,-49.80 22.00,-85.44 0,-96.00 C -22.00,-85.44 -23.10,-49.80 0,-30.00 Z" transform="translate(120.0 120.0) rotate(300.0)" fill="var(--warm)" stroke="var(--ink)" stroke-width="1.2" stroke-linejoin="round"/>
+    <circle cx="120.0" cy="120.0" r="34" fill="var(--ground)" stroke="var(--ink)" stroke-width="2"/>
+    <path d="M 90.0,120.0 A 30,30 0 0 1 150.0,120.0 Z" fill="var(--cool)"/>
+    <path d="M 150.0,120.0 A 30,30 0 0 1 90.0,120.0 Z" fill="var(--warm)"/>
+  </g>
+</svg>

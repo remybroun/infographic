@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" role="img" aria-labelledby="t">
+  <title id="t">infographic, iris</title>
+  <style>
+    :root { --ground: #F2EFE6; --ink: #1F1D1A; --warm: #C15F3C; --warmt: #E2A88E; --cool: #1F5C97; --coolt: #8FB0CE; --w1: #451A0B; --w2: #893411; --w3: #B66346; --w4: #CE9581; --c1: #082A4A; --c2: #065494; --c3: #4481BF; --c4: #82A8D3; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ground: #1F1D1A; --ink: #F2EFE6; --warm: #CE7454; --warmt: #8A4C36; --cool: #3F86C6; --coolt: #2A4E70; --w1: #84432D; --w2: #B75D3D; --w3: #D4896F; --w4: #E7B8A7; --c1: #2B5A8B; --c2: #3A7DC1; --c3: #6EA3DB; --c4: #A8C8EA; }
+    }
+  </style>
+  <g>
+    <path d="M 120.0,14 A 106,106 0 0 0 120.0,226 L 120.0,176 A 56,56 0 0 1 120.0,64 Z" fill="var(--w4)"/>
+    <path d="M 120.0,14 A 106,106 0 0 1 120.0,226 L 120.0,176 A 56,56 0 0 0 120.0,64 Z" fill="var(--c1)"/>
+    <path d="M 120.0,64 A 56,56 0 0 0 120.0,176 Z" fill="var(--w1)"/>
+    <path d="M 120.0,64 A 56,56 0 0 1 120.0,176 Z" fill="var(--c4)"/>
+    <circle cx="120.0" cy="120" r="106" fill="none" stroke="var(--ink)" stroke-width="3.80"/>
+    <circle cx="120.0" cy="120" r="56" fill="none" stroke="var(--ink)" stroke-width="2.28"/>
+    <line x1="120.0" y1="14" x2="120.0" y2="226" stroke="var(--ink)" stroke-width="3.04" stroke-linecap="round"/>
+  </g>
+</svg>
