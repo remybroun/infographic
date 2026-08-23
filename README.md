@@ -11,7 +11,7 @@
 
 <p align="center">
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
-<a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.3.0-B66346" alt="version 3.3.0"></a>
+<a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.3.1-B66346" alt="version 3.3.1"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-B66346" alt="Python 3.12+"></a>
 <a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-57-B66346" alt="57 block types"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-B66346" alt="dependencies 0"></a>
@@ -44,7 +44,7 @@ every project, clone into `<project>/.claude/skills/infographic` instead.
 ## Verify
 
 ```bash
-python3 scripts/ig.py selftest          # 420 assertions
+python3 scripts/ig.py selftest          # 423 assertions
 python3 scripts/ig.py validate --all    # every theme through the colour checks
 python3 scripts/ig.py selftest --render # also builds all six fixtures, to PDF
 sh assets/build_gallery.sh              # rebuilds every image on this page
@@ -207,20 +207,53 @@ inversion the mark is built on. Block titles are set in the display face over
 the sans everywhere else; the serif is opt-in per theme (`type.block_title`),
 since a theme whose display face *is* its sans gains nothing from it.
 
+**Status colours come out of the theme, not from outside it.** `good` is the
+theme's green slot, `warning` is its gold, and `serious` and `critical` are two
+steps down one crimson, which is honest because severity is ordinal. The
+version before this one had `critical` at hue 29° and the accent at 40°, so a
+DON'T panel painted itself in the house colour, and a `good` green that
+appeared nowhere else in the theme, so a tick read as framework chrome. Every
+status hue now sits at least 36° clear of the accent.
+
 **The eight categorical slots are deliberately not the brand.** A chart needs
 eight separable identities and a brand has two, so forcing the slots to the
-brand hues is how "brand-safe" palettes end up unreadable. Clay and blue lead,
-and the other six were found by enumerating a hue grid and keeping only the sets
-that clear every gate, with a minimum 32° hue gap so that no two slots collapse
-into the same family. The first search passed the gate with four oranges and
-four blues, which is legal, because the gate measures adjacent pairs and the
-first three slots, and useless in an eight-series scatter. The gate is a floor,
-not a target.
+brand hues is how "brand-safe" palettes end up unreadable. Clay and blue lead
+and the other six are searched, under three rules the gate itself cannot check:
+a 36° minimum hue gap, so no two slots collapse into one family; an objective
+that maximises the worst pair *anywhere* rather than the worst adjacent pair;
+and a lightness spread across the first three, which are the ones a scatter
+puts side by side. Each rule exists because the search broke without it. Scored
+on adjacency alone it returned four oranges and four blues. Given a 32° gap it
+returned two dark crimsons 33° apart. Both are legal, because past slot three
+the gate only measures adjacent pairs, and both are useless in a legend. The
+gate is a floor, not a target.
+
+That third rule has a ceiling worth writing down, because it is a property of
+the page and not of the search. The cream ground stops a chromatic fill
+clearing 3:1 above L 0.65, and the two brand slots are pinned at L 0.590 and
+L 0.441, so slot three has about 0.06 of lightness to move in. Worse, the
+things you want from it fight each other: a high-contrast slot three has to be
+dark, which puts it beside navy in lightness, which leaves only hue to separate
+them, which is exactly what protanopia takes away. One candidate measured a
+comfortable 4.70:1 on the page and a useless 7.5 ΔE from navy for a protanope.
+So slot three is taken from the light side, and the trio's colour-vision floor
+is held at 15 ΔE so it cannot regress.
+
+One of those checks is new here, and it is new because this theme failed it.
+A ramp is supposed to be at its most saturated where it is darkest; the first
+`iris` ramp drove chroma with a sine, which is zero at *both* ends, so its last
+two steps came out neutral grey and a heatmap read as greyscale wearing a
+colour legend. Nothing caught it: the ordinal gate measures hue *spread* and
+lightness monotonicity, and a grey has no hue to spread, and a fade to grey is
+still perfectly monotone. The gate now requires the dark half of a ramp to hold
+40% of that ramp's own peak chroma. Every bundled theme clears it (`rentos` is
+closest, at 41%); the ramp that shipped in 3.3.0 held 9%.
 
 All four themes pass the computable colour checks: contrast, categorical
-separation, and colour-vision-deficiency distance. `iris` is the only one that
-needs no waiver; `rentos` records one, because brand olive measures a chroma of
-0.087 against a 0.10 floor and a brand colour cannot be re-stepped. A new theme
+separation, ramp saturation, and colour-vision-deficiency distance. `iris` is
+the only one that needs no waiver; `rentos` records one, because brand olive
+measures a chroma of 0.087 against a 0.10 floor and a brand colour cannot be
+re-stepped. A new theme
 is a JSON file, not code. The scorecard in the sheet above counts the checks per
 theme; `mono` runs fewer of them because greyscale has fewer categorical slots
 to separate, not because it scores worse.
@@ -299,12 +332,14 @@ Three things are still wrong, and none of them is faked:
 
 - **The images are light, so they glare in dark mode.** Fixing that properly
   needs a validated dark theme, which does not exist yet.
-- **The gallery build reports two warnings.** `near-empty-page` fires on the
-  closing alias sheet at 3% ink. It is measuring correctly and measuring the
-  wrong thing: that sheet is mostly full by area and almost empty by ink, because
-  a grid of outlined chips is mostly the page showing through. The check is tuned
-  for documents rather than specimen sheets, and it is reported rather than
-  suppressed.
+- **The figure build reports three findings and suppresses none of them.** The
+  gallery warns that its `cycle` specimen asked for 380px in a 330px column, and
+  it is right; a specimen sheet packs blocks tighter than a document would. The
+  three-frame README strip sets `tables: false`, so `no-table-view` fires as an
+  error and `sparse-pages` as a warning. Both checks are correct about a
+  document and wrong about a raster image frame, where a `<details>` twin is a
+  control nobody can operate. That is the one `|| true` in
+  `assets/build_gallery.sh`, and the reason is written beside it.
 - **The `rentos` theme's fonts live outside this repo.** Its `fonts_dir` points
   at a sibling brand directory, so a fresh clone renders it in Georgia and Helvetica
   instead of Instrument Serif and Inter. The build now warns when a declared font

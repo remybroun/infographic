@@ -52,6 +52,34 @@ def dig(theme: Theme, path: str) -> str:
 
 WAIVABLE = {"Lightness band": "lightness_band", "Chroma floor": "chroma_floor"}
 
+RAMP_CHROMA_HOLD = 0.40
+
+
+def ramp_chroma(theme: Theme):
+    """Check that a continuous ramp still has its hue where it is darkest.
+
+    The ordinal gate measures hue SPREAD and lightness monotonicity, and
+    neither can see this failure: a gray has no hue to spread from the rest,
+    and a ramp that fades to gray is still perfectly monotone. So it passes,
+    and the heatmap it paints is a grayscale one wearing a color legend.
+
+    The dark half of a sequential ramp is where it should be MOST saturated.
+    Requiring it to hold 40% of the ramp's own peak chroma is a floor, not a
+    target: every bundled theme clears it (rentos' cool ramp is closest, at
+    41%), and the iris ramp that shipped in v3.3.0 held 9%.
+    """
+    rows = []
+    for key, label in (("sequential", "Ramp chroma, dark end"),
+                       ("sequential_alt", "Ramp chroma, alt hue")):
+        steps = theme.data[key]["steps"]
+        peak = max(vp.oklch(s)[1] for s in steps)
+        worst = min(vp.oklch(s)[1] for s in steps[len(steps) // 2:])
+        held = worst / peak if peak else 0.0
+        rows.append((label, held >= RAMP_CHROMA_HOLD,
+                     f"holds {held:.0%} of its own peak ({worst:.3f} of {peak:.3f}), "
+                     f"need {RAMP_CHROMA_HOLD:.0%}"))
+    return rows
+
 
 def report(theme: Theme, rows, ok_all):
     """Print each check. A documented waiver downgrades a FAIL to WAIVED and
@@ -97,6 +125,11 @@ def check_theme(name: str, strict: bool = False) -> bool:
     print("\nordinal ramp, alternate hue")
     rows, good = vp.validate_ordinal(theme.ordinal_steps(alt=True), "light", surface_light)
     ok = report(theme, rows, good) and ok
+
+    if not theme.grayscale:
+        print("\ncontinuous ramps, chroma held into the dark end")
+        rows = ramp_chroma(theme)
+        ok = report(theme, rows, all(r[1] for r in rows)) and ok
 
     print("\ntext & chrome contrast (WCAG)")
     for label, fg_path, bg_path, minimum in TEXT_PAIRS:

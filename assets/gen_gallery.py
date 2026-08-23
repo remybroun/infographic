@@ -47,7 +47,8 @@ FAMILY_TICK = dict(FAMILY_LABEL, part="Part")
 # The validator prints its gate groups as sentences; a scorecard column head is
 # rotated and clipped, so each one is renamed to the noun it is checking.
 GATE_LABEL = {"categorical slots": "Categorical", "categorical slots 1-3": "Scatter trio",
-              "ordinal ramp": "Ordinal ramp", "text & chrome contrast": "Text contrast"}
+              "ordinal ramp": "Ordinal ramp", "continuous ramps": "Ramp chroma",
+              "text & chrome contrast": "Text contrast"}
 GRAPHIC = {f: sum(1 for n in names if registry.REGISTRY[n].get("graphic"))
            for f, names in FAMILY.items()}
 TOTAL = len(registry.REGISTRY)

@@ -26,6 +26,7 @@ from lib import leading_numbers  # noqa: E402
 from lib import density, registry, svg  # noqa: E402
 from lib.blocks_diagram import CHIP_PAD, _chip_rows, balanced_columns  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
+import validate_palette  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(HERE)
@@ -113,6 +114,18 @@ def test_theme():
               t.diverging(0).lower() == t.data["diverging"]["mid"].lower())
         check(f"{name}: sequential(0) is lighter than sequential(1)",
               svg.luminance(t.sequential(0)) > svg.luminance(t.sequential(1)))
+        # A ramp is supposed to be MOST saturated where it is darkest. Neither
+        # the ordinal gate nor the check above can see a ramp that fades to
+        # gray at the dark end: a gray has no hue to spread, and the fade is
+        # still perfectly monotone. So assert it. Threshold matches
+        # validate_theme.RAMP_CHROMA_HOLD.
+        if not t.grayscale:
+            steps = t.data["sequential"]["steps"]
+            peak = max(validate_palette.oklch(s)[1] for s in steps)
+            worst = min(validate_palette.oklch(s)[1] for s in steps[len(steps) // 2:])
+            check(f"{name}: the ramp keeps its hue into the dark end",
+                  worst >= 0.40 * peak,
+                  f"holds {worst / peak:.0%} of peak chroma, need 40%")
         check(f"{name}: has an accent_text role", "accent_text" in t.data["ink"])
         # The de-emphasis gray is still a data mark, not chrome: below 3:1 the
         # context series it carries disappears in print.

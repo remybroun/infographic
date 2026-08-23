@@ -1,7 +1,7 @@
 {
   "name": "iris",
   "label": "infographic house theme, clay and blue",
-  "note": "The house theme, taken from branding/. Page is the mark's cream ground and the accent is its clay. The two sequential ramps are the mark's own two hue angles, 39.9 and 251.1 in OKLCH, which is why a ramp in this theme and the logo beside it are the same colour. Diverging runs blue to clay, the same inversion the mark is built on. The eight categorical slots are NOT the brand: a chart needs eight separable identities and the brand has two, so the remaining six were found by enumerating a hue grid and keeping only sets that clear every gate, with a 32 degree minimum hue gap so no two slots collapse into one family. Worst adjacent CVD dE is 11.6. This theme needs no waiver. Re-run validate_theme.py after any edit.",
+  "note": "The house theme, taken from branding/. Page is the mark's cream ground and the accent is its clay. The two sequential ramps are the mark's own two hue angles, 39.9 and 251.1 in OKLCH, which is why a ramp in this theme and the logo beside it are the same colour. Their chroma rises to a plateau and stays there, so the dark end of a ramp is the most saturated part of it and not a grey; what limits it is the sRGB gamut. Diverging runs blue to clay, the same inversion the mark is built on. Status is drawn from the theme's own families, never from outside: good is the green slot, warning is the gold slot, and serious and critical are two steps down one crimson, 36 degrees clear of the accent so an error can never paint itself in the house colour. The eight categorical slots are NOT the brand: a chart needs eight separable identities and the brand has two, so the remaining six were found by search, keeping a 36 degree minimum hue gap, maximising the worst pair ANYWHERE under colour-vision simulation rather than the worst adjacent pair, and holding a lightness spread across the first three, which are the ones a scatter puts side by side. Worst pair anywhere is 5.9 dE, worst adjacent 13.4. This theme needs no waiver. Re-run validate_theme.py after any edit.",
   "surface": {
     "page": "#F2EFE6",
     "card": "#FBFAF5",
@@ -26,21 +26,21 @@
   "series": [
     "#B66346",
     "#065494",
-    "#8374DA",
-    "#952755",
-    "#009B8E",
-    "#516003",
-    "#AE7C02",
-    "#036A34"
+    "#8E78E2",
+    "#9C2752",
+    "#B17F00",
+    "#0095AB",
+    "#4C5A00",
+    "#008C5F"
   ],
   "series_names": [
     "clay",
     "navy",
     "violet",
-    "magenta",
-    "teal",
-    "olive",
+    "crimson",
     "gold",
+    "cyan",
+    "olive",
     "green"
   ],
   "deemphasis": "#98907F",
@@ -48,51 +48,51 @@
   "sequential": {
     "hue": "clay",
     "steps": [
-      "#F8EEEA",
-      "#FED3C4",
-      "#FFB8A0",
-      "#FB9E7E",
-      "#EE8965",
-      "#DD7550",
-      "#C96440",
-      "#B35634",
-      "#9A4A2E",
-      "#7F412C",
-      "#603B2D",
-      "#3D3532",
-      "#2E2724"
+      "#F9EDE9",
+      "#F8D5C8",
+      "#F6BCA8",
+      "#F1A489",
+      "#E98B6B",
+      "#E0734C",
+      "#D05E34",
+      "#BD4D21",
+      "#A54017",
+      "#8D3512",
+      "#752B0D",
+      "#5E2007",
+      "#481704"
     ],
     "ordinal_steps": [
-      "#C18975",
-      "#B76548",
-      "#A24725",
-      "#803316",
-      "#582818"
+      "#E3754D",
+      "#CA592F",
+      "#AC4319",
+      "#893411",
+      "#682509"
     ]
   },
   "sequential_alt": {
     "hue": "navy",
     "steps": [
-      "#EAF1F8",
-      "#C6E1FE",
-      "#A5D0FE",
-      "#82BEFF",
-      "#63ACF8",
-      "#4E9AE9",
-      "#3C89D5",
-      "#3078BE",
-      "#2A67A4",
-      "#2A5786",
-      "#2D4864",
-      "#33383D",
-      "#25292F"
+      "#E9F1FA",
+      "#C9E0FA",
+      "#A9CFFA",
+      "#89BEF8",
+      "#6AACF3",
+      "#499AED",
+      "#2D88DE",
+      "#1F77C7",
+      "#1A67AD",
+      "#145793",
+      "#0E477B",
+      "#093863",
+      "#052A4C"
     ],
     "ordinal_steps": [
-      "#769CC6",
-      "#4782C0",
-      "#1F68AD",
-      "#10508A",
-      "#16395D"
+      "#4A9CEF",
+      "#2783D9",
+      "#1C6BB4",
+      "#135490",
+      "#0B3E6D"
     ]
   },
   "diverging": {
@@ -103,13 +103,13 @@
     "high": "#B66346"
   },
   "status": {
-    "good": "#2F7D46",
-    "warning": "#C08512",
-    "serious": "#A74900",
-    "critical": "#A32A20",
-    "good_text": "#1E5C31",
-    "warning_text": "#7A5209",
-    "critical_text": "#8A231A"
+    "good": "#008C5F",
+    "warning": "#B17F00",
+    "serious": "#BC426B",
+    "critical": "#9C2752",
+    "good_text": "#1F7B56",
+    "warning_text": "#8B661B",
+    "critical_text": "#A9305B"
   },
   "type": {
     "sans": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
