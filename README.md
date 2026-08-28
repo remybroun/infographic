@@ -34,12 +34,22 @@ those constraints fail the build rather than advise.
 ## Install
 
 ```bash
+npx skills@latest add remybroun/infographic
+```
+
+That drops it wherever your agent looks for skills, Claude Code included, and
+`npx skills update infographic` pulls later versions. It installs into the
+current project by default; add `-g` to install it for every project instead.
+
+Or do the same thing by hand, because a skill is only a directory with a
+`SKILL.md` in it, and Claude Code finds it on the next session:
+
+```bash
 git clone https://github.com/remybroun/infographic.git ~/.claude/skills/infographic
 ```
 
-That is the whole install: a skill is a directory with a `SKILL.md` in it, and
-Claude Code finds it on the next session. To scope it to one project instead of
-every project, clone into `<project>/.claude/skills/infographic` instead.
+To scope a clone to one project, clone into
+`<project>/.claude/skills/infographic` instead.
 
 ## Verify
 

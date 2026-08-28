@@ -1,6 +1,6 @@
 ---
 name: infographic
-description: Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks.
+description: "Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks."
 version: 3.3.1
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
