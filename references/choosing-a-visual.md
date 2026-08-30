@@ -79,7 +79,6 @@ genre is plotting a number that was already the whole message.
 | A rule, a caveat, a definition | `callout`, `definitions` | a chart with two bars |
 | A subject the reader has never met | `analogy` | a diagram of its parts |
 | A thing with more parts than anyone can meet at once | `progressive` | one complete diagram |
-| A wrong belief the reader arrives with | `misconception` | stating the right answer and hoping |
 | More than ~7 classes that all matter | `table`, or table + chart | more colours |
 | Options scored on criteria, no numeric axis | `matrix` | a "score" bar chart |
 | A person's own words | `quote` | a paraphrase in a box |

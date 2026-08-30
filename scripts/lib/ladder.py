@@ -1,4 +1,4 @@
-"""The ladder: the explanation, written before anything is drawn, and checked.
+"""The ladder: the order a reader has to climb, checked against the page.
 
 This skill could always choose a good form for a fact. What it could not do was
 *teach*, and the reason was structural rather than stylistic. The pipeline's
@@ -12,13 +12,19 @@ document written for someone who already knows what the subject is.
 A ladder is the other shape: rungs, in the order a reader has to climb them,
 where nothing appears before the thing it depends on.
 
+**Nobody writes a ladder by hand.** It is derived from `brief.json`, where the
+order sits in the same file as the pictures, and `meta.ladder` in a spec is the
+derived copy. It used to be authored, in its own `ladder.json`, and it drifted:
+on the last real run that file held seven rungs against the document's five,
+and nothing noticed. → `brief.py`
+
 ```json
 "meta": {
   "mode": "lesson",
   "ladder": [
-    {"says": "A tenant is one customer's own website.",
+    {"asks": "What is a tenant?",
      "introduces": ["tenant"], "at": "what-a-tenant-is"},
-    {"says": "Every tenant is served by the same single application.",
+    {"asks": "How many tenants share one program?",
      "introduces": ["application"], "at": "one-app-many-sites"}
   ]
 }
@@ -26,11 +32,13 @@ where nothing appears before the thing it depends on.
 
 Three keys, and each one is load-bearing:
 
-- `says` is the rung in plain words, capped short so the ladder stays a skeleton.
-  This cap is the guardrail on the whole idea: an explanation written as prose
-  before the drawing starts is how version 1 shipped 2,086 words with one bar
-  chart, and "reflect properly before drawing" is the exact instruction that
-  produced it. A rung is one line or it is an essay.
+- `asks` is the question that section answers, in the reader's words. In lesson
+  mode it is also the section opener, so it is the one field here a reader ever
+  sees. It used to be `says`, a short declarative sentence, and that was a
+  mistake worth recording: the clipped register a short-sentence cap trains got
+  copied out of the skeleton into every lede on the page. A question cannot be
+  pasted into a document as its voice. `says` is still read, for specs written
+  before the change.
 - `introduces` names the vocabulary this rung teaches. It is what makes the
   order checkable rather than declarative.
 - `at` is the block id where the rung lands, which is what makes the ladder a
@@ -41,6 +49,15 @@ comes *before* the rung introducing it. That is the insider register, made
 measurable. Every other check in this skill measures density, form or geometry,
 and a document can pass all of them while opening on a word the reader will not
 meet for another four blocks.
+
+**It is a warning, and it was an error once.** As an error it stopped the
+build, and the cheapest way past it was always to rewrite the sentence that
+tripped it. On the run that changed this, a hero reading "Four fixes to the
+RentRemote integrations catalog" was rewritten to "the list of outside software
+a customer can connect" to clear a forward reference on the word *catalog*, and
+the title lost its subject. The check cannot tell a term of art from the name
+of the thing the document is about, so it no longer gets to decide. Titling
+blocks are exempt outright.
 """
 
 from __future__ import annotations
@@ -49,9 +66,14 @@ import re
 
 from . import density
 
-RUNG_WORDS = 24        # a rung is one line, not a paragraph
+RUNG_WORDS = 24        # a question a reader would ask, not a summary of the answer
 TERM_WORDS = 4         # a term is a name, not a description
 MIN_RUNGS = 3          # two rungs is a claim with a preamble, not a ladder
+
+
+def rung_text(rung: dict) -> str:
+    """What this rung is, for a human. `asks` now, `says` in older specs."""
+    return str(rung.get("asks") or rung.get("says") or "").strip()
 
 # `alt` and `encodes` describe a drawing for a reader who cannot see it, and a
 # table twin restates a graphic that has already been walked. Charging them for
@@ -116,9 +138,10 @@ def audit(spec: dict, registry) -> tuple:
                 "meta.mode is 'lesson' and there is no meta.ladder.\n"
                 "      A lesson is an ordered explanation or it is a pile of "
                 "correct pictures.\n"
-                "      Write the rungs first, one line each, before choosing a "
-                "single block:\n"
-                '        {"says": "...", "introduces": ["..."], "at": "<block id>"}\n'
+                "      Do not write the rungs here. Point the spec at the brief "
+                "that already holds\n      the order, and they are derived every "
+                "build:\n"
+                '        "meta": {"brief": "out/brief.json"}\n'
                 "      → references/teaching.md")
         return errors, warnings
 
@@ -171,19 +194,17 @@ def audit(spec: dict, registry) -> tuple:
         if not isinstance(rung, dict):
             errors.append(f"{where} is not an object")
             continue
-        says = str(rung.get("says", "")).strip()
+        says = rung_text(rung)
         if not says:
-            errors.append(f"{where} has no `says`: a rung is a sentence a "
-                          f"stranger could repeat")
+            errors.append(f"{where} has no `asks`: a rung is the question that "
+                          f"section answers, in the reader's words")
         elif density.words(says) > RUNG_WORDS:
             errors.append(
                 f"{where}: {density.words(says)} words, cap is {RUNG_WORDS}.\n"
                 f'      "{says[:72]}…"\n'
-                f"      → a rung is one line. The cap is the guardrail on this "
-                f"whole step:\n         an explanation written out in full "
-                f"before the drawing starts is an essay\n         with pictures "
-                f"added afterwards, which is the failure this skill was\n"
-                f"         rebuilt to prevent.")
+                f"      → that is not a question a reader would ask, it is a "
+                f"summary of the answer.\n         Ask the shorter question and "
+                f"let the section do the answering.")
 
         for term in rung.get("introduces", []) or []:
             if density.words(term) > TERM_WORDS:
@@ -221,8 +242,8 @@ def audit(spec: dict, registry) -> tuple:
         if p2 <= p1:
             errors.append(
                 f"ladder-order: rung {n2} lands at blocks[{p2}] but rung {n1} "
-                f'lands at blocks[{p1}].\n      "{r1.get("says", "")[:56]}"\n'
-                f'      "{r2.get("says", "")[:56]}"\n'
+                f'lands at blocks[{p1}].\n      "{rung_text(r1)[:56]}"\n'
+                f'      "{rung_text(r2)[:56]}"\n'
                 f"      → the ladder says one order and the page delivers "
                 f"another. A reader\n         meets the page's order, not "
                 f"yours. Move the blocks, or renumber the\n         rungs to "
@@ -234,27 +255,41 @@ def audit(spec: dict, registry) -> tuple:
     for number, rung, position in landed:
         for term in rung.get("introduces", []) or []:
             pattern = _term_pattern(term)
-            early = [i for i in range(position) if pattern.search(texts[i])]
+            early = [i for i in range(position)
+                     if pattern.search(texts[i]) and not _titling(blocks[i])]
             if not early:
                 if not any(pattern.search(t) for t in texts[position:]):
                     warnings.append(
                         f'ladder-unused: rung {number} introduces "{term}", '
-                        f"which never appears on the page. Either the rung is "
-                        f"teaching a word the document does not need, or the "
-                        f"block that uses it calls it something else.")
+                        f"which never appears on the page. The fix is on the "
+                        f"page: use the word where it is taught. Deleting the "
+                        f"term from the brief clears this warning and teaches "
+                        f"the reader nothing.")
                 continue
             first = early[0]
-            errors.append(
+            warnings.append(
                 f'forward-reference: "{term}" is used at blocks[{first}] '
                 f"({blocks[first].get('type')}), but rung {number} teaches it "
                 f"at blocks[{position}].\n"
                 f'      "{_excerpt(texts[first], pattern)}"\n'
-                f"      → the reader meets the word before the picture that "
-                f"gives it a meaning.\n         Move that rung earlier, or say "
-                f"it in words the reader already owns\n         at blocks"
-                f"[{first}] and keep the term for where it is taught.")
+                f"      → the reader may meet the word before the picture that "
+                f"gives it a meaning.\n         Move that rung earlier, or "
+                f"draw the word where it first lands. Do NOT reword\n"
+                f"         blocks[{first}] into something vaguer: if the term "
+                f"is the name of the\n         subject, saying it early is "
+                f"correct and this warning is closed.")
 
     return errors, warnings
+
+
+# A hero, a section opener and a document title exist to name the subject. A
+# forward reference inside one is not the insider register, it is a document
+# saying what it is about, and charging for it buys a vaguer title every time.
+_TITLING = {"hero", "section", "bridge"}
+
+
+def _titling(block) -> bool:
+    return isinstance(block, dict) and str(block.get("type", "")) in _TITLING
 
 
 def _excerpt(text: str, pattern, width: int = 64) -> str:
@@ -295,7 +330,7 @@ def enforce(spec: dict, registry) -> None:
 
 
 def summary(spec: dict) -> str:
-    """The ladder as a reader climbs it, for `ig.py ladder` and the handoff."""
+    """The ladder as a reader climbs it, for `ig.py brief` and the handoff."""
     meta = spec.get("meta", {}) or {}
     rungs = meta.get("ladder") or []
     if not rungs:
@@ -305,7 +340,7 @@ def summary(spec: dict) -> str:
         if not isinstance(rung, dict):
             continue
         terms = ", ".join(rung.get("introduces", []) or [])
-        out.append(f"  {number}. {rung.get('says', '')}")
+        out.append(f"  {number}. {rung_text(rung)}")
         if terms:
             out.append(f"     teaches: {terms}")
     return "\n".join(out)

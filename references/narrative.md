@@ -51,7 +51,7 @@ argument spine.
 5. **Tension.** `comparison`, `diverging`, `matrix`, `callout`. Where the obvious
    reading is wrong, or where the options genuinely conflict. **An argument with
    no tension reads as marketing.** In a lesson the same job is done by
-   `misconception`, and the thing being contradicted is what the reader already
+   the thing the reader already
    wrongly believes rather than a rival position.
 6. **Implication.** `checklist`, `callout`, or a closing `prose` block. What
    follows for the reader.

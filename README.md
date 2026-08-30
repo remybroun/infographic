@@ -13,7 +13,7 @@
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
 <a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.3.1-B66346" alt="version 3.3.1"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-B66346" alt="Python 3.12+"></a>
-<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-57-B66346" alt="57 block types"></a>
+<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-56-B66346" alt="56 block types"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-B66346" alt="dependencies 0"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-B66346" alt="license MIT"></a>
 <a href="branding/"><img src="https://img.shields.io/badge/branding-iris-B66346" alt="branding"></a>
@@ -78,9 +78,9 @@ taste under time pressure always chooses "one more clarifying sentence".
 
 ![Six labelled groups, each showing three miniature specimens: bars, lollipops and heatmaps for quantity; lines, slopes and dumbbells for change; rings, waffles and share bars for part-to-whole; chains, trees and venns for structure; layers, lanes and chips for diagram; tiles, callouts and rules for editorial.](assets/forms.png)
 
-57 block types across seven families, plus 64 aliases so a spec can be written in
+56 block types across seven families, plus 60 aliases so a spec can be written in
 ordinary words (`pie` → `donut`, `waffle` → `unit`, `2x2` → `quadrant`,
-`flow` → `process`, `myth` → `misconception`).
+`flow` → `process`, `2x2` → `quadrant`).
 
 That figure is a map. Below it are the blocks themselves, rendered: three sheets
 out of ten in **[the specimen gallery](GALLERY.md)**, which draws all 41 forms
@@ -99,7 +99,7 @@ a required data twin, refused colour literals, and its labels charged against th
 budget. Capped at three per document, because without a cap "draw the shape the
 catalog lacks" becomes "hand-draw everything" and the consistency is gone.
 
-![Four blocks rendered: a sankey from 57 block types through the families to whether each draws or sets text, a tree of the repository, an authored figure of three arguments over one set of facts with the chosen one highlighted, and a scorecard of the colour checks each theme passes beside a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
+![Four blocks rendered: a sankey from 56 block types through the families to whether each draws or sets text, a tree of the repository, an authored figure of three arguments over one set of facts with the chosen one highlighted, and a scorecard of the colour checks each theme passes beside a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
 
 The authored drawing on that sheet is a `figure`. Three spines over one set of facts is
 not a tree (they partition nothing), not a process (they are alternatives, not
@@ -108,18 +108,20 @@ needs a "well, sort of", which is the test for authoring the shape instead.
 
 ## How a document gets made
 
-Steps 1–6 are judgement and cannot be automated. 7–11 mostly are.
+Steps 1–6.5 are judgement and cannot be automated. 7–11 mostly are.
 
 1. **Source**: read it, or `ig.py extract source.pdf`
 2. **Reader and mode**: who reads this, do they have the concept, which words
    are they missing?
-2.5. **The ladder** (`lesson` mode): the explanation, before any form is chosen.
-   `ig.py ladder out/ladder.json --brief`
+2.5. **The brief**: `ig.py brief out/brief.json --new`. Everything decided from
+   here to step 7 goes in this one file, and nowhere else
 3. **Three spines**: three arguments over the same facts, then choose one
 4. **Target**: paper, poster, slide, or a continuous scrolling page
-5. **Scenes**: which images does this live or die by, *before* opening the catalog
+5. **Scenes**: which images does this live or die by, *before* opening the
+   catalog, and no two of them from the same viewpoint
 6. **Forms**: one per remaining claim
-7. **Spec**: `ig.py new out/spec.json`, and every authored figure drawn twice,
+6.5. **Check the brief**: `ig.py brief out/brief.json --read`, before a line is drawn
+7. **Spec**: one section at a time, `ig.py brief --order <id>`, drawn twice,
    both compositions rendered alone with `ig.py sketch`
 8. **Theme**: validated, never hand-picked
 9. **Render**: `ig.py render out/spec.json --out-dir out`
@@ -134,7 +136,7 @@ before one is chosen**, because the first argument to arrive is nearly always th
 *mechanism*. That is the shape the source is already in, and it is rarely the one
 the reader has a stake in. And **scenes named before the catalog is opened**,
 because once it is open the question silently changes from *what does this look
-like?* to *which of the 57 shapes is closest?*
+like?* to *which of the 56 shapes is closest?*
 
 ## Explaining, as opposed to arguing
 
@@ -166,9 +168,9 @@ how to explain this before drawing anything" is the instruction that produced th
 worst document this skill has shipped. An explanation written out in full before
 the drawing starts is an essay, and the pictures get added to illustrate it.
 
-`ig.py ladder --brief` hands the rungs alone to a reader with no context, before
-anything is rendered, which is the same test `ig.py blind` runs at the end for
-the price of a rebuild.
+`ig.py brief --read` hands the skeleton alone to a reader with no context,
+before anything is rendered, which is the same test `ig.py blind` runs at the end
+for the price of a rebuild.
 
 ## What the build refuses to render
 
@@ -283,7 +285,7 @@ references/           one file per decision; load the one that owns it
   scenes.md             deciding what gets drawn by hand
   anti-patterns.md      check every document against this before shipping
   teaching.md           the ladder, and the mode that enforces it
-  catalog/              the 57 block types, by family
+  catalog/              the 56 block types, by family
 scripts/
   ig.py                 the CLI
   build.py              spec → HTML

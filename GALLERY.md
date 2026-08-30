@@ -53,7 +53,7 @@ being replaced.
 
 ## Change, and part-to-whole
 
-![Six blocks. A dumbbell chart of the words allowed in each field at report against graphic density. A slope chart of blocks per family in the poster against the scrolling page. A meter showing three authored figures against a cap of three. A share bar of the eleven pipeline steps split into judgement and tooling. A funnel from 57 registered block types down to those a shipped example uses, and those two or more use. A treemap of the 57 block types by family.](assets/gallery-change-part.png)
+![Six blocks. A dumbbell chart of the words allowed in each field at report against graphic density. A slope chart of blocks per family in the poster against the scrolling page. A meter showing three authored figures against a cap of three. A share bar of the pipeline steps split into judgement and tooling. A funnel from 56 registered block types down to those a shipped example uses, and those two or more use. A treemap of the 56 block types by family.](assets/gallery-change-part.png)
 
 `dumbbell` `slope` `meter` `share_bar` `funnel` `treemap`. On the slope chart,
 structure and diagram change places, which is what a slope chart is for. The
@@ -75,7 +75,7 @@ that contradicts the legend printed directly above it is worse than no note.
 
 ## The principles, and structure
 
-![A pyramid of the five principles in the order they override each other. A venn of what an authored figure shares with the built-in blocks. A vertical process of the five commands the tooling provides. A cycle of render, look at it, find the collision, fix the spec. A quadrant placing the families by whether a claim needs numbers and whether it needs an order. A sankey from 57 block types through the families to whether each draws or sets text.](assets/gallery-principles-structure.png)
+![A pyramid of the five principles in the order they override each other. A venn of what an authored figure shares with the built-in blocks. A vertical process of the five commands the tooling provides. A cycle of render, look at it, find the collision, fix the spec. A quadrant placing the families by whether a claim needs numbers and whether it needs an order. A sankey from 56 block types through the families to whether each draws or sets text.](assets/gallery-principles-structure.png)
 
 `venn` `process` `cycle` `quadrant` `sankey`. The cycle is the loop the linter
 cannot close for you: it checks structure, and it has never once looked at a
@@ -85,7 +85,7 @@ named, not when the dots are precise.
 
 ## Structure, and diagram
 
-![Four blocks. A sankey from 57 block types through the families to whether each draws or sets text. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the four themes passes, and a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
+![Four blocks. A sankey from 56 block types through the families to whether each draws or sets text. A tree of what is in this repository. An authored figure of three arguments over one set of facts, with the chosen one highlighted. A scorecard of the colour checks each of the four themes passes, and a gauge of how much of the vocabulary a shipped example demonstrates.](assets/gallery-structure-diagram.png)
 
 `sankey` `tree` `figure` `scorecard` `gauge`.
 
@@ -97,12 +97,13 @@ shape instead.
 
 ## Diagram, and teaching
 
-![Four blocks. A swimlane of the eleven pipeline steps across two lanes, you and tooling. A layer stack of what Claude loads in the order it loads it. An analogy putting a recipe beside a ladder, three correspondences mapped row by row. A misconception block with what the pipeline assumed on the left, crossed out, and what a reader needs on the right, ticked.](assets/gallery-diagram-teaching.png)
+![Three blocks. A swimlane of the pipeline across two lanes, you and tooling. A layer stack of what Claude loads in the order it loads it. An analogy putting a recipe beside a ladder, three correspondences mapped row by row.](assets/gallery-diagram-teaching.png)
 
-`swimlane` `stack` `analogy` `misconception`. The swimlane is the argument for
-the whole skill: steps two to six sit in the top lane and cannot be automated.
+`swimlane` `stack` `analogy`. The swimlane is the argument for the whole skill:
+steps two to six sit in the top lane, cannot be automated, and all land in one
+file.
 
-The two teaching blocks are the newest forms here and the only ones whose
+The teaching blocks are the newest forms here and the only ones whose
 subject is this skill's own failure. Every other family draws a relation between
 things the reader already accepts, which is an enormous vocabulary for operating
 on a subject and none at all for meeting one. The analogy names its own limit in
@@ -136,9 +137,9 @@ not.
 
 ## Every alias
 
-![Two chip grids holding all 64 aliases, each chip showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process, myth to misconception.](assets/gallery-aliases.png)
+![Two chip grids holding all 60 aliases, each chip showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process, draw to figure.](assets/gallery-aliases.png)
 
-`chips`. All 64 aliases, so a spec can be written in ordinary words. Split into
+`chips`. All 60 aliases, so a spec can be written in ordinary words. Split into
 two blocks rather than one, and that is not cosmetic: a single grid was 911px at
 60 aliases and 1,171px at 67, and `break-inside: avoid` means a block taller than
 the 1,005px text area cannot be placed at all. It takes a page to itself,

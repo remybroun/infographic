@@ -36,9 +36,9 @@ and three of them are enforced:
 |---|---|---|
 | Opens on | the claim | what the thing **is** |
 | Order | strongest first | nothing before what it depends on |
-| `meta.ladder` | optional | **required**, and checked |
+| a `brief.json` order | optional | **required**, and checked |
 | Density | `graphic` | usually `lesson` |
-| Tension from | a `callout`, a `matrix` where nothing wins | `misconception` |
+| Tension from | a `callout`, a `matrix` where nothing wins | `meta.contradicts`, landed somewhere |
 
 **Choose the mode at step 2, when you name the reader, and say which you chose.**
 It follows from the reader, not from the subject: the same facts about a billing
@@ -53,49 +53,61 @@ documents, which is exactly why this is a mode and not a new law.
 ## The ladder
 
 **Write the explanation before choosing a single form.** Not the document: the
-explanation. A numbered sequence of rungs, one line each, in the order a reader
-has to climb them, where nothing appears before the thing it depends on.
+explanation. A sequence of rungs, in the order a reader has to climb them, where
+nothing appears before the thing it depends on.
+
+**It is not a file of its own, and it is not written by hand.** It is the order
+of `brief.json`, which is the same file that holds the pictures, so a section
+that moves takes its rung with it. It used to be authored separately, in its own
+`ladder.json`, beside a spec that carried its own copy; on the last real run
+those two disagreed, seven rungs against five, and nothing noticed because the
+build only ever read the copy in the spec.
 
 ```json
-"meta": {
-  "mode": "lesson",
-  "ladder": [
-    {"says": "One program can run many separate company websites.",
-     "introduces": ["application"], "at": "one-program"},
-    {"says": "The web address is what tells it which company you want.",
-     "introduces": ["web address"], "at": "address-picks"},
-    {"says": "So a new company needs an address, not a new copy of the program.",
-     "introduces": [], "at": "adding-one"}
-  ]
-}
+"sections": [
+  {"id": "one-program", "asks": "How many programs are actually running?",
+   "teaches": ["application"], "form": "figure"},
+  {"id": "address-picks", "asks": "How does it know whose site to show?",
+   "teaches": ["web address"], "form": "progressive"}
+]
 ```
 
-- **`says`** is the rung in plain words, capped at 24 words.
-- **`introduces`** names the vocabulary this rung teaches. It is what makes the
-  order checkable rather than declarative.
-- **`at`** is the id of the block where the rung lands, which is what makes the
-  ladder a claim about the page rather than a note about intentions.
+- **`asks`** is the question that section answers, in the reader's words. In
+  lesson mode it is also the section opener, so it is the one field here a
+  reader ever sees.
+- **`teaches`** names the vocabulary this section introduces. It is what makes
+  the order checkable rather than declarative.
+- **`id`** is the block the section lands on, which is what makes the ladder a
+  claim about the page rather than a note about intentions.
 
 Run it before anything is built:
 
 ```bash
-python3 scripts/ig.py ladder out/ladder.json            # legal? in order?
-python3 scripts/ig.py ladder out/ladder.json --brief    # hand it to a stranger
+python3 scripts/ig.py brief out/brief.json          # legal? in order?
+python3 scripts/ig.py brief out/brief.json --read   # hand it to a stranger
 ```
 
-A bare JSON list of rungs is legal input, because the ladder is written at step
-2.5 and the spec does not exist until step 7.
+Then point the spec at it, and `meta.ladder` is derived every build:
 
-### Why the rung is capped at 24 words
+```json
+"meta": {"brief": "brief.json"}
+```
 
-Because "reflect completely on how to explain this before drawing anything" is,
-word for word, the instruction that produced the worst document this skill has
-ever shipped: 2,086 words across eight A4 pages with one bar chart. An
-explanation written out in full before the drawing starts *is an essay*, and the
-pictures then get added to illustrate it.
+### Why it is a question and not a sentence
 
-The cap is the guardrail on the whole step. A ladder is a skeleton. If a rung
-does not fit in a line, it is two rungs.
+`asks` used to be `says`: one short declarative sentence per rung, capped at 24
+words, on the reasoning that a skeleton written out in full is an essay with
+pictures added afterwards. That reasoning was right and the cap was the wrong
+instrument. What a short-declarative cap trains is a register, and the register
+it trains is the clipped aphorism: "Start with the whole thing, before its
+parts." "The answer is the difference between rolling and wedging." Having just
+written six of those to plan the document, the author wrote eleven more into it,
+and every lede on the page came out sounding like a fortune cookie.
+
+A question does not have that failure mode. It cannot be pasted into a document
+as its voice, because it is not a voice, it is a request. And it does the
+skeleton's actual job better: a section is finished when its question is
+answered, which is a test, where "does the page say the sentence" is not.
 
 ### What the build checks
 
@@ -117,11 +129,11 @@ to fire on your first build, and the correct reaction is almost never to delete
 the rung: it is to move it earlier, or to say the thing in words the reader
 already owns at the earlier block and keep the term for where it is taught.
 
-### Hand the ladder to a stranger, before you build
+### Hand the skeleton to a stranger, before you build
 
 `ig.py blind` is the only honest test in this skill and it runs at step 10,
 against a built document, where its verdict costs a rebuild and therefore gets
-rationalised away. `ig.py ladder --brief` asks the same question of the ladder
+rationalised away. `ig.py brief --read` asks the same question of the skeleton
 alone. It costs one turn, it renders nothing, and the answer arrives while the
 order is still free to change.
 
@@ -130,7 +142,10 @@ Send the brief verbatim. What comes back is evidence:
 - **"I lost it at 4"** → rung 4 is doing two jobs. Split it.
 - **A term in their answer 3 you did not plan to teach** → a missing rung.
 - **Anything in their answer 5** → a forward reference the build cannot see
-  yet, because the term is still in your head rather than in `introduces`.
+  yet, because the term is still in your head rather than in `teaches`.
+- **Two pictures that sound like one picture in their answer 6** → they are one
+  picture. The `view` check catches the exact repeats; a stranger catches the
+  ones that differ on paper and land the same way.
 
 ## The lesson spine
 
@@ -151,8 +166,13 @@ difference is not decoration: it inverts the first two beats.
    it. A subject with no motivation is a set of facts to memorise.
 4. **The rungs.** One per section, in dependency order, each with its picture.
    `progressive` when the parts accumulate.
-5. **What people get wrong.** `misconception`. This is where a lesson gets its
-   tension, and without it the document reads as marketing.
+5. **What people get wrong.** This is where a lesson gets its tension, and
+   without it the document reads as marketing. Name it in `meta.contradicts` and
+   land it wherever it lands best: the assumed thing drawn beside the real one,
+   a note under the analogy, a callout. **Not a two-column list of assumed
+   against actual.** That shape turns any thought into a listicle and reliably
+   restates whichever picture sits next to it; the block that used to exist for
+   it was removed for that reason.
 6. **What it means for you.** `checklist`, or a closing `callout`.
 
 **Steps 1 to 3 are what an argument document skips**, every time, because the
@@ -225,7 +245,7 @@ The three tells of the wrong register in a lesson:
 ## What this does not license
 
 - **Not more words.** `lesson` density raises the page budget from 150 to 260,
-  which is the smallest allowance that fits a four-rung ladder's bridges and its
+  which is the smallest allowance that fits a four-section ladder's bridges and its
   longer labels. It is not a step towards `report`. Body prose is still refused.
 - **Not simplifying to the point of being wrong.** The target is an intelligent
   adult who lacks *this domain*, not a child. "Explain it to a five-year-old" is

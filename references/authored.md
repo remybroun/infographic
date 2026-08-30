@@ -163,8 +163,8 @@ does, so `ig.py render` remains the count that counts.
   Text inside your `<text>` elements **is** charged: the build counts it from
   the source, before a placeholder expands, so your labels count and a placed
   chart's axis ticks do not. A drawing labels; it does not narrate.
-- **The ladder.** In `lesson` mode a rung lands `at` an `id`, and here that is
-  any element in your markup carrying one. The forward-reference check is
+- **The ladder.** In `lesson` mode a brief section lands on an `id`, and here
+  that is any element in your markup carrying one. The forward-reference check is
   unchanged: the text belonging to a rung is everything up to the next id.
 - **The linter**, minus the findings that count blocks you do not have.
   `no-graphics`, the word budget, page economy, the anti-patterns and the

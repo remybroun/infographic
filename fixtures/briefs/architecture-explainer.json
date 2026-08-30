@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "reader": "a provider-operations lead who has never seen the codebase",
+    "mode": "lesson",
+    "page": "a4",
+    "theme": "rentos",
+    "contradicts": "that running hundreds of company sites means running hundreds of copies of the program",
+    "source": "the platform architecture notes"
+  },
+  "sections": [
+    {
+      "id": "what-it-is",
+      "asks": "What is a provider website?",
+      "teaches": ["provider website"],
+      "form": "hero"
+    },
+    {
+      "id": "one-or-many",
+      "asks": "Why one program instead of one copy per company?",
+      "teaches": ["shared application"],
+      "form": "analogy",
+      "shows": "the familiar thing on the left and the subject on the right, the same layout twice with different nouns"
+    },
+    {
+      "id": "three-hundred-sites",
+      "asks": "How many programs are actually running?",
+      "teaches": [],
+      "form": "figure",
+      "rank": 1,
+      "view": "many-inputs-one-box",
+      "shows": "a column of typed addresses on the left, lines converging into a single box on the right holding the numeral one",
+      "instead_of": {
+        "block": "sankey",
+        "because": "a sankey would give the lines a width and there is no quantity flowing along them, only the fact that they all end in the same place"
+      }
+    },
+    {
+      "id": "how-it-knows",
+      "asks": "How does one program know whose site to show?",
+      "teaches": ["web address", "tenant"],
+      "form": "progressive",
+      "shows": "one picture drawn twice, gaining the piece that does the choosing on the second pass"
+    },
+    {
+      "id": "who-answers",
+      "asks": "Who answers when everyone arrives at once?",
+      "teaches": ["cache", "edge"],
+      "form": "stack",
+      "shows": "three layers, the outermost taking most of the arrivals and the innermost taking the fewest"
+    },
+    {
+      "id": "what-happens",
+      "asks": "What happens between typing an address and seeing a page?",
+      "teaches": [],
+      "form": "process",
+      "shows": "the steps in order along one line, from the address bar to the rendered page"
+    },
+    {
+      "id": "adding-a-site",
+      "asks": "How is a new company's site switched on?",
+      "teaches": ["certificate"],
+      "form": "swimlane",
+      "shows": "one lane per party, the work handing across between them in time order"
+    },
+    {
+      "id": "who-owns-data",
+      "asks": "What is the site never allowed to do?",
+      "teaches": ["source of truth"],
+      "form": "checklist",
+      "shows": "what a site may do and what it may not, each line marked, the boundary between them visible at a glance"
+    }
+  ]
+}

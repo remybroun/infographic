@@ -13,7 +13,6 @@ meeting you were not at.
 |---|---|
 | "it works a bit like a hotel: one building, many rooms" | `analogy` |
 | "the whole thing has six parts, and here they all are" | `progressive` |
-| "people think X, but actually Y" | `misconception` |
 | "so far we have seen A; here is why B has to exist" | `bridge` |
 
 These are the blocks a lesson is built from, and they are the ones to reach for
@@ -131,45 +130,6 @@ first or what problem the rest were added to solve.
 **Each stage must answer "why is this here".** That is what `detail` is for. A
 `progressive` whose stages add parts without saying what forced them is an
 animation of a diagram, which is a diagram with extra steps.
-
-## `misconception`
-
-What a newcomer already believes, beside what is actually the case.
-
-```json
-{
-  "type": "misconception",
-  "title": "Three things people assume about shared applications",
-  "assumed_title": "What people assume",
-  "actual_title": "What is actually true",
-  "items": [
-    {"assumed": "Each site is its own copy of the code",
-     "actual":  "Every site runs the same one program"},
-    {"assumed": "A change has to be shipped site by site",
-     "actual":  "One deployment changes every site at once"}
-  ]
-}
-```
-
-| Key | Meaning |
-|---|---|
-| `items` | rows of `assumed` and `actual` |
-| `assumed_title` / `actual_title` | the column heads. Default to the two above |
-
-**Use when newcomers reliably arrive with a wrong model** and the document has
-to displace it. Stating the correct version and hoping it overwrites what the
-reader already believes does not work: the wrong model has to be named to be
-let go of.
-
-**Not a `comparison`.** A comparison is symmetrical, two positions someone holds
-on purpose. This is asymmetrical, and the left column is a claim about the
-*reader*. That is also its risk: an `assumed` nobody actually assumes is a straw
-man, and it costs the document its credibility for the rest of the page. Write
-the ones you have genuinely heard someone say.
-
-**This is where a lesson gets its tension.** A document that never contradicts
-anything reads as marketing, and a lesson has no argument to supply that
-friction. The thing it corrects is the friction.
 
 ## `bridge`
 

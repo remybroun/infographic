@@ -98,7 +98,6 @@ means this table; it is not repeated, so that it stays one edit.
 | a rule and its failure mode | "always X; never Y" | `checklist` |
 | a quantity, share, or change | "X is bigger / fell / is made of" | the quantity, part and change families |
 | something the reader already owns | "it works a bit like a hotel" | `analogy` |
-| a wrong belief being corrected | "people think X, but actually Y" | `misconception` |
 | parts that accumulate | "then you also need a second one, because…" | `progressive` |
 | the hand-off between two rungs | "so far we have seen A; now B" | `bridge`, lesson density only |
 

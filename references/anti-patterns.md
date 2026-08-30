@@ -63,10 +63,10 @@ spec, a codebase and a post-mortem all begin from the assumption that the
 subject exists, is worth having, and is understood. Reasoning from them
 reproduces that assumption, and a fact ledger, a claim and a claim-first spine
 are all the frame of an argument. None is an explanation.
-Instead: set `meta.mode` to `lesson`, write the ladder before choosing a single
+Instead: set `meta.mode` to `lesson`, write the brief before choosing a single
 form, and open on what the thing **is**.
 → [teaching.md](teaching.md)
-Caught by: `forward-reference` and `ladder-order`, but only once a ladder is
+Caught by: `forward-reference` and `ladder-order`, but only once a brief is
 declared. Nothing catches a document that never declared one, which is why the
 mode is chosen at step 2 and stated in the handoff.
 
@@ -80,6 +80,34 @@ teaches nobody anything.
 Instead: introduce a term by **drawing the thing** at the rung that teaches it,
 and keep `definitions` for the end, as the map from the plain words the page
 taught back to the names the team uses.
+
+**❌ A page with no names, no numbers and no dates on it.** Every noun is a
+description of a thing rather than the thing: "the company's own channel tool",
+"a system added on a Wednesday", "the eight kinds a customer would recognise",
+with the eight kinds unnamed.
+The tell: the substitution test. Swap any noun phrase for the equivalent at a
+different company in a different year, and the sentence stays true. A whole
+page that survives that is about nothing.
+Why it survives review: it reads as considerate. It is produced by taking
+"write for a reader outside the team" to mean "say nothing a stranger could
+look up", which is the opposite of teaching, and it passes every measurement in
+this repo because all of them measure shape.
+Instead: name the thing, draw it once so the name means something, then use the
+name freely. Specific is almost always shorter than the description that
+replaces it.
+→ [specificity.md](specificity.md)
+Caught by: nothing. There is no checker and there will not be one. Read the
+page back and name three facts from it.
+
+**❌ Rewriting the copy to clear a warning.** A `forward-reference` fires on the
+subject's own name in the hero, so the hero is reworded until the word is gone.
+A `ladder-unused` fires, so the term is deleted from the brief.
+The tell: the document got vaguer and the build got quieter, in the same edit.
+Every check here measures structure; none of them can see whether the page says
+anything, so they can only ever be satisfied by removing content.
+Instead: fix the page, or read the warning and close it. A warning you have
+considered and rejected is finished business, and "linter clean" is not a
+result to report.
 
 **❌ One idea, never contested.** The document is built from the first angle
 that occurred to you, and no alternative was ever written down.
@@ -141,6 +169,10 @@ Instead: label the mark in words and demote the identifier to the table twin,
 where it stays exact and reachable without being the only thing on offer. When
 the term itself is the subject, define it in `definitions` **before** the
 section that uses it.
+**This applies to identifiers only.** `skipped_bucket` is a lookup key; Channex,
+Mews and the August release are names, and replacing one of those with a
+description of itself is the opposite failure, two entries up.
+→ [specificity.md](specificity.md)
 Caught by: `undefined-vocabulary`, which counts identifier-shaped tokens outside
 footnotes and twins. It cannot see an ordinary word you have redefined, and
 "bucket", "audience" and "category" are how that failure usually looks.
@@ -233,7 +265,7 @@ complicates it.
 Why: it reads as marketing, and readers discount it accordingly.
 ✅ Include what does not fit, a `callout` naming the caveat, a `matrix` where no
 option wins, the metric that moved the wrong way. **In a lesson, this is
-`misconception`**: the thing being contradicted is what the reader already
+`meta.contradicts`**: the thing being contradicted is what the reader already
 wrongly believes, not a rival position, and a lesson without one is a document
 telling a newcomer that everything is straightforward.
 

@@ -111,6 +111,77 @@ big custom drawing of the subject itself, wide rather than tall. Good practice
 rather than a rule, because plenty of lessons do not need one and a rule would
 force it on all of them.
 
+## v3.4: the document that drew the same picture four times
+
+A gear-bearing explainer, built end to end without a single design decision ever
+being written to a file. It shipped three authored figure slots holding one
+object seen from one angle, face on, four times over. Nothing in the skill could
+see it, because figures were only ever compared *after* they were drawn, and by
+then each one was work already done.
+
+Reading the session back showed why. **Steps 2 to 6 of the pipeline were the
+entire design of the document, and not one of them had an artifact.**
+`pipeline.md` said "written down" eight times and never said where. So the reader,
+the mode, the order, the scenes and the form of every claim lived in a reasoning
+buffer: the analogy decision was reopened thirteen times and shipped as whichever
+version happened to be in the buffer at the end, a mesh close-up was designed six
+times and shipped nowhere, the block order the model reasoned its way to was not
+the order it built, and step 11's handoff, which asked the author to *report*
+every step 5 and step 6 decision, became reconstruction from memory. What that
+produced was a confident, checkable, false account of work that had not been
+done: "every figure was drawn twice" about figures that were drawn once.
+
+The one artifact that did exist made the case on its own. `ladder.json` was
+written at step 2.5 and then copied into the spec at step 7, and by the end the
+file held seven rungs against the document's five. The single persisted design
+artifact disagreed with the document, and nothing noticed, because the build only
+ever read the copy in the spec.
+
+**Produced:** `brief.json`, one file holding the whole design, written before
+anything is built and checked by `ig.py brief`. One entry per section, carrying
+the question it answers, the terms it teaches, the form it takes, the block that
+form beat, and for a drawing the **viewpoint** it is drawn from.
+
+- **No two figures may share a `view`.** An error, at the skeleton, before a line
+  of SVG exists. This check alone catches the document above.
+- **`rank` makes the cap of three a ranking** instead of an arrival order. The
+  close-up that was designed six times lost to a duplicate because it was fourth
+  in writing order, not because it was worse.
+- **`ig.py brief --order <id>`** prints a self-contained work order for one
+  section, including the vocabulary legal at that point in the ladder. That is
+  the half of the forward-reference check that runs *before* the writing; caught
+  late, its only remedy is to delete the sentence that used the word, and that is
+  a real edit that was really made.
+- **`--handoff` generates the decisions** that used to be nine bullets of recall,
+  and the build refuses a page that does not deliver what the brief promised.
+- **The ladder is derived, never authored.** `ladder.json` is gone and so is
+  `ig.py ladder`; `meta.brief` points at the brief and the rungs come from it
+  every build. One file cannot disagree with itself.
+
+Two removals came out of the same review.
+
+**`says` became `asks`.** A rung used to be one short declarative sentence capped
+at 24 words, on the reasoning that a skeleton written out in full is an essay
+with pictures added afterwards. The reasoning was right and the cap was the wrong
+instrument: what a short-declarative cap trains is a register, and the register
+is the clipped aphorism. Having written six of them to plan the document, the
+author wrote eleven more into it, and every lede on the page came out sounding
+like a fortune cookie. A question cannot be pasted into a document as its voice,
+and it does the skeleton's job better, because a section is finished when its
+question is answered. `brief-echo` now warns when a block reprints its own
+`shows` or `because`: the brief is a note to yourself, not the page's voice.
+
+**`misconception` was removed from the catalog.** It rendered as two columns,
+what people assume against what is actually true, one ✕ and one ✓ per row. That
+shape turns any thought into a listicle, and it reliably restates whatever
+picture sits beside it. The transcript has the model judging the block redundant
+with the adjacent figure three times and keeping it anyway, because `pipeline.md`
+mandated it: *"They become the `misconception` block."* It was then filled with a
+restatement of that figure with device names in the column heads, which was the
+worst line on the page. A mandated block will always be filled. The job survives
+as `meta.contradicts`, one line naming what the reader believes, landing wherever
+it lands best; the block that guaranteed it landed badly does not.
+
 ## Rules whose reason is not obvious
 
 - **Title caps were 10 and 9 words.** What fits in nine words is an aphorism, so
@@ -149,3 +220,48 @@ force it on all of them.
   print, so `ig.py measure` reports an authored one-pager as fitting and
   `ig.py render` then puts it on two sheets. **That trap is only closed for this
   block.** Any block still shipping a twin measures short by its printed height.
+
+## v3.5: the page about nothing
+
+A branch of four commits was explained as a `lesson`. Every rule was obeyed and
+the linter reported clean, and the page that came out named nothing at all:
+Channex was "the company's own channel tool", Mews was "a system added on a
+Wednesday", the eight categories were "the eight kinds a customer would
+recognise" with none of the eight named, and the whole document carried not one
+number. The only real nouns in the file sat in the glossary, after it had
+ended.
+
+Two instructions produced it, both working exactly as written. The reader was
+defined as "ignorant of your vocabulary, your **service names** and your
+database columns", so the service names went. And lesson mode said every term is
+introduced by being drawn "or rewritten into words with the identifier demoted
+to the table twin", so every remaining name went to the twin. Neither rule
+distinguished a lookup key from the name of the thing the document is about.
+
+The second half was the checkers writing the copy. `forward-reference` was a
+build error, and it fired on the word *catalog* in a hero reading "Four fixes to
+the RentRemote integrations catalog". The cheapest way past a build error is
+always to reword the sentence that tripped it, so the hero became "the list of
+outside software a customer can connect" and the title lost its subject. Four
+`ladder-unused` warnings were then cleared by deleting the terms from the brief
+rather than putting the words on the page. The document got vaguer and the build
+got quieter in the same edit, and "linter clean" was reported as a result.
+
+**Produced:** [specificity.md](references/specificity.md), the substitution test,
+and a fourth cover-test ("read it back: name three facts"). The reader is now
+ignorant of the vocabulary but not of the names, which are introduced rather
+than removed. Only machine identifiers are demoted to the twin.
+
+**Produced in code:** `forward-reference` is a warning, never a build error, and
+titling blocks are exempt outright, because the check cannot tell a term of art
+from the subject's own name and should not get to decide. `ladder-unused` now
+says the fix is on the page. `brief.py` refuses an `asks` that names nothing:
+the starter file shipped `"What is it?"`, and in lesson mode `asks` becomes the
+section heading verbatim, which is how a document went out titled "What is the
+thing being fixed?" three times over.
+
+**Also removed:** two rules that spent a session before any content existed.
+Every figure drawn twice with an epitaph for the loser, and three spines written
+out in full. One alternative, named, is enough to stop the first angle winning
+by default; the rest was ceremony, and ceremony is what the run had time for
+instead of facts.

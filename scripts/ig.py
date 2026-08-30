@@ -2,7 +2,8 @@
 """One entry point for the infographic skill.
 
     ig.py extract  <source>          read a document into a fact ledger + candidate forms
-    ig.py ladder   <rungs.json>      check the explanation ORDER, before anything is drawn
+    ig.py brief    <brief.json>      THE DESIGN: sections, forms, viewpoints, order
+    ig.py brief    <b> --order <id>  a work order for ONE section, for one subagent
     ig.py build    <spec.json>       compile a spec into HTML
     ig.py render   <spec.json>       compile AND render to PDF (the usual command)
     ig.py check    <doc.html>        lint a built document
@@ -501,104 +502,244 @@ def cmd_blind(args):
     return 0
 
 
-# ------------------------------------------------------------------ ladder --
+# ------------------------------------------------------------------- brief --
 
-LADDER_BRIEF = """\
-Below is an explanation of a subject, written as a numbered sequence. You have
+BRIEF_READ = """\
+Below is the skeleton of an explainer: the questions it answers, in the order it
+answers them, and one line per section saying what is on screen there. You have
 no other context, and you are not expected to have any.
 
 Read it once, in order, and answer:
 
 1. What is this about? One sentence, in your own words.
-2. At which number did you first lose the thread, if any? Say which and why.
+2. At which section did you first lose the thread, if any? Say which and why.
 3. Which words did you have to already know to get through it? List them.
 4. What question does the sequence leave you asking that it never answers?
 5. Is anything explained before the thing it depends on? Name the pair.
+6. Do any two of the pictures sound like the same picture? Name them.
 
 Do not review the writing, suggest improvements, or be encouraging. If it never
 became clear what the subject is, say exactly that and stop.
 
-{rungs}
+{body}
+"""
+
+ORDER = """\
+You are drawing ONE section of a document you cannot see. Do not read the rest
+of it, do not ask for it, and do not write anything outside this section.
+
+  section     {sid}
+  answers     {asks}
+  form        {form}
+  width       {span} of 12 columns
+  words       at most {words} in this block, including any text inside a drawing
+
+{picture}
+Vocabulary. These terms have been taught by the time a reader arrives here, so
+you may use them:
+{legal}
+
+These are taught LATER. Using one is a build error, and the fix is never to
+delete the sentence: say the thing in words the reader already owns.
+{later}
+
+Return one block's JSON and nothing else: no spec, no wrapper, no commentary.
+Its `id` is "{sid}". A drawn block carries `alt` and `encodes`, uses palette
+tokens rather than colour literals, and its `<text>` counts against the words
+above.
+
+Read `ig.py catalog {form}` before you start. Draw it with
+`ig.py sketch` before you return it: one block, on its own, in two seconds.
 """
 
 
-def cmd_ladder(args):
-    """The ladder, checked and read back, before a single block is chosen.
+def _brief_picture(section):
+    shows = str(section.get("shows", "")).strip()
+    if not shows:
+        return ""
+    lines = [f"  shows       {shows}"]
+    view = str(section.get("view", "")).strip()
+    if view:
+        lines.append(f"  view        {view}   (fixed centrally: every other "
+                     f"figure in this\n              document is drawn from a "
+                     f"different one. Do not change it.)")
+    rejected = section.get("instead_of") or {}
+    if rejected.get("block"):
+        lines.append(f"  beat        `{rejected['block']}`, because "
+                     f"{rejected.get('because', '')}")
+    return "\n".join(lines) + "\n\n"
 
-    This is the cheapest instrument in the skill and the earliest. `blind` is
-    the only real test of whether a stranger understands the document, and it
-    runs at step 10, against a built artifact, where its verdict costs a
-    rebuild and therefore gets rationalised away. The same question asked of
-    the ladder alone costs one turn and no rendering, and the answer arrives
-    while the order is still free to change.
+
+def cmd_brief(args):
+    """The design of the document, checked, before a line of it is built.
+
+    Steps 2 to 6 of the pipeline are the whole design and none of them used to
+    have a file, so every decision lived in a reasoning buffer, got re-litigated
+    on every pass, and was reconstructed from memory at handoff time. This is
+    that file, and this is the command that reads it.
     """
-    from lib import ladder as ladder_mod
+    from lib import brief as brief_mod
 
-    path = os.path.abspath(args.spec)
-    if not os.path.isfile(path):
-        print(f"[ladder] not found: {path}", file=sys.stderr)
-        return 1
-    with open(path, encoding="utf-8") as fh:
-        data = json.load(fh)
+    path = os.path.abspath(args.brief)
 
-    # A bare list of rungs is legal input, because the ladder is written at step
-    # 2.5 and the spec does not exist until step 7. Requiring a spec would mean
-    # the check can only run after the document has been built around it, which
-    # is the ordering this whole step exists to break.
-    spec = data if isinstance(data, dict) and "blocks" in data else None
-    if spec is None:
-        rungs = data if isinstance(data, list) else (data or {}).get("ladder")
-        if not isinstance(rungs, list):
-            print("[ladder] expected a spec, or a JSON list of rungs",
-                  file=sys.stderr)
+    if args.new:
+        if os.path.exists(path) and not args.force:
+            print(f"[brief] {path} exists (use --force)", file=sys.stderr)
             return 1
-        spec = {"meta": {"mode": "lesson", "ladder": rungs}, "blocks": []}
-
-    print("\n  The ladder, as a reader climbs it:\n")
-    print(ladder_mod.summary(spec))
-
-    if args.brief:
-        rule = "-" * 72
-        numbered = "\n".join(
-            f"{n}. {r.get('says', '')}"
-            for n, r in enumerate(spec["meta"].get("ladder") or [], 1)
-            if isinstance(r, dict))
-        print(f"\n[ladder] send a subagent the text between the rules, and "
-              f"nothing else:\n        no source, no spec, no subject line, no "
-              f"summary of any of them.\n\n{rule}")
-        print(LADDER_BRIEF.format(rungs=numbered))
-        print(rule)
-        print("\n  What comes back is evidence about the explanation, not a "
-              "request for changes:\n"
-              "    · answer 1 is not the subject → the ladder teaches something "
-              "else than\n      you think it does, and the document will too\n"
-              "    · answer 2 names a rung → that rung is doing two jobs; split "
-              "it\n"
-              "    · anything in answer 3 you did not plan to teach is a missing "
-              "rung\n"
-              "    · answer 5 is the forward reference the build cannot see yet, "
-              "because\n      the terms are still in your head rather than in "
-              "`introduces`")
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(brief_mod.STARTER, fh, indent=2, ensure_ascii=False)
+            fh.write("\n")
+        print(f"  wrote {path}\n\n  Fill it in before anything is built. The "
+              f"reader first: it decides which\n  words are allowed to appear "
+              f"at all. Then check it:\n\n    ig.py brief {args.brief}")
         return 0
 
-    errors, warnings = ladder_mod.audit(spec, registry)
+    if not os.path.isfile(path):
+        print(f"[brief] not found: {path}\n"
+              f"        write one with: ig.py brief {args.brief} --new",
+              file=sys.stderr)
+        return 1
+    data = brief_mod.load(path)
+    rows = brief_mod.sections(data)
+
+    # -- one section, as a self-contained work order -------------------------
+    if args.order:
+        section = next((s for s in rows
+                        if str(s.get("id")) == args.order), None)
+        if section is None:
+            known = ", ".join(str(s.get("id")) for s in rows)
+            print(f"[brief] no section with id {args.order!r}.\n"
+                  f"        known: {known}", file=sys.stderr)
+            return 1
+        errors, _warnings = brief_mod.audit(data, registry)
+        if errors and not args.force:
+            print(f"[brief] {len(errors)} fault(s) in the brief. Fix the "
+                  f"skeleton before sending anyone\n        to draw part of it, "
+                  f"or pass --force.\n", file=sys.stderr)
+            for error in errors:
+                print(f"[error] {error}", file=sys.stderr)
+            return 1
+        legal, later = brief_mod.vocabulary(data, args.order)
+        form = str(section.get("form", ""))
+        key, entry = registry.resolve(form)
+        span = section.get("span") or (entry or {}).get("span", 12)
+        rule = "-" * 72
+        print(f"\n[brief] send a subagent the text between the rules, and "
+              f"nothing else.\n\n{rule}")
+        print(ORDER.format(
+            sid=section.get("id"), asks=section.get("asks", "(no question)"),
+            form=key or form, span=span,
+            words=args.words,
+            picture=_brief_picture(section),
+            legal="\n".join(f"    {t}" for t in legal) or "    (none yet)",
+            later="\n".join(f"    {t}" for t in later) or "    (none)"))
+        print(rule)
+        return 0
+
+    # -- the decisions, generated rather than remembered ---------------------
+    if args.handoff:
+        meta = data.get("meta") or {}
+        print(f"\n  reader     {meta.get('reader', '')}")
+        print(f"  mode       {meta.get('mode', 'argument')}")
+        if meta.get("claim"):
+            print(f"  claim      {meta['claim']}")
+        if meta.get("contradicts"):
+            print(f"  contradicts {meta['contradicts']}")
+        print(f"  target     {meta.get('page', 'a4')}, "
+              f"theme {meta.get('theme', 'default')}\n")
+        figures = sorted((s for s in rows if brief_mod.is_figure(s)),
+                         key=lambda s: s.get("rank", 99))
+        for section in figures:
+            rejected = section.get("instead_of") or {}
+            print(f"  figure {section.get('rank', '?')}  "
+                  f"{section.get('id')}: {section.get('shows', '')}")
+            print(f"            view {section.get('view', '')}, over "
+                  f"`{rejected.get('block', '')}` because "
+                  f"{rejected.get('because', '')}")
+        rails = [s for s in rows if not brief_mod.is_figure(s)]
+        if rails:
+            print("\n  on rails   " + ", ".join(
+                f"{s.get('id')} ({s.get('form')})" for s in rails))
+        print("\n  What this cannot generate, and you still owe: what the "
+              "stranger said,\n  which warnings you accepted and why, and "
+              "where you left a gap.")
+        return 0
+
+    # -- hand the skeleton to someone who has never met the subject ----------
+    if args.read:
+        rule = "-" * 72
+        body = []
+        for number, section in enumerate(rows, 1):
+            body.append(f"{number}. {section.get('asks') or section.get('id')}")
+            if section.get("shows"):
+                body.append(f"   on screen: {section['shows']}")
+        print(f"\n[brief] send a subagent the text between the rules, and "
+              f"nothing else:\n        no source, no spec, no subject line, no "
+              f"summary of any of them.\n\n{rule}")
+        print(BRIEF_READ.format(body="\n".join(body)))
+        print(rule)
+        print("\n  What comes back is evidence about the design, not a request "
+              "for changes:\n"
+              "    · answer 1 is not the subject → the skeleton teaches "
+              "something else than\n      you think it does, and the document "
+              "will too\n"
+              "    · answer 2 names a section → that section is doing two jobs; "
+              "split it\n"
+              "    · anything in answer 3 you did not plan to teach is a "
+              "missing `teaches`\n"
+              "    · answer 5 is the forward reference the build cannot see "
+              "yet, because\n      the terms are still in your head rather than "
+              "in `teaches`\n"
+              "    · answer 6 is the one this file exists for: two figures that "
+              "sound alike\n      ARE alike, and the second one teaches nobody "
+              "anything")
+        return 0
+
+    # -- the brief against the page it produced ------------------------------
+    if args.against:
+        import build as build_mod
+        spec = build_mod.load_spec(args.against)
+        errors, warnings = brief_mod.against(data, spec, registry)
+    else:
+        errors, warnings = brief_mod.audit(data, registry)
+        ladder_spec = {"meta": {"mode": (data.get("meta") or {}).get("mode",
+                                                                    "argument"),
+                                "ladder": brief_mod.to_ladder(data)},
+                       "blocks": []}
+        from lib import ladder as ladder_mod
+        lerrors, lwarnings = ladder_mod.audit(ladder_spec, registry)
+        errors += lerrors
+        warnings += lwarnings
+        print("\n  The document, as a reader meets it:\n")
+        for number, section in enumerate(rows, 1):
+            mark = "▪" if brief_mod.is_figure(section) else "·"
+            print(f"  {number}. {mark} {section.get('asks') or section.get('id')}")
+            print(f"       {section.get('form', '?')}"
+                  + (f" from {section.get('view')}" if section.get("view") else "")
+                  + (f", teaching {', '.join(section['teaches'])}"
+                     if section.get("teaches") else ""))
+
     for warning in warnings:
         print(f"\n[warn] {warning}")
     if errors:
         print()
         for error in errors:
             print(f"[error] {error}")
-        print(f"\n  {len(errors)} fault(s). A lesson is the one order in which "
-              f"each idea can be\n  understood using only the ones before it.")
+        print(f"\n  {len(errors)} fault(s) in the design. Every one of them is "
+              f"cheaper here than it\n  is after the drawing, which is the "
+              f"entire reason this file is written first.")
         return 1
-    if spec.get("blocks"):
-        print("\n  Order holds, and no term is used before the rung that "
-              "teaches it.")
-    else:
-        print("\n  Shape is legal. Nothing is checked against a page yet: rerun "
-              "this against\n  the spec once the rungs have blocks to land on.")
-    print("  Now hand it to someone who has never met the subject: "
-          "ig.py ladder <file> --brief")
+    if args.against:
+        print("\n  The page delivers what the brief promised.")
+        return 0
+    print("\n  The design holds: every section has a form, every figure has a "
+          "viewpoint of\n  its own, and no term is used before the section that "
+          "teaches it.")
+    print("\n  Now hand it to someone who has never met the subject:"
+          "\n    ig.py brief <file> --read"
+          "\n  Then draw it one section at a time:"
+          "\n    ig.py brief <file> --order <id>")
     return 0
 
 
@@ -1105,11 +1246,21 @@ def main():
     p.add_argument("--dpi", type=int, default=80)
     p.set_defaults(fn=cmd_blind)
 
-    p = sub.add_parser("ladder", help="the explanation, checked, before anything is drawn")
-    p.add_argument("spec", help="a spec, or a JSON list of rungs written at step 2.5")
-    p.add_argument("--brief", action="store_true",
-                   help="print the brief for a reader who has never met the subject")
-    p.set_defaults(fn=cmd_ladder)
+    p = sub.add_parser("brief", help="the design of the document, checked, before it is built")
+    p.add_argument("brief", help="out/brief.json, written at step 2")
+    p.add_argument("--new", action="store_true", help="write a starter brief here")
+    p.add_argument("--order", metavar="ID",
+                   help="print a self-contained work order for ONE section")
+    p.add_argument("--read", action="store_true",
+                   help="hand the skeleton to a reader who has never met the subject")
+    p.add_argument("--handoff", action="store_true",
+                   help="the decisions, generated rather than remembered")
+    p.add_argument("--against", metavar="SPEC",
+                   help="check what got built against what was promised")
+    p.add_argument("--words", type=int, default=55,
+                   help="per-block word allowance printed in a work order")
+    p.add_argument("--force", action="store_true")
+    p.set_defaults(fn=cmd_brief)
 
     p = sub.add_parser("check", help="lint a built document")
     p.add_argument("html")

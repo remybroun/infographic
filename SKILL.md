@@ -1,7 +1,7 @@
 ---
 name: infographic
 description: "Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks."
-version: 3.3.1
+version: 3.5.0
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
@@ -24,9 +24,10 @@ stranger to understand it by looking at it.
   the first, correctness the second, pedagogy the third. None of them is
   advertising.
 - **You make it for** a reader outside the team: intelligent, curious, and
-  ignorant of your vocabulary, your service names and your database columns.
-  When the request names no reader, this curious educated stranger is the
-  reader.
+  ignorant of your vocabulary. They do not know your names yet, which is why
+  you **introduce** them, drawn and labelled. It is never a reason to remove
+  them. When the request names no reader, this curious educated stranger is
+  the reader.
 - **You are done when** you have rendered it, looked at it (`ig.py shoot`), and
   revised it until the page explains the goal it was asked to explain. Not
   when it resembles an example.
@@ -40,7 +41,7 @@ stranger to understand it by looking at it.
   encode nothing; marketing words and slogan cadence anywhere, including
   labels and legends; wit. Every word on the page is useful or it is gone.
 
-Three tests, and a document has to pass **all three**:
+Four tests, and a document has to pass **all four**:
 
 > **1. Cover the text.** Does the page still teach you anything?
 >
@@ -48,9 +49,15 @@ Three tests, and a document has to pass **all three**:
 > left on it?
 >
 > **3. Read it in order.** Does anything appear before the thing it depends on?
+>
+> **4. Read it back.** Can the reader repeat three facts from it: a name, a
+> number, a date? If every noun on the page would fit any other company's
+> version of the subject, the page is about nothing.
 
 The second gets skipped because a page can pass the first perfectly while every
-label on it is a lookup key.
+label on it is a lookup key. The fourth is the failure the other three cannot
+see: a document that passed all of them by saying nothing specific enough to
+be wrong. → [specificity.md](references/specificity.md)
 → [graphic-first.md](references/graphic-first.md#checking-it-landed)
 
 ## An improvised page, with a library at hand
@@ -84,6 +91,21 @@ channel** are owned by [integrity.md](references/integrity.md) and
 [color-and-type.md](references/color-and-type.md). Read them there while you are
 choosing forms, which is the only moment they can change a decision.
 
+- **Specific, or it is not an explanation.** Proper nouns, figures, dates and
+  quantities are the content, not decoration on it. Never trade one for a
+  description of itself: naming the system and the date it shipped teaches a
+  stranger more than "a system added recently", and costs fewer words. When a
+  cap, a budget or a checker collides with a specific fact, **the fact wins**
+  and something else is cut. Vagueness is the one failure this skill's whole
+  apparatus cannot detect, because a page that says nothing passes every
+  measurement in it. → [specificity.md](references/specificity.md)
+- **The checkers measure structure. They never write the copy.** `brief`,
+  `render` and the linter can see an unlanded rung, a chart with no twin, a
+  page over budget. None of them can see whether the page says anything. Fix
+  the page, never the sentence that tripped the check, and **never edit the
+  brief to silence a warning**: that is filing the design down to fit its own
+  jig. A warning you have read and rejected is closed. "Linter clean" is not a
+  result and does not go in the handoff.
 - **On aesthetics, the user's brief wins.** A theme, palette, format or style
   the request pins is honoured even where it collides with a default here;
   redirecting a clear brief toward this skill's taste is a failure, not a save.
@@ -92,30 +114,42 @@ choosing forms, which is the only moment they can change a decision.
   reader who has the concept and needs a finding; `lesson` for one who does not.
   It follows from the reader, not the subject. When the request says "explain
   X", it is a lesson. Then list what the reader will not know: every term is
-  either **introduced by being drawn** at the rung that teaches it, or rewritten
-  into words with the identifier demoted to the table twin. A `definitions`
+  **introduced by being drawn** at the rung that teaches it. Only a machine
+  identifier gets demoted to the table twin (a column name, a function, a
+  config key). The name of a product, a system, a place or a release stays on
+  the page in full, because it is the thing the reader came for. A `definitions`
   block is the fallback, not the destination, and a glossary before the lesson
   is the back of a textbook printed at the front.
 - **Say what the thing is before how it works.** Name the subject in plain words
   a stranger owns, then the mechanism. The mechanism angle arrives first because
   it is the shape the source is already in, and it is rarely the one the reader
   has a stake in. → [teaching.md](references/teaching.md)
-- **In `lesson` mode the ladder is written before a single form is chosen, and
-  the build checks it.** Rungs, one line each, in the order a reader climbs
-  them, each naming the terms it teaches and the block it lands on. A term used
-  before the rung that introduces it is `forward-reference`, a build error.
-  **The rung cap is 24 words, and that cap is the point:** a ladder is a
-  skeleton, not a draft.
-- **Three spines before one is chosen. Then choose, and say which.** Write three
-  one-line arguments and name the images each would live on, then pick the
-  strongest yourself and build it, saying in one line why that spine and not the
-  other two. Deciding is the job. Ask only when the three would serve genuinely
-  different readers *and* nothing in the request says which reader is at the
-  table, and then ask once, with a recommendation.
-  **A regeneration never opens the previous spec before the scenes are named**,
-  and declares `meta.supersedes`. **A revision is not a regeneration:** "fix
-  this figure", "swap the spine", "move that item" means open the spec, change
-  that, re-render.
+- **The design of the document is a file, written before anything is built.**
+  `brief.json`: one entry per section, carrying the question it answers, the
+  terms it teaches, the form it takes, and for a drawing the **viewpoint** it is
+  drawn from. `ig.py brief` checks it, `ig.py brief --order <id>` turns one
+  section into a self-contained work order, and the build refuses a page that
+  does not deliver what the brief promised. Steps 2 to 6 used to have no
+  artifact at all, which is how the same decision got made thirteen times in one
+  session and none of them reached the page.
+- **No two figures may be drawn from the same viewpoint.** A build error, at the
+  brief, before a line of SVG exists. Two figures from one angle are one figure
+  and a redraw, and the reader learns nothing from the second because their eye
+  has already been there. It is overridable by a written reason, never by
+  silence. → [teaching.md](references/teaching.md)
+- **Nothing written in the brief is copy, with one exception.** `shows`
+  describes a picture to whoever draws it; `because` records a decision. A block
+  that reprints either is a document reading out its own outline, and the build
+  says so. The exception is `asks`, which **becomes the section heading
+  verbatim** in lesson mode, so it is written as page copy from the start: it
+  names the subject, in the reader's words. "What is the thing being fixed?" is
+  the starter file, unedited, and the build refuses it.
+- **Name a second spine before you commit to the first.** One line each, and
+  the images each would live on. Then choose, build it, and say in one line why
+  that one. Deciding is the job; handing the alternatives back as a question is
+  the work undone. **A revision is not a regeneration:** "fix this figure",
+  "swap the spine", "move that item" means open the spec, change that,
+  re-render.
 - **Draw the idea, not the nearest available shape.** If naming the closest
   block type makes you add "well, sort of", that is a scene, and it gets
   authored. **Name the block you rejected, in writing**, after running `catalog
@@ -130,10 +164,6 @@ choosing forms, which is the only moment they can change a decision.
 - **A figure keeps every guarantee.** `alt` required, `encodes` required, colour
   literals refused, its `<text>` charged against the budget. It is not `raw`
   with a nicer name.
-- **Every figure gets drawn twice, and the loser gets a line.** Two rough
-  versions that differ in something structural, `ig.py sketch` both, keep one,
-  write one sentence saying what the other could not show.
-  → [scenes.md](references/scenes.md#draw-it-twice)
 - **The claim comes before the chart.** Every block earns its space by carrying
   one sentence. If you cannot write the sentence, do not draw the block.
 - **Never fabricate to complete a shape.** A missing series stays missing and
@@ -167,25 +197,22 @@ choosing forms, which is the only moment they can change a decision.
 
 ```bash
 python3 scripts/ig.py extract source.pdf -o out/ledger.json   # 1. facts
-                                                              # 2. name the reader, PICK THE MODE
-python3 scripts/ig.py ladder out/ladder.json --brief          # 2.5 WRITE THE EXPLANATION
-                                                              # 3. THREE SPINES, then pick one
-                                                              # 4. pick the target
-                                                              # 4.5 IMPROVISE THE PAGE, LIBRARY AT HAND
-                                                              # 5. NAME THE SCENES
-                                                              # 6. pick a form per claim
-python3 scripts/ig.py new out/spec.json                       # 7. write the spec
-python3 scripts/ig.py sketch out/comps.json                   #    EVERY FIGURE DRAWN TWICE
-python3 scripts/ig.py render out/spec.json --out-dir out      # 8-9. build, render, lint
+python3 scripts/ig.py brief out/brief.json --new              # 2-6. THE DESIGN, IN A FILE
+python3 scripts/ig.py brief out/brief.json                    #      check it before building
+python3 scripts/ig.py brief out/brief.json --read             #      a stranger reads the skeleton
+python3 scripts/ig.py brief out/brief.json --order <id>       # 7. ONE SECTION, ONE WORKER
+python3 scripts/ig.py sketch out/comps.json                   #    the block alone, in two seconds
+python3 scripts/ig.py render out/spec.json --out-dir out      # 8-9. assemble, render, lint
 python3 scripts/ig.py shoot out/doc.html                      # 10. LOOK AT IT
 python3 scripts/ig.py blind out/doc.html                      #     then a stranger looks
 ```
 
-Steps 2, 2.5, 3, 4.5, 5, 6 and the drawing half of 7 are the skill. Three
-orderings are load-bearing: **2.5 before 3** (the explanation before the
-argument), **3 forces three candidates** before one is chosen, and **5 before
-the catalog is opened**, because once it is open the question silently changes
-from *what does this look like?* to *which of the 57 shapes is closest?*
+The brief is the skill. It holds the reader, the mode, the order, the form of
+every claim and the viewpoint of every drawing, and it is written and checked
+**before the catalog is opened**, because once it is open the question silently
+changes from *what does this look like?* to *which of the 56 shapes is closest?*
+Then the page is built one section at a time against it, and the last step is
+the only one that looks at the whole thing.
 Full detail in [pipeline.md](references/pipeline.md).
 
 ## Which reference to load
@@ -194,6 +221,8 @@ Load the one that owns the decision in front of you. Do not read them all.
 
 - **Always, before writing a spec:** [graphic-first.md](references/graphic-first.md)
   and [anti-patterns.md](references/anti-patterns.md#before-you-write)
+- **Before the handoff, always:** [specificity.md](references/specificity.md).
+  Short, and it is the one check with no code behind it.
 - **Deciding what to build:** [scenes.md](references/scenes.md) ·
   [teaching.md](references/teaching.md) (a reader who has never met the subject) ·
   [choosing-a-visual.md](references/choosing-a-visual.md) (what form a claim needs)
@@ -218,9 +247,9 @@ checklist.
 
 ## The catalog
 
-57 block types in seven families: **teaching**, **diagram**, **structure**,
+56 block types in seven families: **teaching**, **diagram**, **structure**,
 **quantity**, **change**, **part-to-whole**, **editorial**. The teaching family
-(`analogy` `progressive` `misconception` `bridge`) is the one to know by name:
+(`analogy` `progressive` `bridge`) is the one to know by name:
 every other family draws a relation between things the reader already accepts,
 and these draw the moment before that. `figure` is the authored drawing, for the
 shape nothing else has.
@@ -234,7 +263,7 @@ cd <skill-base-dir> && python3 scripts/ig.py pictograms         # 52 drawn objec
 That listing is the whole decision surface for step 6 and names the file
 documenting each family. **Never guess a filename to find out how a block is
 written.** Aliases mean a spec can be written in ordinary words (`pie` →
-`donut`, `2x2` → `quadrant`, `draw` → `figure`, `myth` → `misconception`);
+`donut`, `2x2` → `quadrant`, `draw` → `figure`, `flow` → `process`);
 `catalog` prints them all.
 
 **When a paragraph appears in your draft, it is a block you have not chosen
@@ -295,9 +324,10 @@ compliance. `python3 scripts/ig.py selftest --render` builds all six.
 - **`scroll-architecture.json`**: the reference for `figure` work inside block
   mode. Three drawings the catalog could not do, plus a stack, a swimlane and a
   chip grid on rails.
-- **`architecture-explainer.json`**: the reference for `lesson` mode. A six-rung
-  ladder, an `analogy` before any mechanism, a `progressive`, a `misconception`,
-  glossary last. Read the ladder in its `meta` first.
+- **`architecture-explainer.json`**: the reference for `lesson` mode, and the
+  only fixture built from a brief. An `analogy` before any mechanism, a
+  `progressive`, one figure, glossary last. Read
+  `fixtures/briefs/architecture-explainer.json` first: it is the document.
 - `concept-explainer.json`: A4 explainer, default theme, teaches a concept
 - `data-report.json`: A4 report, rentos theme, findings from data
 - `poster-a3.json`: A3 one-page poster, exercises the structure blocks

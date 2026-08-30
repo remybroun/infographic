@@ -20,13 +20,9 @@ Three shapes, taken from how a subject is actually taught:
   finished architecture diagram shows a reader what a system contains; it never
   shows them how to think about it, because every part arrives at once and
   nothing says which parts were there first and why the rest became necessary.
-- `misconception` names what a newcomer already wrongly believes and puts the
-  truth beside it. What people get wrong is information, and a document that
-  never contradicts anything cannot correct anything.
-
-All three carry their idea in the picture, so they count as graphics.
-`progressive` draws real SVG; `analogy` and `misconception` are HTML and CSS
-compositions for the same reason `checklist` is, their content is sentences that
+All of them carry their idea in the picture, so they count as graphics.
+`progressive` draws real SVG; `analogy` is an HTML and CSS
+composition for the same reason `checklist` is, their content is sentences that
 must stay selectable, reflowable, and never silently truncated to fit a row.
 """
 
@@ -146,8 +142,7 @@ def analogy(b: dict, ctx: Ctx) -> str:
     body = (stage(known, "known", "You already know") +
             stage(new, "new", "So this is") + rows)
 
-    # No table twin by default, for the reason `misconception` and `checklist`
-    # have none: every pair is already selectable, reflowable text sitting in
+    # No table twin by default, for the reason `checklist` has none: every pair is already selectable, reflowable text sitting in
     # the page, so the twin is a verbatim second copy. It is not free, either.
     # Twins are collapsed on screen and forced open in print, so `ig.py measure`
     # cannot see one and an authored one-pager measures as fitting and then
@@ -251,31 +246,6 @@ def progressive(b: dict, ctx: Ctx) -> str:
     twin = chrome.details_table(["Stage", "Adds", "Now present"], rows,
                                 label="Show the build-up") if b.get("table", True) else ""
     return canvas.render() + twin
-
-
-# ---------------------------------------------------------- misconception ----
-
-def misconception(b: dict, ctx: Ctx) -> str:
-    """What a newcomer already believes, and what is actually the case.
-
-    Not a `comparison`: comparison argues that one of two framings is better,
-    and both of its sides are positions someone holds on purpose. This block
-    says the left column is what you probably assume, which is a claim about the
-    reader rather than about the subject, and the reason it teaches is that a
-    correction sticks where a statement does not.
-    """
-    items = [i for i in (b.get("items", []) or []) if isinstance(i, dict)]
-    rows = "".join(
-        f'<div class="ig-misc-row">'
-        f'<div class="ig-misc-assumed"><span aria-hidden="true">✕</span>'
-        f'<span>{inline(i.get("assumed", ""))}</span></div>'
-        f'<div class="ig-misc-actual"><span aria-hidden="true">✓</span>'
-        f'<span>{inline(i.get("actual", ""))}</span></div></div>'
-        for i in items)
-    heads = (f'<div class="ig-misc-head">'
-             f'<p>{inline(b.get("assumed_title", "What people assume"))}</p>'
-             f'<p>{inline(b.get("actual_title", "What is actually true"))}</p></div>')
-    return f'<div class="ig-misconception">{heads}{rows}</div>'
 
 
 # ----------------------------------------------------------------- bridge ----

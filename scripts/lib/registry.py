@@ -224,18 +224,6 @@ REGISTRY = {
                                 "once, and each one exists because of the last",
                     "instead_of": "one complete diagram, which shows what a system "
                                   "contains and never how to think about it"},
-    "misconception": {"fn": teach.misconception, "family": "teaching", "span": 12,
-                      # The role of a payload string comes from the last named
-                      # key on its path, so `items[0].assumed` is charged as
-                      # `assumed`, not as `items`. Mapping the container key
-                      # would leave both columns uncapped.
-                      "text_roles": {"assumed": "detail", "actual": "detail",
-                                     "assumed_title": "label",
-                                     "actual_title": "label"},
-                      "use_when": "newcomers reliably arrive with a wrong model and "
-                                  "the document has to displace it",
-                      "instead_of": "stating the correct version and hoping it "
-                                    "overwrites what the reader already believes"},
     "bridge": {"fn": teach.bridge, "family": "teaching", "span": 12,
                # The one block in this family that is not a picture. It is here
                # rather than in editorial because it only means anything as part
@@ -275,8 +263,6 @@ ALIASES = {
     "diagram": "figure", "illustration": "figure",
     "like": "analogy", "metaphor": "analogy", "is_like": "analogy",
     "buildup": "progressive", "build_up": "progressive", "stages": "progressive",
-    "myth": "misconception", "myths": "misconception",
-    "assumption": "misconception", "corrections": "misconception",
     "transition": "bridge", "so_far": "bridge",
 }
 

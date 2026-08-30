@@ -9,52 +9,7 @@
     "footer_left": "RentOS provider websites",
     "footer_right": "How it works, from the beginning",
     "date": "August 2026",
-    "ladder": [
-      {
-        "says": "A provider website is a rental company's own public site, built and run by us.",
-        "introduces": [
-          "provider website"
-        ],
-        "at": "what-it-is"
-      },
-      {
-        "says": "One shared application serves every company, instead of a separate copy each.",
-        "introduces": [
-          "shared application"
-        ],
-        "at": "one-or-many"
-      },
-      {
-        "says": "The web address a visitor types is what decides whose site they see.",
-        "introduces": [
-          "web address",
-          "tenant"
-        ],
-        "at": "how-it-knows"
-      },
-      {
-        "says": "Most visits are answered at the edge by a cache, never reaching the application.",
-        "introduces": [
-          "cache",
-          "edge"
-        ],
-        "at": "who-answers"
-      },
-      {
-        "says": "Adding a company means adding an address and a certificate, not another copy.",
-        "introduces": [
-          "certificate"
-        ],
-        "at": "adding-a-site"
-      },
-      {
-        "says": "The site displays RentOS data; RentOS stays the single source of truth.",
-        "introduces": [
-          "source of truth"
-        ],
-        "at": "who-owns-data"
-      }
-    ]
+    "brief": "../briefs/architecture-explainer.json"
   },
   "blocks": [
     {
@@ -105,27 +60,8 @@
       "viewbox": "0 0 640 110",
       "alt": "A column of company site names on the left, with a note that three hundred more exist, fans in and meets one box on the right holding a single running copy of the program.",
       "encodes": "concept",
-      "svg": "<text class=\"ig-fig-kicker\" x=\"4\" y=\"11\">WHAT VISITORS TYPE</text><text class=\"ig-fig-mono\" x=\"4\" y=\"36\">sunhomes.com</text><text class=\"ig-fig-mono\" x=\"4\" y=\"56\">casalisboa.pt</text><text class=\"ig-fig-mono\" x=\"4\" y=\"76\">atlasrentals.ma</text><text class=\"ig-fig-mute\" x=\"4\" y=\"98\">and 300 more</text><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"32\" x2=\"372\" y2=\"46\"/><line class=\"ig-fig-edge\" x1=\"150\" y1=\"52\" x2=\"372\" y2=\"56\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"72\" x2=\"372\" y2=\"66\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"94\" x2=\"372\" y2=\"76\"/><rect class=\"ig-fig-node-strong\" x=\"380\" y=\"12\" width=\"252\" height=\"92\" rx=\"8\"/><text class=\"ig-fig-kicker\" x=\"506\" y=\"34\" text-anchor=\"middle\">ONE SHARED APPLICATION</text><text class=\"ig-fig-figure ig-fig-accent\" x=\"506\" y=\"74\" text-anchor=\"middle\">1</text><text class=\"ig-fig-mute\" x=\"506\" y=\"95\" text-anchor=\"middle\">deployment, not 300 copies</text>"
-    },
-    {
-      "type": "misconception",
-      "title": "What people assume about running hundreds of sites",
-      "assumed_title": "What people assume",
-      "actual_title": "What is actually true",
-      "items": [
-        {
-          "assumed": "Each company gets its own copy of the code",
-          "actual": "Every company site runs the same one program"
-        },
-        {
-          "assumed": "A change has to be made site by site",
-          "actual": "One change reaches every site at once"
-        },
-        {
-          "assumed": "More companies means proportionally more machines",
-          "actual": "Cost barely moves as companies are added"
-        }
-      ]
+      "svg": "<text class=\"ig-fig-kicker\" x=\"4\" y=\"11\">WHAT VISITORS TYPE</text><text class=\"ig-fig-mono\" x=\"4\" y=\"36\">sunhomes.com</text><text class=\"ig-fig-mono\" x=\"4\" y=\"56\">casalisboa.pt</text><text class=\"ig-fig-mono\" x=\"4\" y=\"76\">atlasrentals.ma</text><text class=\"ig-fig-mute\" x=\"4\" y=\"98\">and 300 more</text><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"32\" x2=\"372\" y2=\"46\"/><line class=\"ig-fig-edge\" x1=\"150\" y1=\"52\" x2=\"372\" y2=\"56\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"72\" x2=\"372\" y2=\"66\"/><line class=\"ig-fig-edge-mute\" x1=\"150\" y1=\"94\" x2=\"372\" y2=\"76\"/><rect class=\"ig-fig-node-strong\" x=\"380\" y=\"12\" width=\"252\" height=\"92\" rx=\"8\"/><text class=\"ig-fig-kicker\" x=\"506\" y=\"34\" text-anchor=\"middle\">ONE SHARED APPLICATION</text><text class=\"ig-fig-figure ig-fig-accent\" x=\"506\" y=\"74\" text-anchor=\"middle\">1</text><text class=\"ig-fig-mute\" x=\"506\" y=\"95\" text-anchor=\"middle\">deployment, not 300 copies</text>",
+      "id": "three-hundred-sites"
     },
     {
       "type": "section",
@@ -240,7 +176,8 @@
           "text": "Availability and prices are never served from cache."
         }
       ],
-      "note": "An address matching no company gets a plain error, never somebody else's site."
+      "note": "An address matching no company gets a plain error, never somebody else's site.",
+      "id": "what-happens"
     },
     {
       "type": "section",

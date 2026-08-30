@@ -220,16 +220,17 @@ def fig_specimens():
                                f'height="9" rx="2" opacity="0.35"/>')
         return out
 
-    def correction(x, y):
-        """misconception: what is assumed, struck; what is true, kept."""
-        out = []
+    def bridge(x, y):
+        """bridge: one sentence carrying the reader from one picture to the next."""
+        out = [f'<rect class="ig-fig-node" x="{x}" y="{y + 8}" width="52" height="13" rx="2"/>',
+               f'<line class="ig-fig-edge" x1="{x + 2}" y1="{y + 30}" '
+               f'x2="{x + 2}" y2="{y + 44}"/>']
         for i in range(2):
-            yy = y + 12 + i * 18
-            out.append(f'<rect class="ig-fig-node-mute" x="{x}" y="{yy}" width="22" height="11" rx="2"/>')
-            out.append(f'<line class="ig-fig-edge-mute" x1="{x + 4}" y1="{yy + 5.5}" '
-                       f'x2="{x + 18}" y2="{yy + 5.5}"/>')
-            out.append(f'<rect class="ig-fig-node-strong" x="{x + 30}" y="{yy}" width="22" height="11" rx="2"/>')
-            out.append(f'<circle class="ig-fig-solid-accent" cx="{x + 41}" cy="{yy + 5.5}" r="2.5"/>')
+            yy = y + 32 + i * 7
+            out.append(f'<line class="ig-fig-rule" x1="{x + 9}" y1="{yy}" '
+                       f'x2="{x + (44 if i == 0 else 30)}" y2="{yy}"/>')
+        out.append(f'<rect class="ig-fig-node-strong" x="{x}" y="{y + 52}" '
+                   f'width="52" height="13" rx="2"/>')
         return out
 
     families = [
@@ -238,7 +239,7 @@ def fig_specimens():
         ("Part-to-whole", 7, (ring, waffle, sharebar)),
         ("Structure", 7, (proc, tree, venn)),
         ("Diagram", 6, (stack, lanes, chips)),
-        ("Teaching", 4, (mapping, buildup, correction)),
+        ("Teaching", 3, (mapping, buildup, bridge)),
         ("Editorial", 19, (kpis, callout, rows)),
     ]
 
@@ -256,14 +257,14 @@ def fig_specimens():
         "span": 12,
         "id": "specimens",
         "title": "The seven families of block, three specimens from each",
-        "subtitle": "57 forms. Editorial is the largest and the one to reach for least.",
+        "subtitle": "56 forms. Editorial is the largest and the one to reach for least.",
         "viewbox": "0 0 1060 424",
-        "alt": "Seven labelled groups, each showing three miniature specimens of the block shapes in that family: bars and grids for quantity, lines and slopes for change, rings and waffles for part-to-whole, chains and trees for structure, layers and lanes for diagram, paired columns and a three-stage build-up for teaching, tiles and rules for editorial.",
+        "alt": "Seven labelled groups, each showing three miniature specimens of the block shapes in that family: bars and grids for quantity, lines and slopes for change, rings and waffles for part-to-whole, chains and trees for structure, layers and lanes for diagram, a mapping, a three-stage build-up and a joining rule for teaching, tiles and rules for editorial.",
         "encodes": {
             "columns": ["Family", "Block types"],
             "rows": [["Editorial", 19], ["Quantity", 8], ["Part-to-whole", 7],
                      ["Structure", 7], ["Diagram", 6], ["Change", 5],
-                     ["Teaching", 4]],
+                     ["Teaching", 3]],
         },
         "svg": "".join(p),
     }

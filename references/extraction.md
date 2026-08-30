@@ -95,7 +95,7 @@ list:
   "audience" that is not the people who read something but a rule for computing
   an address. → [teaching.md](teaching.md)
 
-That inventory is what step 2.5 turns into the ladder. Neither `candidates` nor
+That inventory is what step 2.5 turns into the brief's order. Neither `candidates` nor
 `numbers` can contribute a single entry to it.
 
 ## Reading a source the extractor cannot help with

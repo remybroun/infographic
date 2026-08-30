@@ -1,12 +1,19 @@
 # The pipeline, end to end
 
-Twelve steps. Steps 1 to 6 are judgement and cannot be automated; 7 to 11 are
-mechanical and mostly are. The rules themselves live in `SKILL.md`; this file is
-the procedure and the commands.
+Thirteen steps. Steps 1 to 6.5 are judgement and cannot be automated; 7 to 11
+are mechanical and mostly are. The rules themselves live in `SKILL.md`; this file
+is the procedure and the commands.
 
 Read [anti-patterns.md](anti-patterns.md#before-you-write) now, not at step 10.
 Its first half is the ways this pipeline gets run and still produces the wrong
 document, and by review time none of them can be fixed.
+
+**Everything judged between steps 2 and 6 goes in one file, `brief.json`, and
+that file is checked before anything is built.** It used to be six steps of
+judgement with no artifact between them, so every decision was made in a
+reasoning buffer, re-made on the next pass, and reconstructed from memory at
+handoff. The brief is what makes a decision survive the turn it was made in, and
+it is what a per-section worker is briefed from.
 
 Three orderings are load-bearing, and all three exist to stop something else
 framing the work before you have decided what the work is:
@@ -15,11 +22,14 @@ framing the work before you have decided what the work is:
   it*, which is the frame of a document for someone who already has the concept.
   Write it first and the document opens on its conclusion no matter how
   carefully everything downstream is done. → [teaching.md](teaching.md)
+- **Step 6.5 before step 7.** The brief is checked before a line is drawn,
+  because every fault in it is cheaper here than after the drawing, and a
+  drawing that exists is a drawing that gets argued for.
 - **Step 3 before step 4.** Three candidates before one is chosen, because the
   first spine to occur to you always wins otherwise.
 - **Step 5 before step 6.** Which images the document lives on is decided
   **before** the catalog is opened, because once it is open the question
-  silently changes from *what does this look like?* to *which of the 57 shapes
+  silently changes from *what does this look like?* to *which of the 56 shapes
   is closest?* → [scenes.md](scenes.md)
 
 One economy rule spans the whole pipeline: **build cheap, then look, then
@@ -69,9 +79,15 @@ reader, not the subject: the same facts about a billing system are a lesson for
 the support team and an argument for the engineer who owns it.
 
 Then, in the same breath, **list the terms the reader does not already have**
-and give each one a destination: drawn at the rung that teaches it, rewritten
-into words with the identifier demoted to the twin, or `definitions` as the
-fallback. Skip this and the word budget decides for you, in favour of jargon.
+and give each one a destination: drawn at the rung that teaches it, or
+`definitions` as the fallback. Skip this and the word budget decides for you, in
+favour of jargon.
+
+Only a **machine identifier** is demoted to the twin: a column, a function, a
+config key. The name of a product, a system, a company or a release is not a
+term to be worked around, it is the subject, and it stays on the page in full.
+The list you are writing is of things to **introduce**, never of things to
+remove. → [specificity.md](specificity.md)
 
 **In `argument` mode, write the claim now**: one sentence the reader should
 believe by the end. Not a topic, a claim. If you cannot write it, nothing
@@ -81,31 +97,39 @@ downstream will rescue the document.
 need to believe a sentence, they need to hold a model, and a claim written here
 becomes a hero block stating the conclusion before the subject has a name.
 
-## 2.5 · Write the ladder (`lesson` mode: required)
-
-**Write the explanation before choosing a single form.** Rungs, one line each,
-in the order a reader has to climb them, where nothing appears before the thing
-it depends on. Each rung is capped at 24 words: a ladder is a skeleton, not a
-draft. If a rung will not fit in a line, it is two rungs.
-
-```json
-"meta": {"mode": "lesson", "ladder": [
-  {"says": "One program can run many separate company websites.",
-   "introduces": ["application"], "at": "one-program"},
-  {"says": "The web address is what tells it which company you want.",
-   "introduces": ["web address"], "at": "address-picks"}
-]}
-```
+## 2.5 · Open the brief
 
 ```bash
-python3 scripts/ig.py ladder out/ladder.json            # legal? in order?
-python3 scripts/ig.py ladder out/ladder.json --brief    # hand it to a stranger
+python3 scripts/ig.py brief out/brief.json --new
 ```
 
-A bare JSON list of rungs is legal input, because the spec does not exist yet.
-**Hand it to a stranger now**, before anything is built: `--brief` asks the
-blind-reader question of the ladder alone, costs one turn, and arrives while the
-order is still free to change.
+**This file is the document.** Everything decided between here and step 7 goes
+in it and nowhere else. Steps 2 to 6 used to be five steps of judgement with no
+artifact between them, and the cost was measured: in one session the same
+analogy decision was reopened thirteen times, a close-up was designed six times
+and shipped nowhere, and the block order the model reasoned its way to was not
+the order it built. None of it survived the turn it was decided in.
+
+Fill `meta` now, from step 2: the reader, the mode, and in `lesson` mode
+`contradicts`, one line naming what the reader already believes that this page
+has to take on. The sections get filled in over steps 3, 5 and 6, and step 6.5
+checks the whole thing before anything is drawn.
+
+**In `lesson` mode, write the questions and the order now.** One section per
+question a reader has to get answered, in the order they have to be answered,
+where nothing appears before the thing it depends on. `asks` is the question in
+the reader's words and it becomes the section opener; `teaches` names the words
+that section is allowed to introduce.
+
+```json
+{"id": "one-program", "asks": "How many programs are actually running?",
+ "teaches": ["application"], "form": "figure"}
+```
+
+The ladder the build checks is derived from this, every build. There is no
+second place to write it, which is the point: it used to live in its own file
+beside a spec that carried its own copy, and on the last real run those two
+disagreed without anything noticing.
 
 → [teaching.md](teaching.md)
 
@@ -117,11 +141,17 @@ or three images it would live on. If all three produce the same pictures, they
 are one spine wearing three titles; try again. **Then choose one, and say which.**
 
 **In `lesson` mode this step is different, and smaller.** A lesson has one true
-order, which step 2.5 already found. Write instead **three things a newcomer
-reliably gets wrong about this subject**, and keep the ones you have genuinely
-heard someone say. They become the `misconception` block, and they are where a
-lesson gets its tension: a document that never contradicts anything reads as
-marketing. Then skip to step 4.
+order, which step 2.5 already found. Write instead **the one thing a newcomer
+reliably gets wrong about this subject**, and only if you have genuinely heard
+someone say it. That goes in `meta.contradicts`, and it is where a lesson gets
+its tension: a document that never contradicts anything reads as marketing.
+
+**It is a job, not a block.** Where it lands is your choice and the brief
+records it: a drawing of the assumed thing beside the real one, a note under an
+analogy, a callout. What it may not be is a two-column list of what people
+assume against what is true. That shape turns any thought into a listicle, it
+restates whatever picture sits next to it, and the block that used to exist for
+it has been removed. Then skip to step 4.
 
 Then write the three to six supporting claims under the chosen spine. Each
 becomes a block or a section. **That list is the document.** Everything after it
@@ -174,6 +204,26 @@ scripts/ig.py catalog <type>`. Writing the rejection down also catches the
 failure in the other direction: a scene committed to a figure slot that was a
 `swimlane` all along.
 
+Each surviving scene becomes a section in the brief with `form: "figure"`, and
+carries four things:
+
+```json
+{"form": "figure", "rank": 1, "view": "many-inputs-one-box",
+ "shows": "a column of typed addresses, lines converging into one box",
+ "instead_of": {"block": "sankey", "because": "there is no quantity flowing"}}
+```
+
+`rank` is what makes the cap of three a ranking instead of an arrival order: the
+fourth-best image used to lose to whichever three were thought of first.
+
+**`view` names the viewpoint, and no two figures may share one.** It is a build
+error at the brief, before any drawing exists. This is the check the file was
+added for: the document that produced it spent three figure slots on the same
+object, face on, and nothing in the skill could see it because figures were only
+ever compared after they were drawn, by which time they were sunk cost. Moving a
+figure means changing where the reader stands: closer in, cut away, from the
+side, or beside something they already own.
+
 → [scenes.md](scenes.md#write-the-rejection-down) · [drawing.md](drawing.md)
 
 ## 6 · Choose a form per remaining claim
@@ -191,12 +241,54 @@ Ask, for each: is it even a chart? A stat tile, a callout or a definitions list
 is often the honest answer, and concept documents usually need more non-chart
 blocks than chart blocks.
 
+Each answer becomes that section's `form` in the brief, and a `shows` saying
+what is on screen. Nothing here is copy: `shows` is a note to whoever draws the
+block, and a block that reprints it is a page reading out its own outline.
+
 → [choosing-a-visual.md](choosing-a-visual.md) · [catalog/](catalog/README.md)
 
-## 7 · Write the spec
+## 6.5 · Check the brief, then hand it to a stranger
 
 ```bash
+python3 scripts/ig.py brief out/brief.json           # legal? in order? two of the same picture?
+python3 scripts/ig.py brief out/brief.json --read    # hand the skeleton to a stranger
+```
+
+Every fault found here is cheaper than the same fault found after the drawing,
+which is the whole reason the file is written first. `--read` asks the
+blind-reader question of the skeleton alone: it costs one turn, renders nothing,
+and the answer arrives while the order is still free to change. `ig.py blind` at
+step 10 asks the same question of a built page, where the verdict costs a
+rebuild and therefore gets rationalised away.
+
+## 7 · Build it one section at a time
+
+```bash
+python3 scripts/ig.py brief out/brief.json --order how-it-knows
 python3 scripts/ig.py new out/spec.json
+```
+
+`--order` prints a self-contained work order for one section: the question, the
+form, the block it beat, the viewpoint, the width, the word allowance, and **the
+vocabulary that is legal at that point in the ladder** along with the terms that
+are not yet. Send it to a subagent verbatim and nothing else. What comes back is
+one block's JSON.
+
+The word list is the half of the forward-reference check that runs before the
+writing rather than after it. Caught late, its only remedy is to delete the
+sentence that used the word, and that is a real edit that has really been made.
+
+A worker sees one section and never the sequence, so left alone every one of
+them draws the whole subject from the front. What stops that is not the worker's
+judgement, it is that the brief already fixed the viewpoint and checked it for
+collisions. **Workers may not change the claim, the form or the view, and may
+not introduce a term.** Any of those is a change to the brief, and the brief
+gets re-checked.
+
+Then point the spec at the brief, and the ladder is derived every build:
+
+```json
+"meta": {"brief": "brief.json"}
 ```
 
 **The spec is the file you edit.** When a figure's geometry is computed (arcs, a
@@ -300,18 +392,22 @@ undefined term, a forward reference, a first look that lands on the wrong
 picture); hierarchy and layout; cosmetics. Re-render, look again. Then say, in
 the handoff:
 
-- **which mode you chose and why**, in one line, naming the reader it follows
-  from. A lesson that should have been an argument is obvious to the person who
-  asked and invisible to you;
-- in `lesson` mode, **the ladder**, and what the stranger who read it said;
-- the claim, and **which spine carries it**, with the two you did not build
-  named in a clause each;
-- which scenes you authored, and what you demoted to the catalog;
-- for each figure, **the composition you kept and what the other could not
-  show**;
-- which forms you chose and **what you rejected**, with the reason;
+```bash
+python3 scripts/ig.py brief out/brief.json --handoff
+```
+
+**Do not write the decisions from memory.** The mode, the reader, the claim, the
+figures in rank order with the viewpoint and the block each one beat, and what
+went on rails: all of it is already in the brief and `--handoff` prints it. It
+used to be nine bullets asking the author to recall choices made six steps
+earlier, and what that produced was a confident, checkable, false account of
+work that had not been done.
+
+Then add the four things no file holds:
+
 - **what the blind reader said the document was about**, and every term they
   could not define, or a line saying the check did not run;
+- what the stranger who read the skeleton at step 6.5 said;
 - what the source did not contain, and where you left a gap rather than filling
   it;
 - any warning you decided to accept, and why.
@@ -325,8 +421,12 @@ user has to re-derive from scratch.
 
 ```bash
 ig.py extract  <src>            source → ledger + candidate forms
-ig.py ladder   <file>           the explanation ORDER, before anything is drawn
-ig.py ladder   <file> --brief   hand the ladder alone to a stranger
+ig.py brief    <brief.json>     THE DESIGN: sections, forms, viewpoints, order
+ig.py brief    <b> --new        write a starter brief
+ig.py brief    <b> --read       hand the skeleton alone to a stranger
+ig.py brief    <b> --order <id> a work order for ONE section, for one subagent
+ig.py brief    <b> --handoff    the decisions, generated rather than remembered
+ig.py brief    <b> --against <spec>   what got built, against what was promised
 ig.py new      <spec.json>      starter spec
 ig.py build    <spec.json>      spec → HTML
 ig.py render   <spec.json>      spec → HTML → PDF → lint

@@ -44,7 +44,8 @@ places itself, with `<div data-block="the-id"></div>`.
 | `theme` | `"default"` | `default` · `iris` · `rentos` · `mono`, or a path to a theme JSON |
 | `page` | `"a4"` | `a4` `a4-land` `letter` `letter-land` `a3` `a3-land` `slide` `poster` |
 | `mode` | `"argument"` | `argument` for a reader who has the concept; `lesson` for one who does not, which makes `ladder` required and enforced. See [teaching.md](teaching.md) |
-| `ladder` | none | the explanation, as ordered rungs. Required in `lesson` mode, checked in both. See below |
+| `brief` | none | path to the `brief.json` this document was designed from, relative to the spec. The ladder is derived from it every build, and the page is checked against it |
+| `ladder` | none | derived from `meta.brief`. Only write it by hand in a spec that has no brief |
 | `density` | `"graphic"` | `graphic` enforces the text budget and refuses body prose; `lesson` keeps the refusal with room to teach; `report` allows prose. See [graphic-first.md](graphic-first.md) |
 | `scenes` | none | one sentence, 8 words minimum, saying what the catalog carried when the document draws nothing by hand. Clears the linter's `no-authored-figure`. See [scenes.md](scenes.md) |
 | `encodes` | none | **required on an authored spec.** `"concept"` (no data drawn), or `{columns, rows}`, or a list of those, each rendered as a table twin. See [authored.md](authored.md) |
@@ -60,29 +61,37 @@ places itself, with `<div data-block="the-id"></div>`.
 Page choice is not cosmetic: type scale, margins, gutters and default block
 heights all derive from it. A poster is not an A4 document printed larger.
 
-### `meta.ladder`
+### `meta.brief` and the derived `meta.ladder`
 
-The explanation, written before any form is chosen, as an ordered list of rungs.
+`meta.brief` is the path to the `brief.json` this document was designed from,
+resolved relative to the spec. The explanation order is derived from it on every
+build and lands in `meta.ladder`:
 
 ```json
 "ladder": [
-  {"says": "One program can run many separate company websites.",
+  {"asks": "How many programs are actually running?",
    "introduces": ["application"], "at": "one-program"}
 ]
 ```
 
 | Key | Meaning |
 |---|---|
-| `says` | the rung in plain words. **Capped at 24 words** |
-| `introduces` | the terms this rung teaches. Each capped at 4 words |
-| `at` | the `id` of the block where the rung lands |
+| `asks` | the question that section answers, from the brief's `asks` |
+| `introduces` | the terms it teaches, from the brief's `teaches`. Each capped at 4 words |
+| `at` | the `id` of the block where the section lands |
+
+**Do not write `meta.ladder` by hand in a spec that has a brief.** Two copies of
+one order is how the previous arrangement failed: the standalone `ladder.json`
+and the spec's copy drifted seven rungs against five without anything noticing.
+A spec with no brief may still carry a hand-written ladder, and `says` is
+accepted there in place of `asks` for documents written before the change.
 
 The build refuses a `lesson` whose rungs land out of order (`ladder-order`) or
 whose terms appear in an earlier block (`forward-reference`). Both are warnings
 in `argument` mode. Check it without building:
 
 ```bash
-python3 scripts/ig.py ladder out/spec.json
+python3 scripts/ig.py brief out/brief.json --against out/spec.json
 ```
 
 ## `options`

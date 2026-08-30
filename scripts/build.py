@@ -21,6 +21,7 @@ from lib import authored  # noqa: E402
 from lib import blocks_figure as figure_mod  # noqa: E402
 from lib import density as density_mod  # noqa: E402
 from lib import derivation  # noqa: E402
+from lib import brief as brief_mod  # noqa: E402
 from lib import ladder as ladder_mod  # noqa: E402
 from lib import leading_numbers  # noqa: E402
 from lib import pictograms  # noqa: E402
@@ -98,10 +99,17 @@ FIGURE_CAP = 3
 
 class Document:
     def __init__(self, spec: dict, theme_name: str = None, page: str = None,
-                 tables: bool = None, texture: bool = None, density: str = None):
+                 tables: bool = None, texture: bool = None, density: str = None,
+                 spec_path: str = None):
         self.spec = spec
         meta = spec.get("meta", {})
         self.meta = meta
+
+        # The brief is absorbed first, because it is where the explanation order
+        # comes from. It runs here rather than in `build()` so that a spec handed
+        # over as a dict gets the same treatment as one handed over as a path:
+        # the two used to diverge, and the dict path silently lost its ladder.
+        self.brief = absorb_brief(spec, spec_path)
 
         # An authored page declares itself by carrying `body`. Validated here,
         # before geometry or theme resolution, for the same reason the budget is:
@@ -576,13 +584,50 @@ def load_spec(path: str) -> dict:
         return json.load(fh)
 
 
+def absorb_brief(spec: dict, spec_path: str = None):
+    """Derive `meta.ladder` from the brief the spec points at.
+
+    Nobody hand-writes a ladder any more. It used to live in its own file, next
+    to a spec that carried its own copy, and the two disagreed on the last real
+    run without anything noticing. Deriving it every build is the only shape in
+    which they cannot: there is one file, and it holds both the order and the
+    pictures, so a section that moves takes its rung with it.
+    """
+    meta = spec.setdefault("meta", {})
+    ref = str(meta.get("brief") or "").strip()
+    if not ref:
+        return None
+    base = os.path.dirname(os.path.abspath(spec_path)) if spec_path else os.getcwd()
+    path = ref if os.path.isabs(ref) else os.path.join(base, ref)
+    if not os.path.isfile(path):
+        raise SystemExit(
+            f"[build] meta.brief points at {path}, which does not exist.\n"
+            f"  The brief is the design of this document. Write it with "
+            f"`ig.py brief --new`,\n  or drop meta.brief if this spec was not "
+            f"built from one.")
+    data = brief_mod.load(path)
+    meta.setdefault("mode", (data.get("meta") or {}).get("mode", "argument"))
+    meta["ladder"] = brief_mod.to_ladder(data)
+    return data
+
+
 def build(spec, out_path: str = None, theme: str = None, page: str = None,
           tables: bool = None, texture: bool = None, density: str = None):
     spec_path = spec if isinstance(spec, str) else None
     if isinstance(spec, str):
         spec = load_spec(spec)
-    doc = Document(spec, theme, page, tables, texture, density)
+    doc = Document(spec, theme, page, tables, texture, density, spec_path)
     html = doc.render()
+    if doc.brief is not None:
+        errors, warnings = brief_mod.against(doc.brief, spec, registry)
+        doc.warnings.extend(warnings)
+        if errors:
+            lines = "\n".join(f"  {e}" for e in errors)
+            raise SystemExit(
+                f"[brief] the page does not deliver what the brief promised.\n\n"
+                f"{lines}\n\n  The brief is the design. If the drawing changed "
+                f"the design, change the brief\n  and say why, so the next "
+                f"section is briefed against what is actually there.")
     # A regeneration that declares what it replaces gets measured against it.
     # Nothing else in the toolchain can see this: the linter reads one finished
     # document and cannot ask whether a different one would have been better.

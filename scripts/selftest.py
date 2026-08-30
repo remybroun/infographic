@@ -241,8 +241,6 @@ MINIMAL = {
                     "stages": [{"label": "1. One site", "adds": ["A visitor", "The program"]},
                                {"label": "2. Many sites", "adds": "The front door",
                                 "detail": "Something has to choose"}]},
-    "misconception": {"items": [{"assumed": "Each site is its own copy",
-                                 "actual": "Every site is the same program"}]},
     "bridge": {"text": "So far every visitor has arrived at the same place."},
 }
 
@@ -628,11 +626,11 @@ def test_linter():
     check("a document that authored no figure is flagged",
           "no-authored-figure" in {f["code"] for f in cd.check(tmp)})
 
-    with open(os.path.join(FIXTURES, "specs", "architecture-explainer.json"),
-              encoding="utf-8") as fh:
+    drawn_path = os.path.join(FIXTURES, "specs", "architecture-explainer.json")
+    with open(drawn_path, encoding="utf-8") as fh:
         drawn = json.load(fh)
     with open(tmp, "w", encoding="utf-8") as fh:
-        fh.write(Document(drawn).render())
+        fh.write(Document(drawn, spec_path=drawn_path).render())
     check("a document with an authored figure is not",
           "no-authored-figure" not in {f["code"] for f in cd.check(tmp)})
 
@@ -736,11 +734,23 @@ def test_ladder():
 
     early = json.loads(json.dumps(ordered))
     early["blocks"][0]["text"] = "The address is looked up first."
-    errors, _ = lad.audit(early, registry)
+    errors, warnings = lad.audit(early, registry)
     check("a term used before its rung is a forward reference",
-          any("forward-reference" in e for e in errors), errors)
+          any("forward-reference" in w for w in warnings), warnings)
+    check("and it is a warning, never a build error", not errors, errors)
     check("and the message names the block and the term",
-          any('"address"' in e and "blocks[0]" in e for e in errors), errors)
+          any('"address"' in w and "blocks[0]" in w for w in warnings), warnings)
+
+    # A hero, a section opener and a bridge exist to name the subject. Charging
+    # them for a forward reference buys a vaguer title every single time, which
+    # is what it bought: a hero naming the document's subject was reworded until
+    # the subject was gone. → references/specificity.md
+    titled = json.loads(json.dumps(ordered))
+    titled["blocks"][0]["type"] = "section"
+    titled["blocks"][0]["title"] = "The address is looked up first."
+    _errors, warnings = lad.audit(titled, registry)
+    check("a title may name the subject before the rung that teaches it",
+          not any("forward-reference" in w for w in warnings), warnings)
 
     scrambled = json.loads(json.dumps(ordered))
     scrambled["meta"]["ladder"][0]["at"] = "c"
@@ -786,18 +796,27 @@ def test_ladder():
     lad.enforce(loose, registry)
     check("an argument document is warned, not stopped",
           any("forward-reference" in w for w in lad.check(loose, registry)))
+    # A forward reference never stops a build, in either mode. As an error the
+    # cheapest way past it was to reword the sentence that tripped it, so it
+    # reliably bought a vaguer page and a quieter build in the same edit.
+    lad.enforce(early, registry)
+    check("a lesson document is warned, not stopped",
+          any("forward-reference" in w for w in lad.check(early, registry)))
+
+    # A fault in the structure still stops it: a rung landing nowhere is not a
+    # judgement call about wording, it is a ladder that cannot be checked.
     raised = False
     try:
-        lad.enforce(early, registry)
+        lad.enforce(missing, registry)
     except SystemExit:
         raised = True
-    check("a lesson document is stopped", raised)
+    check("a rung that lands nowhere still stops a lesson", raised)
 
     plural = json.loads(json.dumps(ordered))
     plural["meta"]["ladder"][1]["introduces"] = ["address"]
     plural["blocks"][0]["text"] = "Many addresses arrive here."
     check("plurals do not slip past the check",
-          any("forward-reference" in e for e in lad.audit(plural, registry)[0]))
+          any("forward-reference" in w for w in lad.audit(plural, registry)[1]))
 
     # A citation naming a constant is not the page teaching a word to someone.
     exempt = json.loads(json.dumps(ordered))
@@ -806,6 +825,184 @@ def test_ladder():
         rung["at"] = rung["at"]
     errors, _ = lad.audit(exempt, registry)
     check("footnotes and twins do not trigger it", not errors, errors)
+
+
+def test_brief():
+    """The design of the document, checked before a line of it is drawn.
+
+    Expectations are written from the failure this file exists to catch: a
+    document that spent three figure slots drawing one object from one angle,
+    which no check in this skill could see, because figures were only ever
+    compared after they were drawn. The rules are stated before the
+    implementation is consulted: two figures may not share a viewpoint; the cap
+    of three is a ranking and not an arrival order; a drawn figure names the
+    block it beat; and nothing written in the brief may be reprinted as page
+    copy, because the brief is a note to yourself about a picture, not the
+    document's voice.
+    """
+    from lib import brief as br
+
+    print("\nthe brief, the design checked as an artifact")
+
+    good = {"meta": {"reader": "a curious stranger", "mode": "lesson",
+                     "contradicts": "they think it is a gearbox"},
+            "sections": [
+                {"id": "a", "asks": "What is it?", "teaches": ["gear bearing"],
+                 "form": "figure", "rank": 1, "view": "beside-a-ball-bearing",
+                 "shows": "the same bearing twice, balls then teeth",
+                 "instead_of": {"block": "analogy",
+                                "because": "the mapping is one image"}},
+                {"id": "b", "asks": "Why do the teeth matter?",
+                 "teaches": ["mesh"],
+                 "form": "figure", "rank": 2, "view": "one-tooth-enlarged",
+                 "shows": "one gear filling the frame, a tooth entering a gap",
+                 "instead_of": {"block": "progressive",
+                                "because": "the claim is a contact, not a build-up"}},
+                {"id": "c", "asks": "What do people get wrong?",
+                 "form": "callout",
+                 "shows": ""},
+            ]}
+
+    errors, warnings = br.audit(good, registry)
+    check("a well-formed brief passes", not errors, errors)
+    check("and warns about nothing", not warnings, warnings)
+
+    same = json.loads(json.dumps(good))
+    same["sections"][1]["view"] = same["sections"][0]["view"]
+    errors, _ = br.audit(same, registry)
+    check("two figures from one viewpoint are refused",
+          any("view-repeats" in e for e in errors), errors)
+    check("and the message names both sections",
+          any('"b"' not in e and "b is drawn from" in e for e in errors), errors)
+
+    # The escape hatch is a sentence, not a flag. Blocking outright would mean
+    # the one document that genuinely needs a second look at the same thing
+    # cannot be built; costing a written reason means it is never the default.
+    excused = json.loads(json.dumps(same))
+    excused["sections"][1]["view_repeats"] = "the second is the same frame, moving"
+    errors, warnings = br.audit(excused, registry)
+    check("a written reason turns it into a warning", not errors, errors)
+    check("and the reason is printed back",
+          any("view-repeats" in w for w in warnings), warnings)
+
+    crowded = json.loads(json.dumps(good))
+    for n in range(2):
+        crowded["sections"].append(
+            {"id": f"x{n}", "asks": "And?", "form": "figure", "rank": 3,
+             "view": f"v{n}", "shows": "something",
+             "instead_of": {"block": "callout", "because": "it is a picture"}})
+    errors, _ = br.audit(crowded, registry)
+    check("a fourth figure is refused",
+          any("the cap is 3" in e for e in errors), errors)
+    check("and the refusal calls the cap a ranking",
+          any("ranking exercise" in e for e in errors), errors)
+
+    unranked = json.loads(json.dumps(good))
+    del unranked["sections"][1]["rank"]
+    errors, _ = br.audit(unranked, registry)
+    check("a figure with no rank is refused",
+          any("needs `rank`" in e for e in errors), errors)
+
+    tied = json.loads(json.dumps(good))
+    tied["sections"][1]["rank"] = 1
+    errors, _ = br.audit(tied, registry)
+    check("two figures cannot hold the same rank",
+          any("already held by" in e for e in errors), errors)
+
+    itself = json.loads(json.dumps(good))
+    itself["sections"][0]["instead_of"]["block"] = "figure"
+    errors, _ = br.audit(itself, registry)
+    check("a rejection naming the form itself is refused",
+          any("instead_of.block is the form itself" in e for e in errors), errors)
+
+    silent = json.loads(json.dumps(good))
+    del silent["sections"][0]["instead_of"]
+    errors, _ = br.audit(silent, registry)
+    check("a drawn figure that names no rejected block is refused",
+          any("names the block it beat" in e for e in errors), errors)
+
+    invented = json.loads(json.dumps(good))
+    invented["sections"][2]["form"] = "sankey_of_vibes"
+    errors, _ = br.audit(invented, registry)
+    check("a form that is not a block type is refused",
+          any("is not a block type" in e for e in errors), errors)
+
+    mute = json.loads(json.dumps(good))
+    del mute["sections"][1]["asks"]
+    errors, _ = br.audit(mute, registry)
+    check("a lesson section with no question is refused",
+          any("no `asks`" in e for e in errors), errors)
+
+    twins = json.loads(json.dumps(good))
+    twins["sections"][1]["id"] = "a"
+    errors, _ = br.audit(twins, registry)
+    check("two sections cannot share an id",
+          any("already used at" in e for e in errors), errors)
+
+    faceless = json.loads(json.dumps(good))
+    faceless["meta"]["reader"] = ""
+    errors, _ = br.audit(faceless, registry)
+    check("a brief with no reader is refused",
+          any("meta.reader is empty" in e for e in errors), errors)
+
+    # -- the ladder, derived rather than authored ---------------------------
+    rungs = br.to_ladder(good)
+    check("the ladder comes out in the brief's order",
+          [r["at"] for r in rungs] == ["a", "b", "c"], rungs)
+    check("and carries the terms each section teaches",
+          rungs[0]["introduces"] == ["gear bearing"], rungs)
+    legal, later = br.vocabulary(good, "a")
+    check("vocabulary at a section is what came before it",
+          legal == ["gear bearing"] and later == ["mesh"], (legal, later))
+
+    # -- the brief against the page it produced -----------------------------
+    spec = {"meta": {"mode": "lesson"}, "blocks": [
+        {"id": "a", "type": "callout", "text": "A bearing with teeth."},
+        {"id": "b", "type": "callout", "text": "They cannot slip."},
+        {"id": "c", "type": "callout", "text": "It is not a gearbox."},
+    ]}
+    errors, _ = br.against(good, spec, registry)
+    check("a form that changed during the drawing is reported",
+          any("brief-form-changed" in e for e in errors), errors)
+
+    matched = json.loads(json.dumps(good))
+    for section in matched["sections"]:
+        section["form"] = "callout"
+        section.pop("rank", None)
+        section.pop("view", None)
+        section.pop("instead_of", None)
+    errors, _ = br.against(matched, spec, registry)
+    check("a page that delivers the brief passes", not errors, errors)
+
+    dropped = json.loads(json.dumps(matched))
+    thin = {"meta": {}, "blocks": spec["blocks"][:2]}
+    errors, _ = br.against(dropped, thin, registry)
+    check("a briefed section that never got built is reported",
+          any("brief-unbuilt" in e for e in errors), errors)
+
+    shuffled = {"meta": {}, "blocks": [spec["blocks"][2], spec["blocks"][0],
+                                       spec["blocks"][1]]}
+    errors, _ = br.against(matched, shuffled, registry)
+    check("a page that reorders the sections is reported",
+          any("brief-order-changed" in e for e in errors), errors)
+
+    # The failure that made `says` worth removing: the skeleton's register
+    # arriving on the page as its voice. `shows` is a note to whoever draws the
+    # block, and a block that reprints it is a document reading out its outline.
+    echoed = json.loads(json.dumps(matched))
+    echoed["sections"][0]["shows"] = "the same bearing twice, balls then teeth"
+    parroted = json.loads(json.dumps(spec))
+    parroted["blocks"][0]["text"] = "The same bearing twice: balls, then teeth."
+    parroted["blocks"][0]["type"] = "callout"
+    _errors, warnings = br.against(echoed, parroted, registry)
+    check("a block that reprints its own brief is warned about",
+          any("brief-echo" in w for w in warnings), warnings)
+
+    extra = json.loads(json.dumps(spec))
+    extra["blocks"].append({"id": "filler", "type": "callout", "text": "Also."})
+    _errors, warnings = br.against(matched, extra, registry)
+    check("a block the brief never named is warned about",
+          any("brief-unbriefed" in w for w in warnings), warnings)
 
 
 def test_lesson_density():
@@ -995,7 +1192,7 @@ def test_fixtures(render=False):
         try:
             with open(path, encoding="utf-8") as fh:
                 spec = json.load(fh)
-            doc = Document(spec)
+            doc = Document(spec, spec_path=path)
             html = doc.render()
             ok = "{{" not in html and len(html) > 3000
             check(f"{name} compiles", ok, f"{len(html)} bytes")
@@ -1713,9 +1910,12 @@ def test_authored():
                       '<p id="two">Counted somehow.</p><p id="three">One shipment.</p>',
               "blocks": [{"id": "early", "type": "callout",
                           "title": "A crate of them", "text": "Counting."}]}
+    from lib import ladder as _lad
     check("a forward reference hiding inside a placed block is caught",
-          _raises(lambda: Document(hidden).render()),
+          any("forward-reference" in w
+              for w in _lad.audit(hidden, registry)[1]),
           "the placeholder's payload must be visible to the ladder")
+    check("and it does not stop the build", Document(hidden).render())
 
     lesson = {"meta": {"title": "t", "encodes": "concept", "mode": "lesson",
                        "ladder": [{"says": "A widget is a small thing.",
@@ -1731,10 +1931,11 @@ def test_authored():
     broken = json.loads(json.dumps(lesson))
     broken["body"] = '<p id="one">A widget in a crate.</p><p id="two">A crate.</p>' \
                      '<p id="three">One shipment.</p>'
+    warned = _lad.audit(broken, registry)[1]
     check("a forward reference in authored markup is still caught",
-          _raises(lambda: Document(broken).render()))
-    check("the refusal names it a forward reference",
-          "forward-reference" in _error(lambda: Document(broken).render()))
+          any("forward-reference" in w for w in warned), warned)
+    check("and the page still builds, because the fix is a judgement",
+          Document(broken).render())
 
 
 def main():
@@ -1760,6 +1961,7 @@ def main():
     test_linter()
     test_derivation()
     test_ladder()
+    test_brief()
     test_lesson_density()
     test_leading_numbers()
     test_pictograms()

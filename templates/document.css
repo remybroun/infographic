@@ -745,8 +745,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   color: var(--ig-muted);
 }
 
-/* -------------------------------------------------------- misconception ---- */
-
 /* analogy: two stages, and one exploded-drawing numbering across both.
 
    The correspondence is carried by position and by a repeated number, never by
@@ -842,51 +840,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   background: var(--ig-accent);
   color: var(--ig-page);
 }
-
-/* Deliberately not styled as a comparison. A comparison is symmetrical, two
-   positions someone holds on purpose; this is asymmetrical, because the left
-   column is what the reader probably believes and the right is what is true.
-   The wrong column is set back and de-emphasised so the eye lands on the
-   correction, which is the half that has to survive being skimmed. */
-
-.ig-misconception { display: grid; gap: 8px; }
-.ig-misc-head {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  font-size: calc(var(--ig-body-size) * 0.74);
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-.ig-misc-head p { margin: 0; color: var(--ig-muted); }
-.ig-misc-head p:last-child { color: var(--ig-accent-text); }
-.ig-misc-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  align-items: stretch;
-}
-.ig-misc-row > div {
-  display: flex;
-  gap: 8px;
-  padding: 11px 13px;
-  border-radius: calc(var(--ig-radius) * 2);
-  font-size: calc(var(--ig-body-size) * 0.9);
-  line-height: 1.4;
-}
-.ig-misc-assumed {
-  background: var(--ig-sunken);
-  color: var(--ig-secondary);
-}
-.ig-misc-actual {
-  background: var(--ig-accent-wash);
-  color: var(--ig-ink);
-  font-weight: 500;
-}
-.ig-misc-row span[aria-hidden] { font-weight: 700; line-height: 1.35; }
-.ig-misc-assumed span[aria-hidden] { color: var(--ig-muted); }
-.ig-misc-actual span[aria-hidden] { color: var(--ig-accent-text); }
 
 /* -------------------------------------------------------------- bridge ---- */
 

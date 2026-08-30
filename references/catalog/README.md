@@ -23,7 +23,7 @@ vocabulary at all for *meeting* one.
 | File | Family | Blocks |
 |---|---|---|
 | **[diagram.md](diagram.md)** | **The forms that absorb paragraphs** | `stack` `swimlane` `scorecard` `gauge` `chips` |
-| **[teaching.md](teaching.md)** | **Meeting a subject for the first time** | `analogy` `progressive` `misconception` · plus `bridge`, **lesson density only** |
+| **[teaching.md](teaching.md)** | **Meeting a subject for the first time** | `analogy` `progressive` · plus `bridge`, **lesson density only** |
 | [quantity.md](quantity.md) | How much, and how items compare | `bar` `column` `lollipop` `diverging` `likert` `scatter` `heatmap` `matrix` |
 | [change.md](change.md) | Movement over time or between two states | `line` `area` `dumbbell` `slope` `timeline` |
 | [part-to-whole.md](part-to-whole.md) | Share, composition, proportion | `share_bar` `unit` `donut` `treemap` `funnel` `pyramid` `meter` |
