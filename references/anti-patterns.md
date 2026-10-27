@@ -204,15 +204,14 @@ only the middle one is correct.
 Why: a topic names a folder, not a document. The blocks end up in whatever order
 the data arrived in, and the reader is left to assemble the argument themselves.
 
-**❌ Too clever: a title that is a slogan.** "Retention is a pricing problem",
-"Compound interest is a shape, not a rate", "Facts an agent may quote, not text
-it may paraphrase", "The channel narrows, swells, then narrows again".
+**❌ Too clever: a title that is a slogan.** "Compound interest is a shape, not
+a rate", "The channel narrows, swells, then narrows again".
 Why: it tells the reader how to feel before telling them what they are looking
 at. It cannot be scanned, cited, searched, or read out in a meeting without
-sounding like an advertisement, and it hides the scope: not one of those four
-names a subject, a period, or a unit. The three tells are rhetorical antithesis
-("X, not Y"), metaphor ("in shadow", "narrows", "is a shape"), and a bare verb
-phrase ("Corroboration saturates").
+sounding like an advertisement, and it hides the scope: neither names a subject,
+a period, or a unit. The three tells are rhetorical antithesis ("X, not Y"),
+metaphor ("narrows", "is a shape"), and a bare verb phrase ("Corroboration
+saturates").
 
 **✅ Right: literal, specific, sober.** "Retention by acquisition channel, 2024
 to 2026". "Compound and simple interest on £10,000 at 7% over 30 years".
@@ -320,10 +319,44 @@ is still the cliché.
 flourishes placed to fill space.
 ✅ Every visual element encodes something. The whitespace is the ornament.
 
-**❌ Marketing words, anywhere.** "Unlock", "seamless", "powerful", and the
-slogan cadence they travel in, including labels and legends.
+### The words
+
+Everything else here measures the page. This measures the sentences, and it
+runs last: `python3 scripts/ig.py copy out/doc.html` quotes each line it finds
+and names the fix. It is kept out of the build because it is the only check
+here that is closed by **rewriting** rather than by deleting.
+
+**❌ Marketing words, anywhere.** "Unlock", "seamless", "powerful", "robust",
+"leverage", and the slogan cadence they travel in, labels and legends included.
 ✅ Museum-plaque register: sober, literal, flat. The imagination is spent on
 the drawings, never the words.
+
+**❌ The generated-prose cadence, in any field and not just the title.**
+Antithesis ("not just X, but Y"); the colon reveal ("The detail that makes it
+work: a separate agent grades it"); the trailing `-ing` clause that pretends to
+explain ("underscoring the team's commitment"); puffery ("marks a pivotal
+moment"); hedged sourcing ("studies show"); the setup that flatters the author
+("what most people get wrong"); the recap ending ("Ultimately,").
+Why: **the word cap selects for them.** With nothing specific to say and six
+words to say it in, these are the shapes that fit, and each is a correctly
+sized string that passes every other check in this file.
+✅ State the fact. Hedged sourcing has a second fix: name it in `footnotes`, or
+cut the claim. Never invent one.
+
+**❌ A verb phrase where a verb would do**, or something other than a person
+doing it: "serves as a centralized hub for", "has the ability to", "the
+decision emerged".
+✅ "Tracks", "can", "the team shipped it Tuesday". Shorter *and* more specific,
+which is the argument this whole skill runs on.
+
+**❌ Telling the reader what to notice.** "This distinction matters", "as you
+can see", "the key point is".
+✅ The picture is the demonstration. A line calling it interesting has swapped
+the demonstration for an opinion, so show it or cut the aside.
+
+**❌ Renaming the subject.** Channex, then "the tool", then "the platform".
+✅ Repeat the word you taught; a newcomer reads synonyms as four things.
+→ [teaching.md](teaching.md#what-the-build-checks)
 
 ## Form choice
 

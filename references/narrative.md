@@ -113,6 +113,12 @@ says what to notice, in one flat sentence. Do not make the title do both, and do
 not compress the two into an aphorism that does neither. A subtitle with
 nothing to notice is deleted, not filled.
 
+**Flat means a plain sentence.** Not a noun phrase, a colon and a reveal ("The
+detail that makes it work: a separate agent grades it"), and never a line saying
+the point matters. The picture is the demonstration; a caption calling it
+interesting has swapped the demonstration for an opinion.
+→ [anti-patterns.md](anti-patterns.md#the-words)
+
 ## Length discipline
 
 Cut a block when:
@@ -129,4 +135,6 @@ it and get better.
 
 End on the implication, not on a chart. A document that stops at its last chart
 leaves the reader holding evidence and no conclusion, and they will supply one
-of their own.
+of their own. Not on a recap either: "In conclusion", "Ultimately", or a final
+block restating the page spends the last thing the reader sees on something they
+have just read.

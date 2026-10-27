@@ -446,6 +446,36 @@ If you cannot tell what the document is about, say exactly that and stop.\
 """
 
 
+def cmd_copy(args):
+    """The register pass. Last, deliberately: see lib/copy_register.py."""
+    from lib import copy_register
+    sys.path.insert(0, os.path.join(HERE))
+    from check_document import split_document
+
+    html_path = os.path.abspath(args.html)
+    if not os.path.isfile(html_path):
+        print(f"[copy] not found: {html_path}", file=sys.stderr)
+        return 1
+    with open(html_path, encoding="utf-8") as fh:
+        _, body = split_document(fh.read())
+
+    runs = copy_register.text_runs(body)
+    findings = copy_register.scan(runs)
+    errors = sum(1 for level, *_ in findings if level == "error")
+
+    print(f"\n[copy] {len(runs)} text nodes read in {os.path.basename(html_path)}")
+    if findings:
+        print()
+        for level, code, line, fix in findings:
+            mark = {"error": "✗", "warn": "!", "note": "·"}[level]
+            print(f"  {mark} {code}\n      “{line}”\n      → {fix}\n")
+    else:
+        print("  no patterns matched.\n")
+    print(copy_register.JUDGEMENT)
+    print()
+    return 1 if errors else 0
+
+
 def cmd_blind(args):
     html_path = os.path.abspath(args.html)
     shots = []
@@ -1238,6 +1268,10 @@ def main():
                    help="window height before trimming; raise it for a tall drawing")
     p.add_argument("--wait", type=int, default=1200)
     p.set_defaults(fn=cmd_sketch)
+
+    p = sub.add_parser("copy", help="the register pass: read the words, last")
+    p.add_argument("html", help="a built document")
+    p.set_defaults(fn=cmd_copy)
 
     p = sub.add_parser("blind", help="brief a reader who has never seen the source")
     p.add_argument("html", help="a built document, or a directory of PNGs")

@@ -47,6 +47,10 @@ same techniques that make a finding land make a false finding land harder.
   conversation, not a finding.
 - **Correlation is not cause.** If the document implies a mechanism the data does
   not establish, a `callout` naming that limit is not optional.
+- **A source is a name, never a hedge.** "Studies show", "experts agree",
+  "industry reports suggest" and "widely regarded as" are a citation's shape
+  with the citation removed, and they read as evidence. Name it in `footnotes`
+  or cut the claim. If you have no source, ask; never invent one.
 
 ## What the document must always carry
 

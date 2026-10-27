@@ -106,11 +106,9 @@ specifically, what the reader is looking at. The subtitle states the finding in
 one flat sentence. Nothing else is needed, because the graphic is already showing
 them the evidence.
 
-Both are **sober and descriptive**. A title is a specimen label, not a headline:
-it names the subject, the scope and the period, and it survives being read out
-loud in a meeting without embarrassing anyone. No aphorisms, no metaphors, no
-"X, not Y" antithesis, no verb-phrase slogans. If a title would work as a
-chapter epigraph, it is wrong. See
+Both are **sober and descriptive**: a specimen label, naming the subject, the
+scope and the period. If a title would work as a chapter epigraph, it is wrong.
+The registers, and the three tells of the wrong one, are in
 [anti-patterns.md](anti-patterns.md#titles).
 
 The one exception is a `section` opener in `lesson` mode, which is the question
@@ -145,6 +143,10 @@ Rewrite, never truncate. These are the four moves that actually work:
 - **Delete the throat-clearing.** "It is worth noting that the system will
   typically resolve the tenant from the Host header" becomes "Tenant resolved
   from the Host header". 15 words to 5, nothing lost.
+- **Let the verb do the work, and give it someone to be done by.** "Serves as a
+  centralized hub for" is "tracks"; "has the ability to" is "can"; "the decision
+  emerged" is "the team decided on Tuesday". Every one is shorter *and* more
+  specific, which is why this move never trades away meaning to buy words.
 - **Move the number into the graphic.** If the sentence exists to carry a
   figure, the figure belongs on the mark and the sentence disappears.
 - **Split one detail into two labels.** A twelve-word step detail is often two
@@ -164,14 +166,11 @@ Rewrite, never truncate. These are the four moves that actually work:
 
 Cutting words is not permission to cut meaning.
 
-- **A graphic still needs its table view.** Every chart ships its accessibility
-  twin, and the twin does not count against the word budget. Never pass
-  `--no-tables` to buy headroom.
-- **Never fabricate to fill a shape.** A missing series stays missing. A
-  `scorecard` with invented per-criterion scores is worse than a `bar` of the
-  real totals, because it looks like more evidence than you have.
-- **Sources survive.** `footnotes` is exempt so that method, caveats and
-  provenance are never what gets cut first.
+- **Twins and sources are exempt, so they are never what gets cut.** The table
+  view does not count against the budget, and neither does `footnotes`. Never
+  pass `--no-tables` to buy headroom. → [integrity.md](integrity.md)
+- **Never fabricate to fill a shape.** A missing series stays missing, and it
+  looks like more evidence than you have.
 - **A document with no words at all is not the goal.** `no-graphics` and
   `prose-only` are errors, but so is a chart nobody can interpret. The subtitle
   stating the conclusion is the minimum, not an optional extra.

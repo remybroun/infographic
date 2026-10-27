@@ -382,7 +382,22 @@ A reader who would remember no image an hour later, or only "a nice diagram",
 is telling you the spine landed on no picture.
 If no subagent is available, say in the handoff that this check did not run.
 
-→ [anti-patterns.md](anti-patterns.md#before-you-ship) · [integrity.md](integrity.md)
+### Then read the words, last of all
+
+```bash
+python3 scripts/ig.py copy out/doc.html
+```
+
+The only pass that reads sentences rather than shapes. It quotes each line
+carrying the generated-prose cadence, names the fix, then prints the four things
+no pattern reaches: substitution, active voice, show-don't-tell, rhythm.
+
+It runs **here** and not in the build on purpose. Every upstream check measures
+structure, so it can only be satisfied by deleting; this one measures the
+sentence, so it can only be satisfied by writing a better one. A clean scan is
+not a finished document, it is an unmeasured one.
+
+→ [anti-patterns.md](anti-patterns.md#the-words) · [integrity.md](integrity.md)
 
 ## 11 · Iterate, then hand off
 
@@ -434,6 +449,7 @@ ig.py check    <doc.html>       lint a built document
 ig.py shoot    <doc.html>       render it to PNGs so you can LOOK at it
 ig.py sketch   <blocks.json>    ONE block alone, at its real width, in 2 seconds
 ig.py blind    <doc.html>       the brief for a reader who has not seen the source
+ig.py copy     <doc.html>       LAST: read the words, not the shapes
 ig.py measure  <spec.json>      per-block height and words, before rendering
 ig.py catalog                   list every block type
 ig.py catalog  <type>           one block: payload example, every key, its docs

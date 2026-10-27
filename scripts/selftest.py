@@ -1938,6 +1938,60 @@ def test_authored():
           Document(broken).render())
 
 
+def test_copy_register():
+    """The register pass. Its whole value is precision: a check that cries wolf
+    on a correctly written method note gets ignored, so the role-awareness is
+    what is asserted here, not the word lists."""
+    from lib import copy_register as cr
+
+    def codes(html):
+        return {code for _, code, _, _ in cr.scan(cr.text_runs(html))}
+
+    check("marketing words are caught",
+          "banned-word" in codes('<p class="ig-block-title">A seamless pipeline</p>'))
+    check("antithesis is caught",
+          "binary-contrast" in codes(
+              '<p class="ig-block-title">Not just a cache, but a ledger</p>'))
+    check("puffery is caught",
+          "importance-puffery" in codes(
+              '<p class="ig-block-subtitle">The release marks a pivotal moment</p>'))
+    check("a hedged source is caught",
+          "weasel-attribution" in codes('<p class="ig-prose">Studies show it works</p>'))
+    check("a verb phrase doing a verb's job is caught",
+          "fake-strong-verb" in codes(
+              '<p class="ig-prose">It serves as a hub for sponsors</p>'))
+
+    reveal = '<p class="ig-block-title">Operator survey: the reply burden</p>'
+    check("a colon reveal in a title is caught", "colon-reveal" in codes(reveal))
+    note = '<p class="ig-block-note">Reversed ordinal ramp: the earliest is dark</p>'
+    check("the same shape in a method note is not", "colon-reveal" not in codes(note))
+    foot = ('<div class="ig-footnotes"><p class="ig-footnotes-title">Sources</p>'
+            '<ol><li>Request figures: edge logs, one week</li></ol></div>')
+    check("nor a source label in footnotes", "colon-reveal" not in codes(foot))
+
+    check("an adverb costs something in a capped field",
+          "empty-adverb" in codes('<p class="ig-block-title">How it actually works</p>'))
+    check("and nothing in a footnote",
+          "empty-adverb" not in codes(
+              '<p class="ig-footnotes-title">Actually measured weekly</p>'))
+
+    twin = ('<details class="ig-table-view"><table><tr><td>a seamless run</td>'
+            '</tr></table></details>')
+    check("the accessibility twin is not scanned", codes(twin) == set())
+
+    cycling = ('<p class="ig-prose">The system is fast. The tool is fast. '
+               'The platform is fast.</p>')
+    check("a subject renamed three ways is caught",
+          "synonym-cycling" in codes(cycling))
+
+    check("an em dash is caught",
+          "em-dash" in codes('<p class="ig-prose">One thing — then another</p>'))
+    check("a sober page scans clean",
+          codes('<p class="ig-block-title">Retention by channel, 2024 to 2026</p>'
+                '<p class="ig-block-subtitle">Paid search retains 12 points '
+                'less than referral.</p>') == set())
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--render", action="store_true", help="also build fixtures to PDF")
@@ -1965,6 +2019,7 @@ def main():
     test_lesson_density()
     test_leading_numbers()
     test_pictograms()
+    test_copy_register()
     test_fixtures(args.render)
 
     print(f"\n{len(PASSED)} passed, {len(FAILED)} failed")

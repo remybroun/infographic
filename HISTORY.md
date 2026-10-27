@@ -265,3 +265,42 @@ Every figure drawn twice with an epitaph for the loser, and three spines written
 out in full. One alternative, named, is enough to stop the first angle winning
 by default; the rest was ceremony, and ceremony is what the run had time for
 instead of facts.
+
+## v3.6: the page that measured clean and read like a machine
+
+Every check in the skill measured shape. `density.py` counted words,
+`check_document.py` counted blocks, twins, hues and ink, `ladder.py` checked the
+order terms arrived in, and `anti-patterns.md` said so plainly without a way to
+act on it: *all of them measure shape*. So a document could pass the whole
+apparatus while every sentence in it was the generated cadence, and two shipped
+fixtures did. `poster-a3` carried a block titled "Operator survey: the reply
+burden" and `scroll-architecture` one titled "Patch surface: a site each against
+one tenant-aware app". Both are the colon reveal, both were written after the
+title rule was in force, and nothing in the repo could see them.
+
+The cause is the same one that produced `undefined-vocabulary`: **the word cap
+selects for these shapes.** With six words to spend and nothing specific to say,
+antithesis, the colon reveal, the trailing `-ing` clause and importance puffery
+are what fits. They are correctly sized strings, so the budget is satisfied by
+the exact register the skill forbids.
+
+**Produced:** `copy_register.py` and `ig.py copy`, the one check here that reads
+sentences. It is deliberately not in the build. Every upstream check is closed
+by deleting something, which is why `Rewriting the copy to clear a warning` is
+an anti-pattern; this one is closed only by writing a better line, so it runs
+last, against a finished document, after `shoot` and `blind`.
+
+**Role-awareness is the whole design.** "Operator survey: the reply burden" is a
+broken title and "Reversed ordinal ramp: the earliest deposit holds the dark
+end" is a correctly written method note, and the two are the same string shape.
+The first draft could not tell them apart and fired on four legitimate notes and
+footnotes out of six fixtures. A check that cries wolf gets ignored, which is
+worse than absent, so every finding is scoped to the fields where it is actually
+a failure.
+
+**Also produced:** the direct-verb move in the budget's rewrite list ("serves as
+a centralized hub for" is "tracks"), which is the only rewrite that shortens and
+sharpens at once; hedged sourcing as an integrity rule, because "studies show"
+is a citation's shape with the citation removed; and synonym cycling named in
+`teaching.md`, because `forward-reference` tracks a term and never the four
+words a document renames it to afterwards.

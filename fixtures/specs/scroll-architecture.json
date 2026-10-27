@@ -64,7 +64,7 @@
   {
    "type": "comparison",
    "span": 12,
-   "title": "Patch surface: a site each against one tenant-aware app",
+   "title": "Patch surface across 500 sites against one tenant-aware app",
    "left": {
     "label": "A site each",
     "headline": "500 patch surfaces",

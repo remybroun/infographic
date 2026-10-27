@@ -129,6 +129,12 @@ to fire on your first build, and the correct reaction is almost never to delete
 the rung: it is to move it earlier, or to say the thing in words the reader
 already owns at the earlier block and keep the term for where it is taught.
 
+**It tracks the term, never its synonyms.** A page can teach "Channex" at rung
+three and then call it the tool, the platform and the service, with every check
+still green. Rotating a word for style is invisible to the build and reads to a
+newcomer as four different things, so once a term is taught, **repeat it**.
+`ig.py copy` counts the stand-ins.
+
 ### Hand the skeleton to a stranger, before you build
 
 `ig.py blind` is the only honest test in this skill and it runs at step 10,

@@ -1,7 +1,7 @@
 ---
 name: infographic
 description: "Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks."
-version: 3.5.0
+version: 3.6.0
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
@@ -38,8 +38,10 @@ stranger to understand it by looking at it.
 - **Banned outright:** emoji and icon fonts (an icon is SVG, drawn in the
   page's own visual language); the AI-slop look (gradient heroes,
   glassmorphism, glow effects, generic dashboard chrome); filler graphics that
-  encode nothing; marketing words and slogan cadence anywhere, including
-  labels and legends; wit. Every word on the page is useful or it is gone.
+  encode nothing; marketing words and the generated-prose cadence anywhere,
+  labels and legends included (antithesis, colon reveals, importance puffery,
+  hedged sourcing, a subject renamed four times for variety); wit. Every word
+  on the page is useful or it is gone.
 
 Four tests, and a document has to pass **all four**:
 
@@ -189,9 +191,12 @@ choosing forms, which is the only moment they can change a decision.
   polish a page you have not seen. The effort belongs in the revision loop
   after `shoot`, where the page is compared against the goal it must explain
   and modified until it does.
-- **Look at it, then give it to someone who has not.** `ig.py shoot` renders the
-  document to PNGs; `ig.py blind` prints the brief for a reader with no context,
-  which is the only instrument here that measures the two cover-tests above.
+- **Look at it, give it to someone who has not, then read the words.**
+  `ig.py shoot` renders the document to PNGs; `ig.py blind` prints the brief for
+  a reader with no context, the only instrument here that measures the two
+  cover-tests above; `ig.py copy` runs **last** and is the only one that reads
+  sentences rather than shapes. Every other check can be satisfied by deleting
+  something. That one can only be satisfied by writing a better line.
 
 ## The pipeline
 
@@ -205,6 +210,7 @@ python3 scripts/ig.py sketch out/comps.json                   #    the block alo
 python3 scripts/ig.py render out/spec.json --out-dir out      # 8-9. assemble, render, lint
 python3 scripts/ig.py shoot out/doc.html                      # 10. LOOK AT IT
 python3 scripts/ig.py blind out/doc.html                      #     then a stranger looks
+python3 scripts/ig.py copy out/doc.html                       # 11. LAST: read the words
 ```
 
 The brief is the skill. It holds the reader, the mode, the order, the form of
@@ -239,11 +245,11 @@ Load the one that owns the decision in front of you. Do not read them all.
   [color-and-type.md](references/color-and-type.md) ·
   [print-pdf.md](references/print-pdf.md)
 - **Reviewing the finished document:**
-  [anti-patterns.md](references/anti-patterns.md#before-you-ship)
+  [anti-patterns.md](references/anti-patterns.md#before-you-ship), whose last
+  section is the register `ig.py copy` measures.
 
-`anti-patterns.md` appears twice on purpose. Its first half is process failures
-that can only be avoided *before* you write; its second half is the review
-checklist.
+`anti-patterns.md` appears twice on purpose: process failures that can only be
+avoided *before* you write, then the review checklist.
 
 ## The catalog
 
