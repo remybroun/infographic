@@ -53,7 +53,7 @@ Read your sentence and find its **verb**. The verb picks the family.
 | X is a kind of thing you have never met | teaching | [catalog/teaching.md](catalog/teaching.md) |
 
 **A claim with no verb of comparison is not a chart.** "Churn is when customers
-leave" is a `definitions` block. "We should assign an owner at triage" is a
+leave" is a label on the chart that counts them, or a footnote. "We should assign an owner at triage" is a
 `callout`. Neither improves by being plotted.
 
 **Before any of the above: what must the reader *do* with this sentence?** Meet
@@ -74,16 +74,17 @@ genre is plotting a number that was already the whole message.
 |---|---|---|
 | One current value, maybe with a trend | `stat` | a one-bar bar chart |
 | The number the page leads with | `hero_figure` (one per view) | none |
-| Three or four numbers, **none of which the document explains further down** | `kpi`, and answer per tile why it is not its own chart | a row restating figures the charts below carry properly. `kpi` is not a slot: see [narrative.md](narrative.md#the-spine-that-works-for-almost-every-argument) |
+| Three or four headline numbers | the one that is the finding as a `hero_figure`, the rest in the chart that proves them | a row of number tiles; the `kpi` block was deleted. See [narrative.md](narrative.md#the-spine-that-works-for-almost-every-argument) |
 | One ratio against a limit | `meter` | a two-slice pie |
-| A rule, a caveat, a definition | `callout`, `definitions` | a chart with two bars |
+| A rule, a caveat | `callout` | a chart with two bars |
+| A term the reader lacks | the word on the mark that uses it, or `footnotes` | a glossary of any kind, which fails the build |
 | A subject the reader has never met | `analogy` | a diagram of its parts |
 | A thing with more parts than anyone can meet at once | `progressive` | one complete diagram |
 | More than ~7 classes that all matter | `table`, or table + chart | more colours |
 | Options scored on criteria, no numeric axis | `matrix` | a "score" bar chart |
 | A person's own words | `quote` | a paraphrase in a box |
-| Two competing framings | `comparison` | a chart of one of them |
-| What to do and what not to | `checklist` | prose |
+| Two competing framings | `dumbbell` or `slope` when measured, `matrix` when weighed, a before/after `figure` otherwise | two panels of bullets |
+| What to do and what not to | one `callout`, or a `figure` of the failure | two columns of ticked sentences |
 
 ## Step 4: Pick the form from the reader's job
 
@@ -166,9 +167,9 @@ different size compared by angle is exactly what donuts are bad at.
 **"Ticket volume fell but total work did not."**
 → Two facts in tension. Not one chart. The tension goes in the `hero` subtitle, a
 `dumbbell` per category shows the fall is concentrated, and a `share_bar` of
-handling time shows where the work went. Two blocks, one argument. **No `kpi`
-row:** both numbers are explained properly by the blocks below, so a tile would
-be those facts with their denominator, comparison and shape stripped off,
+handling time shows where the work went. Two blocks, one argument. **No row of
+number tiles:** both numbers are explained properly by the blocks below, so a
+tile would be those facts with their denominator, comparison and shape stripped off,
 printed before the reader has a frame for them.
 
 **"Reply time degrades as portfolio grows."**

@@ -65,9 +65,9 @@ ECHO_RATIO = 0.7        # how much of a brief note may resurface as page copy
 # The page's furniture: blocks that carry no claim of their own, so they need no
 # entry in the brief and their absence from it is not filler arriving late. A
 # `section` opener is generated from its section's `asks`, a `bridge` is the
-# sentence between two rungs, and a glossary or a method note is reference
-# material a reader reaches for rather than reads.
-FURNITURE = {"hero", "section", "bridge", "definitions", "footnotes"}
+# sentence between two rungs, and a method note is reference material a reader
+# reaches for rather than reads.
+FURNITURE = {"hero", "section", "bridge", "footnotes"}
 
 # An escape hatch is a sentence, never a flag, and it is the same length
 # everywhere: long enough that writing it is a decision. `build.py` uses the
@@ -206,6 +206,10 @@ def audit(brief: dict, registry) -> tuple:
                 f"catalog` for the list.")
             continue
         key, entry = registry.resolve(form)
+        if key in registry.REMOVED:
+            errors.append(f'{label}: `form` is "{form}", which was removed: '
+                          + registry.REMOVED[key].replace("\n", "\n      "))
+            continue
         if not entry:
             errors.append(
                 f'{label}: `form` is "{form}", which is not a block type.\n'
@@ -280,6 +284,11 @@ def audit(brief: dict, registry) -> tuple:
                 f"name: not \"What is the thing being fixed?\" but \"What is "
                 f"the\n      integrations catalog?\". Vague here is vague on "
                 f"the page.")
+        if asks and registry.GLOSSARY_TITLE.search(asks):
+            errors.append(
+                f'brief-glossary: {label} asks "{asks}". A section that '
+                f"exists to define words is a glossary,\n      and there is "
+                f"none: " + registry.GLOSSARY_FIX.replace("\n", "\n      "))
         if asks and not asks.rstrip().endswith("?"):
             warnings.append(
                 f"brief-not-a-question: {label} has an `asks` that is not a "

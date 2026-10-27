@@ -22,7 +22,7 @@ colour. `emphasis: true` on a node fills it.
 
 **Keep it to three levels.** Past that the boxes shrink below a readable label
 and a nested list outperforms the drawing. If you need four levels, you are
-describing a taxonomy, and a `definitions` block or an indented list is kinder.
+describing a taxonomy, and an indented list is kinder.
 
 ## `venn`: overlapping membership
 

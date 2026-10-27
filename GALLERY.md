@@ -111,18 +111,14 @@ the note, because an analogy with no boundary is one a reader over-extends.
 
 ## Teaching, and editorial
 
-![Four blocks. A progressive built in three stages, each adding one guard against jargon while the parts not yet added stay as empty outlines. A definitions list of spine, scene, twin and budget in four columns. A comparison of the outer two densities, 900 words a page against 150. A do and don't checklist for handing a document over.](assets/gallery-teaching-editorial.png)
+![A progressive built in three stages, each adding one guard against jargon while the parts not yet added stay as empty outlines.](assets/gallery-teaching-editorial.png)
 
-`progressive` `definitions` `comparison` `checklist`. The progressive draws the
+`progressive`. The progressive draws the
 same three-part picture three times, accenting only what each stage adds: a word
 budget, then a jargon scanner because the budget selects for jargon, then a
 ladder because plain words can still arrive in the wrong order. Each stage exists
 because the one before it left a hole the reader fell into, which is the shape
 the block is for and something a finished diagram of all three cannot show.
-
-The definitions block is at span 12 rather than 6. At half width it stacks its
-four terms vertically and runs to 444px, which beside the 137px stat left 307px
-of blank page, the single worst void in the document.
 
 ## Editorial
 
@@ -130,16 +126,13 @@ of blank page, the single worst void in the document.
 
 `stat` `hero_figure` `callout`. The stat sets `compact: false`, because the block
 otherwise renders 2,086 as "2.1K" and the exactness is the entire point of the
-number. The checklist on the sheet above is at span 12 for the same reason as the
-definitions list: at half width its two columns are about 90px each and every
-item wrapped to one word a line, which the render showed and the linter did
-not.
+number.
 
 ## Every alias
 
-![Two chip grids holding all 60 aliases, each chip showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process, draw to figure.](assets/gallery-aliases.png)
+![All 52 aliases, each showing the ordinary word and the block type it resolves to: pie to donut, waffle to unit, 2x2 to quadrant, flow to process, draw to figure.](assets/gallery-aliases.png)
 
-`chips`. All 60 aliases, so a spec can be written in ordinary words. Split into
+All 52 aliases, so a spec can be written in ordinary words. Split into
 two blocks rather than one, and that is not cosmetic: a single grid was 911px at
 60 aliases and 1,171px at 67, and `break-inside: avoid` means a block taller than
 the 1,005px text area cannot be placed at all. It takes a page to itself,
@@ -168,7 +161,7 @@ single pair wastes more than 63px.
 
 ## What is not on this page, and why
 
-Five forms are missing, and the reason is the same in every case: this
+Four forms are missing, and the reason is the same in every case: this
 repository has no honest data for them, and principle four says a missing series
 stays missing.
 
@@ -177,7 +170,6 @@ stays missing.
 | `likert` | Needs a real five-point survey. There isn't one. |
 | `timeline` | Wants dates that carry the argument. Every commit here landed on one day. |
 | `anatomy` · `image` | Both need a photograph or a screenshot as their subject. |
-| `kpi` | Deliberate. It is the block this skill added a guard against, and putting a row of four numbers at the top of a specimen sheet would teach exactly the reflex that guard exists to stop. |
 | `bridge` | Deliberate. A bridge is one sentence carrying a reader between two rungs of a ladder, so a bridge with nothing on either side of it is not a specimen of anything. It is drawn in context in the architecture fixture instead. |
 
 ## Two honest defects

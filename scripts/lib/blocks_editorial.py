@@ -53,8 +53,10 @@ def hero(b: dict, ctx: Ctx) -> str:
     if b.get("lede"):
         parts.append(f'<div class="ig-hero-lede">{_paragraphs(b["lede"])}</div>')
     if b.get("stats"):
-        parts.append(kpi({"items": b["stats"],
-                          "compact": b.get("compact", True)}, ctx))
+        raise SystemExit(
+            "[build] hero `stats` was removed: a row of numbers under the title "
+            "is a table without the table. Lead with one `hero_figure` or "
+            "`stat`, and let the chart below prove it.")
     meta = []
     for key in ("author", "date", "source"):
         if b.get(key):
@@ -182,33 +184,6 @@ def stat(b: dict, ctx: Ctx) -> str:
             f"{spark}{note}</div>")
 
 
-MIN_TILE_PX = 132.0
-
-
-def kpi(b: dict, ctx: Ctx) -> str:
-    """A row of stat tiles. Three or four; past that it stops being a headline
-    and becomes a table.
-
-    The column count is decided here, in Python, from the block's real width, CSS cannot know how wide a grid column is without container queries, and a
-    four-tile row squeezed into a 4-span column is how big numbers end up
-    colliding with each other in print.
-    """
-    items = b.get("items", [])
-    if len(items) > 5:
-        ctx.warn("more than 5 KPI tiles in a row stops reading as headlines. "
-                 "Keep 3-4 and move the rest to a table.")
-    count = len(items) or 1
-    columns = max(1, min(count, int(ctx.width // MIN_TILE_PX) or 1))
-    if columns < count:
-        ctx.warn(f"{count} KPI tiles will not fit across {ctx.width:.0f}px; "
-                 f"laid out {columns} per row. Widen the block's span or use fewer tiles.")
-    cells = "".join(f"<li>{stat(i, ctx.sub(ctx.width / columns))}</li>" for i in items)
-    cls = "ig-kpi ig-kpi-compact" if b.get("compact") or columns == 1 else "ig-kpi"
-    if columns == 1:
-        cls += " ig-kpi-stacked"
-    return f'<ul class="{cls}" style="--ig-kpi-n:{columns}">{cells}</ul>'
-
-
 def hero_figure(b: dict, ctx: Ctx) -> str:
     """The single number a page leads with. Exactly one per view, in the same
     sans as everything else, a serif here reads as off-brand decoration."""
@@ -229,63 +204,6 @@ def table(b: dict, ctx: Ctx) -> str:
     rows = [[("" if c is None else c) for c in row] for row in b.get("rows", [])]
     return chrome.table_html(columns, rows, b.get("align"), b.get("caption"),
                              cls="ig-table")
-
-
-def checklist(b: dict, ctx: Ctx) -> str:
-    """Do / don't. Two columns of concrete instructions, never abstractions."""
-    def column(kind, title, items):
-        cells = "".join(f'<li><span aria-hidden="true">{"✓" if kind == "do" else "✕"}</span>'
-                        f"<span>{inline(i)}</span></li>" for i in items)
-        return (f'<div class="ig-check ig-check-{kind}">'
-                f'<p class="ig-check-title">{inline(title)}</p>'
-                f"<ul>{cells}</ul></div>")
-
-    return (f'<div class="ig-checklist">'
-            f'{column("do", b.get("do_title", "Do"), b.get("do", []))}'
-            f'{column("dont", b.get("dont_title", "Don\'t"), b.get("dont", []))}'
-            f"</div>")
-
-
-DEF_TILE_PX = 168.0
-
-
-def definitions(b: dict, ctx: Ctx) -> str:
-    """Terms the reader may not share.
-
-    At graphic density this is a tile grid, not a two-column list. The list form
-    invites a sentence per term and stacks into a wall; tiles cap each entry at
-    roughly a line and put the terms side by side, where they read as a
-    vocabulary rather than as prose with bold lead-ins.
-    """
-    items = b.get("items", [])
-    rows = "".join(
-        f'<div class="ig-def"><dt>{inline(i.get("term", ""))}</dt>'
-        f'<dd>{inline(i.get("text", ""))}</dd></div>'
-        for i in items
-    )
-    if not ctx.graphic or b.get("layout") == "list":
-        return f'<dl class="ig-definitions">{rows}</dl>'
-    from .blocks_diagram import balanced_columns
-    columns = balanced_columns(len(items), ctx.width, DEF_TILE_PX)
-    return (f'<dl class="ig-definitions ig-definitions-grid" '
-            f'style="--ig-def-n:{columns}">{rows}</dl>')
-
-
-def comparison(b: dict, ctx: Ctx) -> str:
-    """Two framings side by side, old vs new, myth vs fact, A vs B. The
-    asymmetry is deliberate: the right-hand side is the one you are arguing for."""
-    t = ctx.theme
-
-    def side(data, kind):
-        points = "".join(f"<li>{inline(p)}</li>" for p in data.get("points", []))
-        return (f'<div class="ig-compare-side ig-compare-{kind}">'
-                f'<p class="ig-compare-label">{inline(data.get("label", ""))}</p>'
-                f'<p class="ig-compare-headline">{inline(data.get("headline", ""))}</p>'
-                f"<ul>{points}</ul></div>")
-
-    return (f'<div class="ig-compare">{side(b.get("left", {}), "left")}'
-            f'<div class="ig-compare-vs" aria-hidden="true">{svg.esc(b.get("vs", "vs"))}</div>'
-            f'{side(b.get("right", {}), "right")}</div>')
 
 
 def image(b: dict, ctx: Ctx) -> str:

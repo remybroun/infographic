@@ -528,8 +528,8 @@ def cmd_blind(args):
       not on the page, and no amount of polish adds it
     · answer 2 is not your claim → the document argues something you did not
       write, which is the failure the two cover-tests are meant to catch
-    · every term in answer 3 needed a `definitions` block or a rewrite into
-      words. That list is a work item, not an opinion
+    · every term in answer 3 needed a rewrite into words, on the mark that
+      carries it. That list is a work item, not an opinion. Never a glossary
     · answer 4 out of order → hierarchy problem: the biggest thing on the page
       is not the most important thing on it
     · anything in answer 5 is a picture that was not drawn""")
@@ -1017,8 +1017,8 @@ def _undocumented_keys(entry, doc):
     """Payload keys the renderer reads that its documentation never shows.
 
     Read off the function itself, because the alternative is what actually
-    happened: an author wanting to rename a checklist's second column found no
-    `dont_title` in the docs, grepped `scripts/`, and ended up reverse
+    happened: an author wanting to rename a block's second column found no
+    key for it in the docs, grepped `scripts/`, and ended up reverse
     engineering the payload from `blocks_editorial.py`. A key the code accepts
     and the prose omits is a key someone will go looking for in the source.
     """
@@ -1046,7 +1046,6 @@ def cmd_pictograms(args):
             print(f"  {category:<9} {' '.join(members)}")
         print("\n  unit:      \"glyph\": \"home\"          100 little houses, 24 filled")
         print("  pictogram: \"glyph\": \"home\"          rows of houses, one per unit_value")
-        print("  chips:     \"icon\": \"key\"            the shape instead of the tone mark")
         print("  figure:    <use href=\"#ig-pic-home\" x=\"0\" y=\"0\" width=\"40\" height=\"40\"")
         print("                  class=\"ig-fig-solid-accent\"/>")
         print("\n  references/drawing.md decides whether a drawn subject earns its place.")
@@ -1177,9 +1176,8 @@ STARTER = {
          "categories": ["Alpha", "Beta", "Gamma"], "values": [12, 30, 21],
          "sort": "desc", "value_label": "Count",
          "note": "Say where the numbers came from."},
-        {"type": "kpi", "span": 4, "items": [
-            {"label": "Headline number", "value": 1284, "compact": True,
-             "delta": 12.4, "delta_period": "vs last period"}]},
+        {"type": "stat", "span": 4, "label": "Headline number", "value": 1284,
+         "compact": True, "delta": 12.4, "delta_period": "vs last period"},
         {"type": "footnotes", "items": ["Source: replace me.", "Method: replace me."]}
     ]
 }

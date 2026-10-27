@@ -231,7 +231,7 @@ class Document:
                 f"  twin for free, and it does not need reviewing pixel by pixel.\n\n"
                 f"  Demote the weakest ones. A layered thing is a `stack`, a sequence that\n"
                 f"  changes hands is a `swimlane`, options against criteria is a\n"
-                f"  `scorecard`, a set of states is `chips`. If all {len(figures)} really are\n"
+                f"  `scorecard`, a sequence is a `process`. If all {len(figures)} really are\n"
                 f"  load-bearing, the honest answer is that this is two documents.")
 
     def check_scenes_declaration(self, spec: dict) -> None:
@@ -633,7 +633,6 @@ def build(spec, out_path: str = None, theme: str = None, page: str = None,
     # document and cannot ask whether a different one would have been better.
     doc.warnings.extend(derivation.check(spec, registry, spec_path))
     doc.warnings.extend(ladder_mod.check(spec, registry))
-    doc.warnings.extend(leading_numbers.check(spec, registry))
     doc.warnings.extend(leading_numbers.inverted_without_ground(spec))
     if out_path:
         os.makedirs(os.path.dirname(os.path.abspath(out_path)) or ".", exist_ok=True)

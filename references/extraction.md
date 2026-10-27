@@ -67,11 +67,11 @@ What it detects today:
 | ≥3 sentences carrying a date | `timeline` |
 | ordering language (first / then / step N) | `process` |
 | ordering language + loop vocabulary | `cycle` |
-| contrast language (versus / whereas / instead of) | `comparison`, `matrix` |
+| contrast language (versus / whereas / instead of) | `dumbbell` or `slope` when both sides are measured, `matrix` when they are weighed |
 | containment language (consists of / reports to) | `tree` |
 | percentages in prose | `unit`, `share_bar`, `stat` |
 | headline figures in prose | `stat` |
-| an existing pros/cons split | `checklist` |
+| an existing pros/cons split | `scorecard`, or a `callout` for the one con that matters |
 
 ## The ledger is facts. A lesson needs the other inventory.
 
@@ -103,16 +103,16 @@ That inventory is what step 2.5 turns into the brief's order. Neither `candidate
 Plenty of sources are pure narrative and produce almost no candidates. That is
 information, not a failure: it usually means the document explains a **concept**,
 and concepts are carried by `process`, `cycle`, `tree`, `venn`, `quadrant`,
-`comparison`, `definitions` and prose, none of which the extractor can infer
+drawn `figure`s, none of which the extractor can infer
 from arithmetic.
 
 When the candidate list is thin, read the source yourself and ask:
 
 - What does the reader have to **believe** by the end? That is the hero claim.
-- What has to be **true first** for that to make sense? Those are the definitions
-  and the setup.
-- Where does the source **argue** rather than report? Those are the comparison
-  and callout blocks.
+- What has to be **true first** for that to make sense? Those are the setup,
+  drawn before the claim that depends on it.
+- Where does the source **argue** rather than report? Those are the `matrix`,
+  `diverging` and `callout` blocks.
 - What does the source **admit**, limits, caveats, unknowns? Those belong in
   callouts and footnotes, not buried.
 - What is the source **silent** about that a reader will ask? Say so explicitly

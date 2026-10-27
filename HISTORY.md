@@ -403,3 +403,54 @@ sections numbers all of them; `number` gone from the doc example and from every
 fixture, so what gets copied is the unnumbered form; and the rule rewritten to
 say where the ordinals actually belong.
 
+
+## v3.8: the glossary, deleted
+
+A provider review shipped a section titled "What do the less familiar criterion
+names on this page mean?": ten tiles of a bold term over a one-line gloss, in a
+5×2 grid, between two charts. It was the `definitions` block doing exactly what
+it was built to do, and the person the page was for hated it on sight.
+
+The skill selected it on every route. Step 2 offered it as "the fallback" for
+any term the reader lacked; the blind test said a term the stranger missed
+"needed a `definitions` block or a rewrite"; `undefined-vocabulary` named it as
+the fix and went quiet once one existed; the brief listed it as furniture that
+needed no entry; and `undrawn-section` exempted it. Every pressure in the skill
+made drawing a term expensive and listing it free, so it was listed. Moving its
+meaning off the chart that used it was the failure, wherever on the page the
+grid sat.
+
+**Produced:** the block deleted, with its CSS, its density role, its gallery
+specimen and its two fixture uses (both folded into `footnotes`). `definitions`,
+`glossary`, `terms`, `vocabulary` and their spellings now stop the build with
+the reason. The brief refuses one as a `form` and refuses a section whose `asks`
+is a glossary question. The linter's `glossary` is an **error** for every other
+way to rebuild it: a `<dl>`, a table with a Definition or Meaning column, a
+section or block titled as a glossary, or more than four "Term: gloss" lines in
+`footnotes`. `undefined-vocabulary` no longer has an escape: its only fix is to
+label the marks in words.
+
+## v3.8: text in boxes, deleted
+
+The glossary was not alone. Its deletion came with a complaint that named the
+whole class: the skill exists to show visuals, and too many of its blocks were
+full of text with no visualization. Rendering every block counted as a graphic
+and looking for an `<svg>` found six that drew nothing. `hero_figure` is one
+number set large and `image` is a picture, and they stayed. The other four were
+sentences in boxes: `checklist` (two columns of ✓ and ✕ lines), `comparison`
+(two columns of bullets), `chips` (a grid of text pills) and `kpi` (a row of
+numbers). All four were flagged `graphic: True`, so the brief accepted them
+where a picture was promised. The linter counted them as neither graphic nor
+text, so a page of them cleared the 60% ratio on one chart. `undrawn-section`
+exempted the first two by name.
+
+**Produced:** all four deleted, with their CSS, density roles, gallery
+specimens and every alias that reached them (`kpis`, `stats`, `compare`,
+`list`, `tags`, `pills`, `badges`, `facts`). Each name stops the build with
+what to draw instead, and the brief refuses it as a `form` with the same
+reason. `hero.stats`, which rendered a `kpi` row under the title, is refused
+too. `leading-numbers` went with `kpi`, since it only ever read `kpi` rows. The
+fixtures that used them now draw: a `stack`, a `dumbbell`, a `bar` and a
+`process`, and one do-and-don't with no data behind it was cut rather than
+redrawn. A selftest now renders every block flagged as a graphic and fails if
+it emits no SVG, so the flag cannot drift from the drawing again.

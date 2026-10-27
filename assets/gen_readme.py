@@ -174,16 +174,16 @@ def fig_specimens():
                        f'width="14" height="9" rx="2"/>')
         return out
 
-    def chips(x, y):
-        return [f'<rect class="ig-fig-node" x="{x + (i % 2) * 26}" y="{y + 12 + (i // 2) * 14}" '
-                f'width="22" height="10" rx="5"/>' for i in range(4)]
+    def score(x, y):
+        """scorecard: options as rows of filled and empty marks."""
+        return [f'<circle class="{"ig-fig-solid-accent" if i % 4 < 3 - i // 4 else "ig-fig-node"}" '
+                f'cx="{x + 5 + (i % 4) * 13}" cy="{y + 16 + (i // 4) * 13}" r="4"/>'
+                for i in range(8)]
 
-    def kpis(x, y):
-        out = []
-        for i in range(3):
-            out.append(f'<line class="ig-fig-rule" x1="{x + i * 18}" y1="{y + 14}" x2="{x + 12 + i * 18}" y2="{y + 14}"/>')
-            out.append(f'<rect class="ig-fig-solid" x="{x + i * 18}" y="{y + 20}" width="12" height="13" rx="2"/>')
-        return out
+    def bignum(x, y):
+        """hero_figure: one number, large."""
+        return [f'<rect class="ig-fig-solid" x="{x}" y="{y + 10}" width="34" height="22" rx="2"/>',
+                f'<line class="ig-fig-rule" x1="{x}" y1="{y + 38}" x2="{x + 44}" y2="{y + 38}"/>']
 
     def callout(x, y):
         return [f'<rect class="ig-fig-node" x="{x}" y="{y + 12}" width="52" height="22" rx="3"/>',
@@ -238,9 +238,9 @@ def fig_specimens():
         ("Change", 5, (line, slope, dumb)),
         ("Part-to-whole", 7, (ring, waffle, sharebar)),
         ("Structure", 7, (proc, tree, venn)),
-        ("Diagram", 6, (stack, lanes, chips)),
+        ("Diagram", 5, (stack, lanes, score)),
         ("Teaching", 3, (mapping, buildup, bridge)),
-        ("Editorial", 19, (kpis, callout, rows)),
+        ("Editorial", 15, (bignum, callout, rows)),
     ]
 
     p = []

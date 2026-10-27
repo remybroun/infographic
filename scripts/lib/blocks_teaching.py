@@ -10,10 +10,9 @@ formally correct and read like minutes of a meeting you were not at.
 Three shapes, taken from how a subject is actually taught:
 
 - `analogy` puts something the reader already owns beside the new thing, part
-  for part. It is the single most reliable teaching move there is, and the
-  catalog's nearest neighbour, `comparison`, is its opposite: comparison exists
-  to argue that the right-hand side is better, analogy exists to claim the two
-  sides are the same shape. It draws both subjects and numbers the parts across
+  for part. It is the single most reliable teaching move there is, and a
+  before-and-after is its opposite: that argues the right-hand side is better,
+  analogy exists to claim the two sides are the same shape. It draws both subjects and numbers the parts across
   them, because a mapping the reader has to read line by line is a table, and a
   table is what this block spent a version being.
 - `progressive` draws one picture several times, gaining a part each time. A
@@ -22,7 +21,7 @@ Three shapes, taken from how a subject is actually taught:
   nothing says which parts were there first and why the rest became necessary.
 All of them carry their idea in the picture, so they count as graphics.
 `progressive` draws real SVG; `analogy` is an HTML and CSS
-composition for the same reason `checklist` is, their content is sentences that
+composition because its content is sentences that
 must stay selectable, reflowable, and never silently truncated to fit a row.
 """
 
@@ -142,7 +141,7 @@ def analogy(b: dict, ctx: Ctx) -> str:
     body = (stage(known, "known", "You already know") +
             stage(new, "new", "So this is") + rows)
 
-    # No table twin by default, for the reason `checklist` has none: every pair is already selectable, reflowable text sitting in
+    # No table twin by default: every pair is already selectable, reflowable text sitting in
     # the page, so the twin is a verbatim second copy. It is not free, either.
     # Twins are collapsed on screen and forced open in print, so `ig.py measure`
     # cannot see one and an authored one-pager measures as fitting and then

@@ -79,9 +79,11 @@ reader, not the subject: the same facts about a billing system are a lesson for
 the support team and an argument for the engineer who owns it.
 
 Then, in the same breath, **list the terms the reader does not already have**
-and give each one a destination: drawn at the rung that teaches it, or
-`definitions` as the fallback. Skip this and the word budget decides for you, in
-favour of jargon.
+and give each one a destination: drawn at the rung that teaches it, named in
+words on the mark that carries it, or, for a term used once, glossed in
+`footnotes`. There is no glossary to fall back on: the `definitions` block was
+deleted, and a table of terms or a section asking what the names mean fails the
+linter. Skip this and the word budget decides for you, in favour of jargon.
 
 Only a **machine identifier** is demoted to the twin: a column, a function, a
 config key. The name of a product, a system, a company or a release is not a
@@ -257,9 +259,10 @@ on it. When the answer is "meet it for the first time", the form is in the
 teaching family, and the next question is *what do they already own that has
 this shape?* → [catalog/teaching.md](catalog/teaching.md)
 
-Ask, for each: is it even a chart? A stat tile, a callout or a definitions list
-is often the honest answer, and concept documents usually need more non-chart
-blocks than chart blocks.
+Ask, for each: is it even a chart? A `hero_figure`, a `stat` or a `callout` is
+sometimes the honest answer, and a concept is often a drawn `figure`, a
+`process` or a `stack` rather than a plotted one. It is never text in boxes:
+the blocks that set sentences in tinted panels were deleted.
 
 Each answer becomes that section's `form` in the brief, and a `shows` saying
 what is on screen. Nothing here is copy: `shows` is a note to whoever draws the
@@ -395,7 +398,7 @@ Send it **verbatim**, with no source, no spec, no claim, and no summary of any
 of them.
 
 What comes back is evidence, not a change request. A term they could not define
-needed `definitions` or a rewrite. A first-look landing on the wrong picture is
+needed a rewrite into words on the mark that carries it, never a glossary. A first-look landing on the wrong picture is
 a hierarchy problem. A summary describing the layout rather than the subject
 means the spine never made it onto the page, and polish will not put it there.
 A reader who would remember no image an hour later, or only "a nice diagram",

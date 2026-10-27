@@ -21,6 +21,8 @@ document cannot quietly turn back into an essay:
 
 from __future__ import annotations
 
+import re
+
 from . import blocks_diagram as dia
 from . import blocks_editorial as ed
 from . import blocks_figure as fig
@@ -65,8 +67,8 @@ REGISTRY = {
               "instead_of": "nothing at graphic density; the picture carries the idea"},
     "bullets": {"fn": ed.bullets, "family": "editorial", "span": 6,
                 "text_roles": {"items": "detail"},
-                "use_when": "items are parallel, short, and a chip grid would over-format them",
-                "instead_of": "prefer `chips`, a bullet list is a paragraph wearing a disc"},
+                "use_when": "REPORT DENSITY ONLY, items that are parallel and short",
+                "instead_of": "at graphic density, the picture the items describe"},
     "quote": {"fn": ed.quote, "family": "editorial", "span": 12,
               "text_roles": {"text": "quote"},
               "use_when": "a human voice carries the point better than a restatement"},
@@ -77,23 +79,12 @@ REGISTRY = {
              "graphic": True,
              "use_when": "a single current value is the whole message",
              "instead_of": "a one-bar bar chart"},
-    "kpi": {"fn": ed.kpi, "family": "editorial", "span": 12, "graphic": True,
-            "use_when": "numbers nothing else explains; never a slot to fill",
-            "instead_of": "a row restating figures the charts below carry properly"},
     "hero_figure": {"fn": ed.hero_figure, "family": "editorial", "span": 4,
                     "owns": ["note", "label"], "graphic": True,
                     "use_when": "one number is the entire finding; exactly one per view"},
     "table": {"fn": ed.table, "family": "editorial", "span": 12, "text_exempt": True,
               "use_when": "more than about seven classes all carry meaning, or exact values matter",
               "instead_of": "more colors"},
-    "checklist": {"fn": ed.checklist, "family": "editorial", "span": 12, "graphic": True,
-                  "text_roles": {"do": "detail", "dont": "detail"},
-                  "use_when": "the reader must act, and the failure modes are as useful as the advice"},
-    "definitions": {"fn": ed.definitions, "family": "editorial", "span": 12, "graphic": True,
-                    "use_when": "the concept depends on terms the reader may not share"},
-    "comparison": {"fn": ed.comparison, "family": "editorial", "span": 12, "graphic": True,
-                   "text_roles": {"points": "detail"},
-                   "use_when": "two framings compete and you are arguing for one"},
     "image": {"fn": ed.image, "family": "editorial", "span": 6, "graphic": True,
               "use_when": "the subject is image-native: a place, a product, a screen, a person"},
     "footnotes": {"fn": ed.footnotes, "family": "editorial", "span": 12, "owns": ["title"],
@@ -194,10 +185,6 @@ REGISTRY = {
     "stack": {"fn": dia.stack, "family": "diagram", "span": 12,
               "use_when": "layers rest on each other and you need to show what sits in which",
               "instead_of": "a paragraph naming the components of each tier"},
-    "chips": {"fn": dia.chips, "family": "diagram", "span": 12,
-              "text_roles": {"items": "label"},
-              "use_when": "several short facts, states or names must be scannable at a glance",
-              "instead_of": "a bullet list, which is a paragraph wearing a disc"},
     "scorecard": {"fn": dia.scorecard, "family": "diagram", "span": 12,
                   "use_when": "options are scored against criteria and the totals are the punchline",
                   "instead_of": "a bar chart of totals plus a paragraph explaining the criteria"},
@@ -216,8 +203,8 @@ REGISTRY = {
                 "text_roles": {"known": "label", "new": "label"},
                 "use_when": "the reader owns nothing yet, and something they do own "
                             "has the same shape",
-                "instead_of": "`comparison`, which argues one side is better; an "
-                              "analogy claims both sides are the same shape"},
+                "instead_of": "a before-and-after, which argues one side is better; "
+                              "an analogy claims both sides are the same shape"},
     "progressive": {"fn": teach.progressive, "family": "teaching", "span": 12,
                     "text_roles": {"parts": "label"},
                     "use_when": "the finished picture has too many parts to meet at "
@@ -247,15 +234,14 @@ for _entry in REGISTRY.values():
 
 ALIASES = {
     "barchart": "bar", "hbar": "bar", "columns": "column", "vbar": "column",
-    "stat_tile": "stat", "kpis": "kpi", "stats": "kpi", "big_number": "hero_figure",
+    "stat_tile": "stat", "big_number": "hero_figure",
     "pie": "donut", "waffle": "unit", "isotype": "unit", "stacked100": "share_bar",
     "share": "share_bar", "steps": "process", "flow": "process", "loop": "cycle",
     "orgchart": "tree", "hierarchy": "tree", "twobytwo": "quadrant", "2x2": "quadrant",
-    "text": "prose", "paragraph": "prose", "list": "chips", "note": "callout",
-    "grid": "matrix", "compare": "comparison", "sources": "footnotes",
+    "text": "prose", "paragraph": "prose", "note": "callout",
+    "grid": "matrix", "sources": "footnotes",
     "before_after": "dumbbell", "gantt": "timeline",
     "layers": "stack", "tiers": "stack", "architecture": "stack",
-    "tags": "chips", "pills": "chips", "badges": "chips", "facts": "chips",
     "criteria": "scorecard", "evaluation": "scorecard", "tradeoff": "scorecard",
     "dial": "gauge", "score": "gauge", "lanes": "swimlane", "handoff": "swimlane",
     "pictograph": "pictogram", "picto": "pictogram", "symbol_chart": "pictogram",
@@ -273,8 +259,60 @@ def resolve(name: str):
     return key, REGISTRY.get(key)
 
 
+# A glossary is not a block. The `definitions` grid shipped as a page of bold
+# words over one-line glosses, set apart from the chart that used them, and it
+# read as filler every time. It was deleted in 3.6 and these names refuse with
+# the reason, so neither an old spec nor a habit can bring it back.
+GLOSSARY_TYPES = {"definitions", "definition", "glossary", "terms", "vocabulary",
+                  "key_terms", "terminology", "defs", "dl"}
+# The same thing arriving under another block: a section or a block titled as a
+# glossary. Narrow on purpose: it matches the titles the deleted block actually
+# shipped under ("Terms used here", "The words the team uses for the same
+# things", "What do the less familiar criterion names on this page mean?"),
+# not every sentence that contains the word "mean".
+GLOSSARY_TITLE = re.compile(
+    r"\b(?:glossary|glossaries|key terms|terminology|vocabulary|jargon|"
+    r"terms used|terms we use|words we use|the words the)\b"
+    r"|^\s*definitions?\b"
+    r"|\bwhat (?:do|does)\b[^?.]{0,80}\b(?:names?|terms?|words?|acronyms?|"
+    r"abbreviations?|labels?)\b[^?.]{0,40}\bmean\b", re.I)
+GLOSSARY_FIX = (
+    "there is no glossary block. Name the thing in words on the mark that "
+    "carries it\n(a column header, an axis title, a label), teach it in the "
+    "figure at the rung that\nneeds it, or gloss a one-off term in "
+    "`footnotes`. Never a grid of terms.")
+
+
+# Four more blocks went the same way, for the same reason: each was text in
+# boxes, drew nothing, and was still counted as a graphic, so a page built from
+# them passed as graphic-first while being a document of sentences. Each name
+# here, and every alias that used to reach it, refuses with what to draw.
+TEXT_BOX_FIX = {
+    "checklist": "a do-and-don't is two columns of sentences. Draw the failure "
+                 "in a `figure`, or put the one rule that matters in a `callout`.",
+    "comparison": "two columns of bullets is not a picture of a difference. "
+                  "Draw it: `dumbbell` or `slope` for a value that moved, "
+                  "`scorecard` or `matrix` for options against criteria, or a "
+                  "before-and-after `figure`.",
+    "chips": "a grid of text pills is a bullet list with borders. Draw what "
+             "the items are: `stack` for layers, `process` for a sequence, "
+             "`pictogram` for counts, `tree` for a hierarchy, or a `figure`.",
+    "kpi": "a row of numbers is a table without the table. Lead with one "
+           "`hero_figure` or `stat`, and let the chart below prove it.",
+}
+REMOVED = {**{name: GLOSSARY_FIX for name in GLOSSARY_TYPES}, **TEXT_BOX_FIX,
+           "kpis": TEXT_BOX_FIX["kpi"], "stats": TEXT_BOX_FIX["kpi"],
+           "compare": TEXT_BOX_FIX["comparison"],
+           "do_dont": TEXT_BOX_FIX["checklist"],
+           **{name: TEXT_BOX_FIX["chips"]
+              for name in ("list", "tags", "pills", "badges", "facts")}}
+
+
 def render_block(block: dict, ctx) -> str:
     key, entry = resolve(block.get("type"))
+    if key in REMOVED:
+        raise SystemExit(f"[build] block type {block.get('type')!r} was removed: "
+                         f"{REMOVED[key]}")
     if not entry:
         known = ", ".join(sorted(REGISTRY))
         raise SystemExit(f"[build] unknown block type {block.get('type')!r}.\nKnown types: {known}")

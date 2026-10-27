@@ -22,14 +22,14 @@ vocabulary at all for *meeting* one.
 
 | File | Family | Blocks |
 |---|---|---|
-| **[diagram.md](diagram.md)** | **The forms that absorb paragraphs** | `stack` `swimlane` `scorecard` `gauge` `chips` |
+| **[diagram.md](diagram.md)** | **The forms that absorb paragraphs** | `stack` `swimlane` `scorecard` `gauge` |
 | **[teaching.md](teaching.md)** | **Meeting a subject for the first time** | `analogy` `progressive` · plus `bridge`, **lesson density only** |
 | [quantity.md](quantity.md) | How much, and how items compare | `bar` `column` `lollipop` `diverging` `likert` `scatter` `heatmap` `matrix` |
 | [change.md](change.md) | Movement over time or between two states | `line` `area` `dumbbell` `slope` `timeline` |
 | [part-to-whole.md](part-to-whole.md) | Share, composition, proportion | `share_bar` `unit` `donut` `treemap` `funnel` `pyramid` `meter` |
 | [process-and-time.md](process-and-time.md) | Sequence and flow | `process` `cycle` `funnel` `timeline` `sankey` |
 | [structure-and-relation.md](structure-and-relation.md) | Hierarchy, overlap, position | `tree` `venn` `quadrant` `matrix` `sankey` `anatomy` |
-| [editorial.md](editorial.md) | Claim, framing, figures | `hero` `section` `quote` `callout` `stat` `kpi` `hero_figure` `table` `checklist` `definitions` `comparison` `image` `footnotes` · plus `prose` and `bullets`, **report density only** |
+| [editorial.md](editorial.md) | Claim, framing, figures | `hero` `section` `quote` `callout` `stat` `hero_figure` `table` `image` `footnotes` · plus `prose` and `bullets`, **report density only** |
 
 ## Shared payload keys
 

@@ -75,11 +75,11 @@ wrong in a way the reader cannot detect. With neither key a side falls back to
 its label set large, which is honest and plain.
 
 **Use when the reader owns nothing yet** and something they do own has the same
-shape. It is the most reliable teaching move there is, and the catalog's nearest
-neighbour is its opposite: `comparison` exists to argue that the right-hand side
-is *better*, and an analogy claims the two sides are the *same shape*. Reaching
-for `comparison` here produces a document that appears to be arguing against
-something the reader has never heard of.
+shape. It is the most reliable teaching move there is, and the opposite move is a
+before-and-after, which argues that one side is *better*, while an analogy
+claims the two sides are the *same shape*. Reaching for a before-and-after here
+produces a document that appears to be arguing against something the reader has
+never heard of.
 
 **Every pair must be a real correspondence.** An analogy with no `pairs` is a
 mood, and a mood is what makes analogies deservedly suspect: it invites the

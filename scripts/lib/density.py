@@ -55,7 +55,7 @@ CAPS = {
         "hero_title": 16,   # what the document covers, stated plainly
         "title": 14,        # block, section and step titles
         "subtitle": 16,     # the single line under a title, and section ledes
-        "label": 6,         # anything sitting beside a mark: chips, terms, axes
+        "label": 6,         # anything sitting beside a mark: names, steps, axes
         "detail": 12,       # the one supporting line an item may carry
         "note": 18,         # footers, sources, methodology one-liners
         "callout": 24,      # the one thing that must not be skimmed past
@@ -124,7 +124,6 @@ DEFAULT_ROLES = {
     "headline": "subtitle",
     "kicker": "label",
     "label": "label",
-    "term": "label",
     "name": "label",
     "stage": "label",
     "attribution": "label",
@@ -135,8 +134,6 @@ DEFAULT_ROLES = {
     "axis_y": "label",
     "low_label": "label",
     "high_label": "label",
-    "do_title": "label",
-    "dont_title": "label",
     "text": "detail",
     "detail": "detail",
     "note": "note",
@@ -227,8 +224,9 @@ class Violation:
                     f"({self.count} words).\n"
                     f"      {self.sample}\n"
                     f"      → draw it. If this paragraph is a sequence use `process`, a "
-                    f"comparison use `comparison` or `scorecard`, a structure use `stack` "
-                    f"or `tree`, a set of facts use `chips` or `kpi`. If it is one "
+                    f"before-and-after use `dumbbell` or `slope`, options against criteria "
+                    f"use `scorecard`, a structure use `stack` or `tree`, counts use "
+                    f"`pictogram` or `unit`. If it is one "
                     f"sentence linking two rungs of a lesson, it is a `bridge` at "
                     f"--density lesson. If it is genuinely an essay, --density report.")
         return (f"  {where}: {self.count} words as a `{self.role}`, cap is {self.cap}.\n"

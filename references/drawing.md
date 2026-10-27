@@ -177,7 +177,7 @@ mark      check cross warning star heart plus arrow_right flag search eye
 thing     box tool tree sun leaf bolt layers
 ```
 
-Four places take them, and every one is opt-in. Nothing changes if you never
+Three places take them, and every one is opt-in. Nothing changes if you never
 name one:
 
 ```xml
@@ -186,7 +186,6 @@ name one:
 ```json
 {"type": "unit", "glyph": "person", "parts": [ … ]}
 {"type": "pictogram", "glyph": "apartment", "unit_value": 500, "rows": [ … ]}
-{"type": "chips", "items": [{"label": "Keys issued", "icon": "key"}]}
 ```
 
 They carry no `fill` of their own, so a pictogram takes the colour of wherever

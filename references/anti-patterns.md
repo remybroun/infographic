@@ -42,18 +42,17 @@ reads one finished document and cannot ask whether a different one would have
 been better.
 
 **❌ Four numbers at the top of the page, because that is what goes there.**
-A `kpi` row of labelled integers, every one of which a chart further down
-explains properly.
+A row of labelled integers, every one of which a chart further down explains
+properly.
 The tell is arithmetic: **four numbers cannot each be the finding.** If they
-could, you would have four documents. The block is the cheapest in the catalog:
-it looks like a summary, needs no argument, and takes ten seconds, so it gets
-added by reflex rather than chosen.
+could, you would have four documents. The row looked like a summary, needed no
+argument and took ten seconds, so it got added by reflex rather than chosen.
+The `kpi` block that made it was deleted for that reason, along with the hero's
+`stats` field.
 Instead: `hero_figure` when one number genuinely is the whole finding, and
 nothing at all when none is. An empty slot is a better document, not an
 incomplete one.
 → [narrative.md](narrative.md#the-spine-that-works-for-almost-every-argument)
-Caught by: `leading-numbers`, which counts how many of a row's figures the rest
-of the document restates.
 
 **❌ A document that opens on its conclusion, for a reader who does not have the
 subject.** The hero states the finding, the second block compares two designs,
@@ -70,16 +69,21 @@ Caught by: `forward-reference` and `ladder-order`, but only once a brief is
 declared. Nothing catches a document that never declared one, which is why the
 mode is chosen at step 2 and stated in the handoff.
 
-**❌ A glossary before the lesson.** A `definitions` block near the top, holding
-the eight terms the document is about to use.
-Why: it looks like exactly the right thing to do, and it is the back of a
-textbook printed at the front. The reader is asked to memorise definitions for
-things they have not seen, in words drawn from the same vocabulary they do not
-have: "Tenant resolution: Host header looked up in a cached domains table"
-teaches nobody anything.
+**❌ A glossary, anywhere on the page.** A grid of bold terms over one-line
+glosses, under a heading like "What do the less familiar criterion names on
+this page mean?", "Terms used here" or "The words the team uses".
+Why: it looks like exactly the right thing to do, and it reads as filler every
+time. At the top it is the back of a textbook printed at the front: the reader
+memorises definitions for things they have not seen, in words drawn from the
+vocabulary they do not have. Anywhere else it pulls each term away from the
+chart that uses it, so the reader reads the chart, scrolls, reads the gloss and
+scrolls back. The skill used to ship a `definitions` block for this; it was
+deleted, and the build refuses it under any name.
 Instead: introduce a term by **drawing the thing** at the rung that teaches it,
-and keep `definitions` for the end, as the map from the plain words the page
-taught back to the names the team uses.
+or name it in words on the mark that carries it: a column header, an axis
+title, a label. A term used once goes in `footnotes`. A two-column table of
+terms, a `<dl>`, or a section or block titled as a glossary is a linter
+**error** (`glossary`), not a warning.
 
 **❌ A page with no names, no numbers and no dates on it.** Every noun is a
 description of a thing rather than the thing: "the company's own channel tool",
@@ -132,8 +136,11 @@ one, write one sentence on what the other could not show.
 **❌ A bullet list.** Five discs, each carrying a clause.
 Why: a bullet list is a paragraph wearing a disc. It has no shape, so it is
 neither scannable nor readable, and it never has to justify its own length.
-Instead: `chips` for parallel facts, `checklist` for do-and-don't, `process` if
-they are secretly ordered, `definitions` if they are secretly a vocabulary.
+Instead: `process` if they are secretly ordered, `stack` if they are layers,
+`pictogram` if they are counts, a `figure` if they are parts of one thing. If
+they are secretly a vocabulary, put each word on the mark it names; there is no
+glossary. A grid of pills or two columns of ticked sentences is the same list in
+a box: those blocks were deleted.
 
 **❌ Retyping a paragraph as a `table` because table cells are exempt.**
 Why: it is the same move as reaching for report density, but it does not feel
@@ -167,8 +174,8 @@ The tell: you chose a name because it was short and true, and you have not
 asked whether the reader has ever seen it.
 Instead: label the mark in words and demote the identifier to the table twin,
 where it stays exact and reachable without being the only thing on offer. When
-the term itself is the subject, define it in `definitions` **before** the
-section that uses it.
+the term itself is the subject, draw it at the rung that introduces it; never
+in a glossary.
 **This applies to identifiers only.** `skipped_bucket` is a lookup key; Channex,
 Mews and the August release are names, and replacing one of those with a
 description of itself is the opposite failure, two entries up.

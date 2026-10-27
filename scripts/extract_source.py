@@ -380,9 +380,10 @@ def text_candidates(text, numbers, dates):
 
     contrasts = [s for s in sentences if CONTRAST_HINTS.search(s)]
     if len(contrasts) >= 2:
-        out.append({"form": "comparison", "ref": "prose", "confidence": "medium",
-                    "why": f"{len(contrasts)} sentences frame one option against another",
-                    "alternatives": ["matrix", "checklist"], "sample": contrasts[:2]})
+        out.append({"form": "dumbbell", "ref": "prose", "confidence": "medium",
+                    "why": f"{len(contrasts)} sentences frame one option against another; "
+                           "draw the gap, or score the options",
+                    "alternatives": ["slope", "scorecard", "figure"], "sample": contrasts[:2]})
 
     if HIERARCHY_HINTS.search(text):
         out.append({"form": "tree", "ref": "prose", "confidence": "medium",
@@ -418,8 +419,10 @@ def text_candidates(text, numbers, dates):
     pros = re.findall(rf"(?im)^{lead}(?:pros?|benefits?|advantages?|upsides?|do)\b.*$", text)
     cons = re.findall(rf"(?im)^{lead}(?:cons?|risks?|drawbacks?|downsides?|don'?ts?)\b.*$", text)
     if pros and cons:
-        out.append({"form": "checklist", "ref": "prose", "confidence": "medium",
-                    "why": "the source already separates upsides from downsides"})
+        out.append({"form": "scorecard", "ref": "prose", "confidence": "medium",
+                    "why": "the source already separates upsides from downsides; "
+                           "score the options against them",
+                    "alternatives": ["diverging", "figure"]})
     return out
 
 
@@ -502,7 +505,7 @@ def summarize(ledger):
     ]
     if not ledger["candidates"]:
         lines.append("  none detected. The source may be pure narrative; consider process, "
-                     "comparison, definitions, or a concept diagram.")
+                     "comparison, or a concept diagram.")
     for c in ledger["candidates"]:
         lines.append(f"  [{c['confidence']:<6}] {c['form']:<12} {c['ref']:<10} {c['why']}")
         if c.get("alternatives"):

@@ -182,7 +182,8 @@ difference is not decoration: it inverts the first two beats.
    against actual.** That shape turns any thought into a listicle and reliably
    restates whichever picture sits next to it; the block that used to exist for
    it was removed for that reason.
-6. **What it means for you.** `checklist`, or a closing `callout`.
+6. **What it means for you.** A closing `callout`, or the figure from step 4
+   with the reader's next move marked on it.
 
 **Steps 1 to 3 are what an argument document skips**, every time, because the
 source material never contains them: a design document, a spec or a codebase all

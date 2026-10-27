@@ -38,7 +38,7 @@ Look at what it cost on that one document:
 | One app wearing 500 faces | hostnames fanning into one door | nothing; there is no block for it |
 | Blast radius under a breach | a shockwave through shared code | a two-column bullet list |
 | 100 requests in, 2 reaching the core | a beam visibly narrowing | a `sankey`, which is generic plumbing |
-| Tenant scope binding at the Host header | containment, drawn as nested boundaries | a `definitions` card |
+| Tenant scope binding at the Host header | containment, drawn as nested boundaries | a sentence of explanation under a box |
 
 Three of those four are **spatial**, and the catalog has no spatial forms. It
 never will: a catalog of shapes is a catalog of shapes that have recurred, and

@@ -43,8 +43,6 @@ which block carries the section.
 Some blocks stop working below a width, and the compiler tells you rather than
 letting them collapse:
 
-- **`kpi`** needs about 132px per tile. Below that it stacks to one column and
-  warns. Three tiles want span 6+; four want span 8+.
 - **`bar` / `lollipop`** reserve up to 38% of their width for category labels.
   Long names at span 4 leave almost nothing for the bars.
 - **`matrix`** needs roughly 90px per column plus the row-label gutter.

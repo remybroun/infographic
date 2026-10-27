@@ -61,27 +61,19 @@
       "svg": "<text class=\"ig-fig-kicker\" x=\"0\" y=\"24\">A site each, 200 accounts</text><text class=\"ig-fig-kicker\" x=\"610\" y=\"24\">One app, 1 process</text><rect class=\"ig-fig-node\" x=\"0\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"58\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"88\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-solid-danger\" x=\"168\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"118\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"148\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"0\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"42\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"84\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"126\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"168\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"210\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"252\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"294\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"336\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><rect class=\"ig-fig-node\" x=\"378\" y=\"178\" width=\"34\" height=\"22\" rx=\"3\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"52\" opacity=\"0.9\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"94\" opacity=\"0.55\"/><circle class=\"ig-fig-ring-danger\" cx=\"185.0\" cy=\"129.0\" r=\"136\" opacity=\"0.28\"/><text class=\"ig-fig-figure ig-fig-danger\" x=\"0\" y=\"272\">200</text><text class=\"ig-fig-label\" x=\"66\" y=\"272\">reachable from one foothold</text><rect class=\"ig-fig-node\" x=\"610\" y=\"58\" width=\"470\" height=\"142\" rx=\"12\"/><rect class=\"ig-fig-ring-good\" x=\"646\" y=\"86\" width=\"398\" height=\"86\" rx=\"10\"/><circle class=\"ig-fig-solid-danger\" cx=\"845\" cy=\"129\" r=\"9\"/><circle class=\"ig-fig-ring-danger\" cx=\"845\" cy=\"129\" r=\"30\" opacity=\"0.9\"/><text class=\"ig-fig-mute\" x=\"845\" y=\"192\" text-anchor=\"middle\">process boundary</text><text class=\"ig-fig-figure ig-fig-good\" x=\"610\" y=\"272\">1</text><text class=\"ig-fig-label\" x=\"638\" y=\"272\">reachable from one foothold</text>"
     },
     {
-      "type": "comparison",
+      "type": "bar",
       "span": 12,
-      "title": "Patch surface across 500 sites against one tenant-aware app",
-      "left": {
-        "label": "A site each",
-        "headline": "500 patch surfaces",
-        "points": [
-          "500 dependency trees",
-          "500 TLS renewals",
-          "Drift within weeks"
-        ]
-      },
-      "right": {
-        "label": "One tenant-aware app",
-        "headline": "1 patch surface",
-        "points": [
-          "One dependency tree",
-          "Certs issued on demand",
-          "No drift possible"
-        ]
-      }
+      "title": "Patch surfaces to maintain, a site each against one tenant-aware app",
+      "categories": [
+        "A site each",
+        "One tenant-aware app"
+      ],
+      "values": [
+        500,
+        1
+      ],
+      "value_label": "Patch surfaces",
+      "note": "500 dependency trees and 500 certificate renewals, against one of each."
     },
     {
       "type": "section",
@@ -208,44 +200,27 @@
       "note": "Four minutes from entering a domain to serving it, unattended."
     },
     {
-      "type": "chips",
+      "type": "process",
       "span": 12,
-      "title": "The eight states a domain can hold",
-      "items": [
+      "title": "The path a domain takes to go live",
+      "steps": [
         {
-          "label": "Draft",
-          "tone": "mute"
+          "title": "Draft"
         },
         {
-          "label": "DNS pending",
-          "tone": "warn"
+          "title": "DNS pending"
         },
         {
-          "label": "Verified",
-          "tone": "good"
+          "title": "Verified"
         },
         {
-          "label": "Cert issued",
-          "tone": "good"
+          "title": "Cert issued"
         },
         {
-          "label": "Live",
-          "tone": "accent"
-        },
-        {
-          "label": "Failed",
-          "tone": "danger",
-          "note": "retries for 24h"
-        },
-        {
-          "label": "Suspended",
-          "tone": "warn"
-        },
-        {
-          "label": "Archived",
-          "tone": "mute"
+          "title": "Live"
         }
-      ]
+      ],
+      "note": "Off the path: Failed retries for 24 hours; Suspended and Archived are exits."
     },
     {
       "type": "callout",

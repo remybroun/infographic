@@ -55,27 +55,6 @@ def _chip_rows(labels, available, size=10.0, weight=600):
     return rows
 
 
-def balanced_columns(count: int, width: float, min_tile: float) -> int:
-    """How many columns to lay `count` tiles across `width`.
-
-    Six tiles across four columns leaves a row of two and reads as a mistake;
-    three columns of two reads as a grid. So drop a column when it tidies the
-    last row, but only while the row COUNT stays the same. Without that guard
-    the rule runs away: ten tiles walk 4 → 3 → 2, each step "more balanced" and
-    each step wasting more of the page.
-    """
-    fit = max(1, int(width // min_tile))
-    columns = min(fit, max(count, 1))
-    rows = math.ceil(count / columns)
-    best = columns
-    for candidate in range(columns - 1, 1, -1):
-        if math.ceil(count / candidate) != rows:
-            break
-        if count % candidate == 0 or (count % candidate) > (count % best or 0):
-            best = candidate
-    return best
-
-
 # ------------------------------------------------------------------ stack ----
 
 def stack(b: dict, ctx: Ctx) -> str:
@@ -144,64 +123,6 @@ def stack(b: dict, ctx: Ctx) -> str:
     twin = chrome.details_table(["Layer", "Contains"], rows_out, "Show the layers") \
         if b.get("table", True) else ""
     return canvas.render() + twin
-
-
-# ------------------------------------------------------------------ chips ----
-
-def chips(b: dict, ctx: Ctx) -> str:
-    """Indicator chips: the graphic-density replacement for a bullet list.
-
-    A bullet list is a paragraph wearing a disc. A chip grid is scannable, has a
-    shape, and costs the author their adjectives, because a chip that needs
-    twelve words is not a chip.
-    """
-    items = b.get("items", [])
-    if not items:
-        return ""
-    tones = {"good": "good", "warn": "warn", "danger": "danger",
-             "accent": "accent", "plain": "plain", "mute": "mute"}
-    icons = {"good": "✓", "warn": "!", "danger": "✕", "accent": "◆"}
-    cells = []
-    for item in items:
-        if not isinstance(item, dict):
-            item = {"label": item}
-        tone = tones.get(str(item.get("tone", "plain")), "plain")
-        icon = item.get("icon", icons.get(tone, ""))
-        # An `icon` has always been a literal character, and still is. A name
-        # from the pictogram library is recognised instead, which is the
-        # difference between a chip row about apartments carrying "◆" and
-        # carrying an apartment. Neither is required; the tone marks are the
-        # default and they say the thing that usually matters, which is whether
-        # the item is good or bad.
-        if pictograms.has(icon):
-            glyph = (f'<svg class="ig-chip-icon ig-chip-pic" aria-hidden="true" '
-                     f'focusable="false" viewBox="0 0 24 24" fill="currentColor">'
-                     f'<use href="#{pictograms.ID_PREFIX}{icon}"/></svg>')
-        elif icon:
-            glyph = f'<span class="ig-chip-icon" aria-hidden="true">{svg.esc(icon)}</span>'
-        else:
-            glyph = ""
-        value = (f'<span class="ig-chip-value">{inline(item["value"])}</span>'
-                 if item.get("value") is not None else "")
-        note = (f'<span class="ig-chip-note">{inline(item["note"])}</span>'
-                if item.get("note") else "")
-        cells.append((glyph, f'<li class="ig-chip ig-chip-{tone}">',
-                      f'<span class="ig-chip-label">{inline(item.get("label", ""))}</span>'
-                      f"{value}{note}</li>"))
-    # A grid whose labels start at different distances from the left edge is not
-    # a grid. Once ONE chip carries a mark, the plain ones hold the gutter open
-    # rather than sliding under it; a block where nothing is toned keeps the
-    # gutter closed and reads as the plain list it is.
-    blank = ('<span class="ig-chip-icon" aria-hidden="true"></span>'
-             if any(glyph for glyph, _, _ in cells) else "")
-    cells = [open_tag + (glyph or blank) + rest for glyph, open_tag, rest in cells]
-    # Column count is decided here for the same reason the KPI row decides its
-    # own: CSS cannot see how wide this block's grid column actually is.
-    requested = int(b.get("columns", 0) or 0)
-    columns = (min(requested, len(cells)) if requested
-               else balanced_columns(len(cells), ctx.width, 150.0))
-    return (f'<ul class="ig-chips" style="--ig-chip-n:{columns}">'
-            f'{"".join(cells)}</ul>')
 
 
 # -------------------------------------------------------------- scorecard ----

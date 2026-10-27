@@ -13,7 +13,7 @@ for, and draw that instead.
 | "first the provider does A, then the system does B" | `swimlane` |
 | "we scored five options against fifteen criteria and E won" | `scorecard` |
 | "it scored 66 out of 75" | `gauge` |
-| "the states are draft, pending, live, suspended" | `chips` |
+| "the states are draft, pending, live, suspended" | `process`, each state a step and each arrow the event that moves it |
 | "imagine a beam that gets thinner as it goes deeper" | **`figure`** |
 
 That last row is the one to notice. **The catalog is a floor, not a ceiling.**
@@ -189,40 +189,6 @@ One score against its ceiling, as an arc.
 invents its own scale, and the honest form is a `stat`. Three gauges in a row at
 `span: 4` compare well; more than three, use a `bar`.
 
-## `chips`
-
-Indicator chips: the graphic-density replacement for a bullet list. A bullet
-list is a paragraph wearing a disc. A chip grid is scannable, has a shape, and
-costs you your adjectives, because a chip needing twelve words is not a chip.
-
-```json
-{
-  "type": "chips",
-  "items": [
-    {"label": "Published", "tone": "good"},
-    {"label": "SSL pending", "tone": "warn"},
-    {"label": "Failed", "tone": "danger", "note": "retry in 24h"},
-    {"label": "Archived", "tone": "mute"},
-    {"label": "Sessions", "value": "12.4K", "tone": "accent"}
-  ]
-}
-```
-
-`items` also accepts bare strings. Tones are `plain`, `mute`, `good`, `warn`,
-`danger`, `accent`; each carries an icon as well as a colour, so the state never
-depends on hue alone. `value` sits right-aligned, `note` drops to its own line.
-
-`icon` overrides the tone mark, either with a literal character or with a name
-from the pictogram library (`"icon": "key"` draws a key). The tone marks are the
-default and they usually say the thing that matters, which is whether the item
-is good or bad; a picture is worth swapping them for when the chips name
-*things* rather than states. Not both: a chip carrying a drawn key and no tone
-colour has lost the one channel a reader scans for.
-→ [drawing.md](../drawing.md#pictograms-when-the-subject-has-a-shape)
-
-Labels are charged against the **label** budget (6 words), not the detail
-budget. That is deliberate.
-
-Columns are computed from the block's real width and balanced so the last row is
-not a straggler, unless you set `columns` explicitly. Six chips across a 12-span
-become three columns of two rather than four and a gap.
+There is no `chips` block. It drew a grid of labelled pills, which is a bullet
+list with rounded corners, and it was deleted with `checklist`, `comparison` and
+`kpi`. → [editorial.md](editorial.md#there-is-no-text-in-boxes-block)

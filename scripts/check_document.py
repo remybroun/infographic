@@ -25,6 +25,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from lib.density import WORDS_PER_BLOCK, WORDS_PER_PAGE  # noqa: E402
+from lib.registry import GLOSSARY_FIX, GLOSSARY_TITLE  # noqa: E402
 
 
 def _count(pattern, text, flags=0):
@@ -215,7 +216,7 @@ def check(html_path: str, pdf_path: str = None):
             add("warn", "text-heavy-mix",
                 f"{charts} graphics against {text_blocks} prose blocks "
                 f"({ratio * 100:.0f}% graphic)",
-                "replace the prose blocks with stack, chips, scorecard or process")
+                "replace the prose blocks with stack, scorecard, process or a figure")
         if text_blocks and charts == 0:
             add("error", "prose-only", f"{text_blocks} prose blocks and no graphic")
 
@@ -224,10 +225,7 @@ def check(html_path: str, pdf_path: str = None):
         # wall. The reader does not experience an average, they read a section
         # at a time, so check the run between one section head and the next.
         #
-        # Deliberately narrow. A section built from `definitions`, `comparison`
-        # or `checklist` draws no SVG and is still doing its job: those forms
-        # have structure, and the vocabulary section of a good explainer looks
-        # exactly like that. What this catches is a section carried by the two
+        # What this catches is a section carried by the two
         # forms with no shape at all, `table` and `prose`, which is what an
         # author reaches for when the budget says no.
         shapeless = re.compile(r'class="(?:ig-table|ig-prose|ig-bullets|ig-bridge)[ "]')
@@ -320,18 +318,55 @@ def check(html_path: str, pdf_path: str = None):
                     r"\b(?:[A-Z][a-z0-9]+){2,}\b",            # CamelCase
                     r"\b\w+(?:::\w+|\(\))"):                  # Foo::bar, baz()
         identifiers |= set(re.findall(pattern, visible))
-    # `ig-defs` is the arrowhead <defs>, so match the class exactly.
-    defined = _count(r'class="ig-def"', body)
     # Six, for the same reason a donut stops at six segments: it is where a
-    # reader stops being able to hold the set. A document may introduce more
-    # than six new names, but not silently.
-    if len(identifiers) > 6 and defined == 0:
+    # reader stops being able to hold the set. This used to be silenced by a
+    # `definitions` block, which taught the skill to answer jargon with a
+    # glossary. That block is gone, and the only fix left is the real one.
+    if len(identifiers) > 6:
         sample = ", ".join(sorted(identifiers)[:5])
         add("warn", "undefined-vocabulary",
-            f"{len(identifiers)} identifiers on the page and no definitions "
-            f"block ({sample}…)",
-            "add `definitions` before the first section that uses them, or "
-            "label the marks in words and demote the identifiers to the twin")
+            f"{len(identifiers)} identifiers on the page ({sample}…)",
+            "label the marks in words and demote the identifiers to the twin "
+            "or to `footnotes`")
+
+    # -- no glossary, in any form -------------------------------------------
+    # The `definitions` block was deleted because a grid of terms over
+    # one-line glosses read as filler on every page it reached. Deleting the
+    # block does not delete the habit: the same thing can come back as a
+    # two-column table, a raw <dl>, or a section whose question is "what do
+    # these names mean?". Each of those is an error, not a warning.
+    glossary = []
+    if re.search(r"<dl\b", body, re.I):
+        glossary.append("a <dl> definition list")
+    for head in re.findall(
+            r'class="(?:ig-section-head|ig-section-title|ig-block-title|'
+            r'ig-block-sub)"[^>]*>(.*?)</(?:div|h\d|p)>', body, re.S):
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", head)).strip()
+        if GLOSSARY_TITLE.search(text):
+            glossary.append(f'a block titled "{text}"')
+    for table in re.findall(r'<table\b[^>]*>.*?</table>', body, re.S | re.I):
+        heads = [re.sub(r"<[^>]+>", "", h).strip().lower()
+                 for h in re.findall(r"<th\b[^>]*>(.*?)</th>", table, re.S)]
+        if any(h in ("definition", "meaning", "what it means", "means",
+                     "glossary") for h in heads):
+            glossary.append(f"a table of terms ({' / '.join(heads[:2])})")
+    # And the last place it can hide: `footnotes`, which is the right home for
+    # a term used once and the wrong one for ten. "Term: gloss" items past four
+    # are the grid again, set in smaller type.
+    method = {"source", "sources", "method", "note", "notes", "period", "data",
+              "caveat", "scope", "sample", "excluded", "assumption", "figures"}
+    for notes in re.findall(r'class="ig-footnotes".*?</ol>', body, re.S):
+        items = [re.sub(r"<[^>]+>", "", li).strip()
+                 for li in re.findall(r"<li\b[^>]*>(.*?)</li>", notes, re.S)]
+        terms = [i for i in items if (m := re.match(r"([^:.]{1,40}):\s", i))
+                 and m.group(1).strip().lower() not in method]
+        if len(terms) > 4:
+            glossary.append(f"{len(terms)} term glosses in footnotes "
+                            f"(the cap is 4)")
+    if glossary:
+        add("error", "glossary",
+            f"the page carries a glossary: {'; '.join(dict.fromkeys(glossary))}",
+            GLOSSARY_FIX.replace("\n", " "))
 
     heroes = _count(r'class="ig-hero-figure"', body)
     if heroes > 1:

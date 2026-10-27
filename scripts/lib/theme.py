@@ -230,9 +230,7 @@ class Ctx:
         its tile form over its prose form.
 
         `lesson` counts. It is graphic density with room to teach, not a step
-        towards report density: a lesson that renders its definitions as a
-        two-column list of sentences is the glossary-at-the-back failure this
-        skill added the lesson mode to prevent.
+        towards report density.
         """
         return self.density in ("graphic", "lesson")
 

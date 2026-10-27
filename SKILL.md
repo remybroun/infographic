@@ -1,7 +1,7 @@
 ---
 name: infographic
 description: "Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks."
-version: 3.7.0
+version: 3.8.0
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
@@ -119,9 +119,11 @@ choosing forms, which is the only moment they can change a decision.
   **introduced by being drawn** at the rung that teaches it. Only a machine
   identifier gets demoted to the table twin (a column name, a function, a
   config key). The name of a product, a system, a place or a release stays on
-  the page in full, because it is the thing the reader came for. A `definitions`
-  block is the fallback, not the destination, and a glossary before the lesson
-  is the back of a textbook printed at the front.
+  the page in full, because it is the thing the reader came for. **There is no
+  glossary, ever**: no `definitions` block (it was deleted), no table of terms,
+  no section asking what the names mean. A term lives on the mark that uses it,
+  in the figure that teaches it, or, used once, in `footnotes`. The build
+  refuses the block and the linter fails the page on every other form of it.
 - **Say what the thing is before how it works.** Name the subject in plain words
   a stranger owns, then the mechanism. The mechanism angle arrives first because
   it is the shape the source is already in, and it is rarely the one the reader
@@ -266,7 +268,7 @@ avoided *before* you write, then the review checklist.
 
 ## The catalog
 
-56 block types in seven families: **teaching**, **diagram**, **structure**,
+51 block types in seven families: **teaching**, **diagram**, **structure**,
 **quantity**, **change**, **part-to-whole**, **editorial**. The teaching family
 (`analogy` `progressive` `bridge`) is the one to know by name:
 every other family draws a relation between things the reader already accepts,
@@ -349,7 +351,7 @@ compliance. `python3 scripts/ig.py selftest --render` builds all six.
 - **`architecture-explainer.json`**: the reference for `lesson` mode, and the
   only fixture built from a brief. Two drawings first, one fanning in and one
   fanning out, then the mechanism: a `progressive`, a `stack`, a `swimlane`,
-  glossary last. It used to open on an `analogy` and it is worth knowing why it
+  and the team's names glossed in `footnotes`. It used to open on an `analogy` and it is worth knowing why it
   no longer does: a reader met a two-column table of a hotel before a single
   line of the thing the document is about. Read
   `fixtures/briefs/architecture-explainer.json` first: it is the document.

@@ -22,9 +22,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from build import Document  # noqa: E402
 from lib import derivation  # noqa: E402
-from lib import leading_numbers  # noqa: E402
 from lib import density, registry, svg  # noqa: E402
-from lib.blocks_diagram import CHIP_PAD, _chip_rows, balanced_columns  # noqa: E402
+from lib.blocks_diagram import CHIP_PAD, _chip_rows  # noqa: E402
 from lib.theme import Ctx, Theme  # noqa: E402
 import validate_palette  # noqa: E402
 
@@ -209,13 +208,8 @@ MINIMAL = {
     "callout": {"tone": "warn", "title": "Careful", "text": "A caveat."},
     "stat": {"label": "Revenue", "value": 4200000, "currency": "$", "delta": 12.4,
              "trend": [1, 3, 2, 5, 4, 7]},
-    "kpi": {"items": [{"label": "A", "value": 12}, {"label": "B", "value": 34}]},
     "hero_figure": {"value": 0.68, "decimals": 2, "label": "of the total"},
     "table": {"columns": ["Name", "Value"], "rows": [["A", "1"], ["B", "2"]]},
-    "checklist": {"do": ["Label the endpoint"], "dont": ["Number every point"]},
-    "definitions": {"items": [{"term": "Churn", "text": "Customers who leave."}]},
-    "comparison": {"left": {"label": "Before", "headline": "Slow", "points": ["Manual"]},
-                   "right": {"label": "After", "headline": "Fast", "points": ["Automatic"]}},
     "image": {"src": "x.png", "alt": "An image"},
     "footnotes": {"items": ["Source: internal data."]},
     "divider": {}, "spacer": {}, "raw": {"html": "<p>raw</p>"},
@@ -224,8 +218,6 @@ MINIMAL = {
         {"label": "Edge", "meta": "cached", "items": ["CDN", "TLS"]},
         {"label": "App", "items": ["Router", "Render"]},
     ]},
-    "chips": {"items": [{"label": "Draft", "tone": "mute"},
-                        {"label": "Live", "tone": "good", "value": "42"}]},
     "scorecard": {"choices": ["Hybrid", "Split"], "criteria": ["Cost", "Scale", "Risk"],
                   "scores": [[5, 4, 3], [2, 2, 1]], "max": 5},
     "gauge": {"value": 66, "max": 75, "label": "Hybrid", "caption": "recommended"},
@@ -478,7 +470,7 @@ def test_compiler():
         "blocks": [
             {"type": "hero", "title": "A claim"},
             {"type": "bar", "span": 6, "categories": ["A"], "values": [1], "title": "Chart"},
-            {"type": "chips", "span": 6, "items": ["Live"], "break": "before"},
+            {"type": "stat", "span": 6, "label": "Live", "value": 42, "break": "before"},
         ],
     }
     doc = Document(spec)
@@ -575,7 +567,7 @@ def test_extractor():
                     "Pros\n- a\nCons\n- b"):
         forms = [c["form"] for c in ex.text_candidates(heading, [], [])]
         check(f"pros/cons detected in {heading.splitlines()[0]!r}",
-              "checklist" in forms, str(forms))
+              "scorecard" in forms, str(forms))
 
     md = "| A | B |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |"
     found = ex.extract_tables_from_text(md)
@@ -968,7 +960,7 @@ def test_brief():
 
     charted = json.loads(json.dumps(good))
     charted["sections"][0] = {"id": "a", "asks": "What is it like?",
-                              "teaches": ["gear bearing"], "form": "comparison",
+                              "teaches": ["gear bearing"], "form": "matrix",
                               "shows": "two columns, bearing beside gearbox"}
     charted["sections"][1]["rank"] = 1
     errors, _ = br.audit(charted, registry)
@@ -1199,69 +1191,6 @@ def test_lesson_density():
           Ctx(Theme.load("default"), density="lesson").graphic)
 
 
-def test_leading_numbers():
-    """A kpi row that restates what the document explains properly.
-
-    Expectations come from the failure: a row of four whose every figure a
-    chart further down carries with a denominator and a shape. The rule is
-    stated before the implementation is consulted: warn when at least half a
-    row's figures appear elsewhere, and never warn for hero_figure or stat,
-    which are claims that evidence below them is supposed to support.
-    """
-    print("\nleading numbers, the row added because a slot existed")
-
-    restated = {"blocks": [
-        {"type": "kpi", "items": [{"label": "Kinds", "value": 61},
-                                  {"label": "Places", "value": 20}]},
-        {"type": "bar", "categories": ["a", "b"], "values": [61, 20]},
-    ]}
-    found = leading_numbers.check(restated, registry)
-    check("a row restating the chart below is reported",
-          found and "2 of 2" in found[0], found)
-
-    fresh = {"blocks": [
-        {"type": "kpi", "items": [{"label": "Kinds", "value": 61},
-                                  {"label": "Places", "value": 20}]},
-        {"type": "bar", "categories": ["a", "b"], "values": [7, 9]},
-    ]}
-    check("a row carrying numbers nothing else states is silent",
-          leading_numbers.check(fresh, registry) == [])
-
-    half = {"blocks": [
-        {"type": "kpi", "items": [{"label": "a", "value": 5}, {"label": "b", "value": 6},
-                                  {"label": "c", "value": 7}, {"label": "d", "value": 8}]},
-        {"type": "bar", "categories": ["x"], "values": [5, 6]},
-    ]}
-    check("half restated is enough to report",
-          leading_numbers.check(half, registry) != [])
-
-    # A claim supported by evidence underneath is the correct relationship.
-    claim = {"blocks": [
-        {"type": "hero_figure", "label": "Conversion", "value": 3.1, "unit": "%"},
-        {"type": "funnel", "stages": [{"label": "a", "value": 3.1}]},
-    ]}
-    check("a hero figure evidenced below it is not a restatement",
-          leading_numbers.check(claim, registry) == [])
-    single = {"blocks": [
-        {"type": "stat", "label": "Median", "value": 31},
-        {"type": "bar", "categories": ["a"], "values": [31]},
-    ]}
-    check("a stat evidenced below it is not a restatement",
-          leading_numbers.check(single, registry) == [])
-
-    # Numbers are found inside strings too, so a figure quoted in a title counts.
-    quoted = {"blocks": [
-        {"type": "kpi", "items": [{"label": "Kinds", "value": 61}]},
-        {"type": "callout", "title": "All 61 of them", "text": "x"},
-    ]}
-    check("a figure restated in prose is found",
-          leading_numbers.check(quoted, registry) != [])
-
-    check("a document with no leading row is silent",
-          leading_numbers.check({"blocks": [{"type": "bar", "categories": ["a"],
-                                             "values": [1]}]}, registry) == [])
-
-
 def test_derivation():
     """Whether a regeneration re-derived anything, or edited the last one.
 
@@ -1272,7 +1201,7 @@ def test_derivation():
     """
     print("\nderivation, the check on a regeneration that changed nothing")
 
-    same = ["figure", "figure", "bar", "chips"]
+    same = ["figure", "figure", "bar", "stack"]
     check("identical form lists overlap completely",
           derivation.overlap(same, list(same)) == 1.0)
     check("disjoint form lists do not overlap",
@@ -1409,8 +1338,6 @@ def test_density():
           not audit({"type": "table", "columns": ["A"], "rows": [[long_line]]}))
     check("raw is exempt", not audit({"type": "raw", "html": long_line}))
 
-    check("chip labels are charged as labels, not details",
-          audit({"type": "chips", "items": [" ".join(["word"] * 7)]})[0].role == "label")
     check("nested item text is charged",
           len(audit({"type": "process",
                      "steps": [{"title": "Go", "text": " ".join(["word"] * 20)}]})) == 1)
@@ -1452,21 +1379,6 @@ def test_graphic_layout():
     check("an oversized chip is clamped to the available width",
           over[0][0][2] <= 80.0, str(over[0][0][2]))
 
-    # Six tiles across four columns leaves a stray row of two; three columns is
-    # two full rows. Ten tiles must NOT collapse to two, which the first
-    # implementation did while calling it balance.
-    check("6 tiles balance to 3 columns", balanced_columns(6, 672.0, 168.0) == 3,
-          str(balanced_columns(6, 672.0, 168.0)))
-    check("10 tiles stay at 4 columns", balanced_columns(10, 672.0, 150.0) == 4,
-          str(balanced_columns(10, 672.0, 150.0)))
-    check("5 tiles balance to 3 columns", balanced_columns(5, 672.0, 150.0) == 3,
-          str(balanced_columns(5, 672.0, 150.0)))
-    check("4 tiles stay at 4 columns", balanced_columns(4, 672.0, 150.0) == 4,
-          str(balanced_columns(4, 672.0, 150.0)))
-    check("balancing never returns zero columns", balanced_columns(1, 40.0, 150.0) >= 1)
-    check("a narrow block collapses to one column",
-          balanced_columns(6, 150.0, 150.0) == 1, str(balanced_columns(6, 150.0, 150.0)))
-
     # Every registered block declares whether it carries its idea in a picture,
     # because the linter's graphic-ratio check counts on it.
     unflagged = [n for n, e in registry.REGISTRY.items() if "graphic" not in e]
@@ -1475,8 +1387,8 @@ def test_graphic_layout():
     check("the diagram family is entirely graphic",
           all(registry.REGISTRY[n]["graphic"] for n in diagram), str(diagram))
     check("prose is not counted as a graphic", not registry.REGISTRY["prose"]["graphic"])
-    check("`list` now resolves to chips, not bullets",
-          registry.resolve("list")[0] == "chips", registry.resolve("list")[0])
+    check("`list` is refused, not quietly turned into text pills",
+          registry.resolve("list")[0] in registry.REMOVED)
 
 
 def test_figure():
@@ -1593,7 +1505,7 @@ def test_scroll():
         html = doc.render()
         return doc, check_document.document_classes(html), check_document.split_document(html)[1]
 
-    doc, classes, body = build([{"type": "chips", "items": ["One", "Two"]}])
+    doc, classes, body = build([{"type": "bar", "categories": ["A", "B"], "values": [1, 2]}])
     check("scroll is a known page", doc.page_key == "scroll")
     check("scroll stamps its own body class", "ig-page-scroll" in classes, str(classes))
     check("a scroll document is marked continuous", "ig-continuous" in classes)
@@ -1605,10 +1517,10 @@ def test_scroll():
 
     # A bleed block escapes the measure. That is the whole point of the target,
     # and it is meaningless (and breaks the page box) on paper.
-    doc, classes, body = build([{"type": "chips", "items": ["A"], "bleed": True}])
+    doc, classes, body = build([{"type": "bar", "categories": ["A"], "values": [1], "bleed": True}])
     check("a bleed block is marked", "ig-bleed" in body)
     paper, _ = Document({"meta": {"page": "a4"},
-                         "blocks": [{"type": "chips", "items": ["A"], "bleed": True}]}), None
+                         "blocks": [{"type": "bar", "categories": ["A"], "values": [1], "bleed": True}]}), None
     check("bleed on paper warns rather than silently doing nothing",
           any("bleed" in w for w in paper.warnings), str(paper.warnings))
 
@@ -1628,7 +1540,7 @@ def test_scroll():
     import tempfile
     spec = {"meta": {"title": "Scroll", "page": "scroll"}, "blocks": [
         {"type": "hero", "title": "A claim", "subtitle": "One line under it."},
-        {"type": "chips", "items": ["One", "Two", "Three"], "bleed": True},
+        {"type": "process", "steps": [{"title": "One"}, {"title": "Two"}], "bleed": True},
         {"type": "bar", "categories": ["A", "B"], "values": [3, 5], "title": "Two things"},
     ]}
     with tempfile.TemporaryDirectory() as tmp:
@@ -1765,13 +1677,12 @@ def test_catalog_lookup():
 
     _, out = run("bullets")
     check("an undocumented block falls back to the registry, not a crash",
-          "No section in" in out and "a paragraph wearing a disc" in out)
+          "No section in" in out and "the picture the items describe" in out)
 
     # A key the renderer accepts and the prose omits is a key someone goes
-    # looking for in `scripts/`. `checklist` documents `do_title` and not
-    # `dont_title`, and that is the case that sent an author into the source.
-    _, out = run("checklist")
-    check("a key the renderer reads is never invisible", "dont_title" in out)
+    # looking for in `scripts/`.
+    _, out = run("dumbbell")
+    check("a key the renderer reads is never invisible", "to_label" in out)
 
     buffer = io.StringIO()
     with contextlib.redirect_stdout(buffer):
@@ -1852,18 +1763,6 @@ def test_pictograms():
           drawn_in(dict(MINIMAL["unit"], type="unit", glyph="home")))
     check("a unit chart naming a glyph that does not exist is refused",
           _raises(lambda: drawn_in(dict(MINIMAL["unit"], type="unit", glyph="horse"))))
-
-    chips_plain = drawn_in({"type": "chips",
-                            "items": [{"label": "Live", "tone": "good"}]})
-    check("a chip with no icon name keeps its tone mark",
-          "ig-chip-pic" not in chips_plain and "ig-chip-icon" in chips_plain)
-    check("a chip naming a pictogram draws it",
-          "ig-chip-pic" in drawn_in({"type": "chips",
-                                     "items": [{"label": "Keys", "icon": "key"}]}))
-    chips_char = drawn_in({"type": "chips",
-                           "items": [{"label": "Live", "icon": "★"}]})
-    check("a chip icon that is a character is still a character",
-          "★" in chips_char and "ig-chip-pic" not in chips_char)
 
     # The pictogram block's own contract.
     def picto(**kw):
@@ -2137,6 +2036,112 @@ def test_copy_register():
                 'less than referral.</p>') == set())
 
 
+def test_no_glossary():
+    """There is no glossary, in any form.
+
+    The `definitions` block rendered a grid of bold terms over one-line glosses,
+    set apart from the chart that used them, and it read as filler on every page
+    it reached. It was deleted, and deleting a block does not delete the habit:
+    the same page comes back as a two-column table, a raw <dl>, or a section
+    whose question is "what do these names mean?". Each of those is pinned here.
+    """
+    print("\nno glossary, in any form")
+    import check_document as cd
+    from build import Document
+    from lib import brief as br
+
+    for name in ("definitions", "glossary", "key-terms", "terminology"):
+        message = ""
+        try:
+            registry.render_block({"type": name, "items": []}, ctx())
+        except SystemExit as exc:
+            message = str(exc)
+        check(f"block type '{name}' is refused with the reason",
+              "removed" in message and "footnotes" in message, message)
+    check("`definitions` is not in the registry", "definitions" not in registry.REGISTRY)
+    check("`definitions` is not page furniture", "definitions" not in br.FURNITURE)
+
+    spec_path = os.path.join(FIXTURES, "specs", "concept-explainer.json")
+    with open(spec_path, encoding="utf-8") as fh:
+        spec = json.load(fh)
+    tmp = os.path.join(SKILL, "examples", "out", "_glossary_probe.html")
+    os.makedirs(os.path.dirname(tmp), exist_ok=True)
+
+    def codes(extra):
+        probe = json.loads(json.dumps(spec))
+        probe["blocks"] = probe["blocks"][:-1] + extra + probe["blocks"][-1:]
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(Document(probe).render())
+        return {f["code"] for f in cd.check(tmp)}
+
+    check("a fixture carries no glossary", "glossary" not in codes([]))
+    check("a section asking what the names mean is a glossary",
+          "glossary" in codes([{"type": "section", "title":
+              "What do the less familiar criterion names on this page mean?"}]))
+    check("a block titled as terms is a glossary",
+          "glossary" in codes([{"type": "bar", "title": "Terms used here",
+                                "categories": ["A"], "values": [1]}]))
+    check("a table of term and meaning is a glossary",
+          "glossary" in codes([{"type": "table", "columns": ["Term", "Meaning"],
+                                "rows": [["Principal", "What you put in"]]}]))
+    check("a raw <dl> is a glossary",
+          "glossary" in codes([{"type": "raw", "html":
+              "<dl><dt>Principal</dt><dd>What you put in</dd></dl>"}]))
+    many = [f"Term {i}: what it means." for i in range(5)]
+    check("five term glosses in footnotes is a glossary",
+          "glossary" in codes([{"type": "footnotes", "items": many}]))
+    check("four, and source lines, are not",
+          "glossary" not in codes([{"type": "footnotes", "items":
+              many[:4] + ["Source: internal data.", "Period: 2025."]}]))
+    check("a question about what a number means is not",
+          "glossary" not in codes([{"type": "section", "title":
+              "What does a 7% return mean after twenty years?"}]))
+
+    brief = {"meta": {"mode": "argument"}, "sections": [
+        {"id": "g", "asks": "What do these terms mean?", "form": "callout"},
+        {"id": "h", "asks": "Which words matter?", "form": "definitions"}]}
+    errors, _ = br.audit(brief, registry)
+    check("a brief section asking for definitions is refused",
+          any("brief-glossary" in e for e in errors), errors)
+    check("a brief section built as `definitions` is refused",
+          any("footnotes" in e and e.startswith("h:") for e in errors), errors)
+
+
+def test_no_text_in_boxes():
+    """checklist, comparison, chips and kpi are gone.
+
+    Each drew no SVG and was flagged as a graphic, so a page of sentences in
+    boxes passed as graphic-first. They are refused by name and by every alias
+    that used to reach them, and the refusal says what to draw instead.
+    """
+    print("\nno text in boxes")
+    from lib import brief as br
+    for name in ("checklist", "comparison", "chips", "kpi", "kpis", "stats",
+                 "compare", "list", "tags", "pills", "badges", "facts"):
+        message = ""
+        try:
+            registry.render_block({"type": name}, ctx())
+        except SystemExit as exc:
+            message = str(exc)
+        check(f"block type '{name}' is refused with what to draw",
+              "removed" in message and "`" in message, message)
+    for name in ("checklist", "comparison", "chips", "kpi"):
+        check(f"`{name}` is not in the registry", name not in registry.REGISTRY)
+    check("a hero carrying a row of stats is refused",
+          _raises(lambda: registry.render_block(
+              {"type": "hero", "title": "T", "stats": [{"label": "A", "value": 1}]},
+              ctx())))
+    errors, _ = br.audit({"meta": {"mode": "argument"}, "sections": [
+        {"id": "x", "asks": "Which option wins?", "form": "comparison"}]}, registry)
+    check("a brief section built as `comparison` is refused with the reason",
+          any("was removed" in e and "dumbbell" in e for e in errors), errors)
+    silent = [name for name, entry in registry.REGISTRY.items()
+              if entry.get("graphic") and name not in ("hero_figure", "image")
+              and name in MINIMAL
+              and "<svg" not in registry.render_block(dict(MINIMAL[name], type=name), ctx())]
+    check("every block counted as a graphic draws an SVG", not silent, str(silent))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--render", action="store_true", help="also build fixtures to PDF")
@@ -2161,10 +2166,11 @@ def main():
     test_derivation()
     test_ladder()
     test_brief()
+    test_no_glossary()
+    test_no_text_in_boxes()
     test_section_numbering()
     test_number_defaults()
     test_lesson_density()
-    test_leading_numbers()
     test_pictograms()
     test_copy_register()
     test_fixtures(args.render)

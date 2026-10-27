@@ -13,11 +13,12 @@ for. Expect roughly half of a good concept document to be these.
  "title": "Compound and simple interest on £10,000 at 7% over 30 years",
  "subtitle": "Compounding ends 2.5 times higher; the gap is interest earned on interest.",
  "lede": "Two or three sentences of setup.",
- "author": "Analytics", "date": "2026",
- "stats": [{"label": "Tickets received", "value": 18420, "compact": true, "delta": -14.2}]}
+ "author": "Analytics", "date": "2026"}
 ```
 
-`tone`: `plain` (default) or `panel` for a tinted block. `stats` embeds a KPI row.
+`tone`: `plain` (default) or `panel` for a tinted block. There is no `stats`
+field: it embedded a row of number tiles, which was removed with `kpi`. If one
+number is the finding, follow the hero with a `hero_figure`.
 
 **The title names the subject, the scope and the period, literally.** A reader
 who sees only the title should know what the document covers and be able to
@@ -99,7 +100,7 @@ painted blue.
 
 Use sparingly. Three callouts on a page and none of them is a callout any more.
 
-## `stat` / `kpi` / `hero_figure`, numbers as figures
+## `stat` / `hero_figure`, numbers as figures
 
 ```json
 {"type": "stat", "label": "Median time to close", "value": 31, "unit": "h",
@@ -114,22 +115,16 @@ Use sparingly. Three callouts on a page and none of them is a callout any more.
 | `delta_period` | name the comparison, a delta against nothing means nothing |
 | `trend` | 6-14 points; renders a sparkline in the accent |
 
-`kpi` wraps 3-4 stats in a row. **The column count is computed from the block's
-real width**, so a 4-span KPI stacks vertically instead of colliding, and warns
-when it does, so you know to widen the span.
-
-**Before writing a `kpi` row, check whether the document explains any of those
-numbers further down.** If it does, the row is those facts with the denominator,
-the comparison and the shape stripped off, printed before the reader has a frame
-for them. This is the single most-added-by-reflex block in the catalog, because
-four labelled integers look like a summary and cost nothing to write. A row of
-four is the strongest tell: four numbers cannot each be the finding. Reach for
-`hero_figure` when one number genuinely is, and for nothing at all when none is.
-`leading-numbers` measures it and warns.
+There is no row of number tiles. Four labelled integers look like a summary and
+cost nothing to write, and they are the same facts a chart further down carries
+with its denominator and its shape, printed before the reader has a frame for
+them. Four numbers cannot each be the finding. Reach for `hero_figure` when one
+number genuinely is, put the rest in the chart that proves it, and lead with
+nothing at all when no number is the finding.
 
 `hero_figure` is the one number a page leads with: large, in the sans (never a
-serif, that reads as off-brand decoration), **exactly one per view**. All three
-use proportional figures rather than `tabular-nums`, which makes a number like
+serif, that reads as off-brand decoration), **exactly one per view**. Both use
+proportional figures rather than `tabular-nums`, which makes a number like
 121 look loose at display size.
 
 ## `table`: when exact values matter
@@ -144,49 +139,44 @@ Not a fallback, the right answer whenever there are more than about seven
 classes that all carry meaning, or when the reader needs to look a number up
 rather than compare shapes.
 
-## `checklist`: what to do and what not to
+## There is no text-in-boxes block
 
-```json
-{"type": "checklist", "do_title": "What moves the outcome",
- "do": ["Starting earlier, even with less"],
- "dont": ["Chasing an extra 0.2% of headline rate"]}
-```
+`checklist`, `comparison`, `chips` and `kpi` were deleted. Each one drew no
+SVG: two columns of ticked sentences, two tinted panels of bullets, a grid of
+labelled pills, a row of number tiles. The registry counted them as graphics, so
+a page built from them passed as graphic-first while being text in boxes, which
+is the opposite of what this skill is for. The build refuses all four, and the
+aliases that pointed at them (`compare`, `kpis`, `stats`, `list`, `tags`,
+`pills`, `badges`, `facts`), with the reason.
 
-Both columns carry a shape as well as a colour. Keep the items **concrete and
-parallel**: "Label the endpoint" beats "Be thoughtful about labelling".
+Draw the thing instead:
 
-## `comparison`: two competing framings
+| What you were about to write | Draw it as |
+|---|---|
+| do and don't, a rule and its failure | a `callout` for the one rule that matters, or a `figure` of the failure happening |
+| before and after, old framing against new | `dumbbell` or `slope` when both sides are measured; `scorecard` or `matrix` when they are weighed on criteria; a before/after `figure` when the difference is a shape |
+| a set of states or parallel facts | `process` if they happen in order, `stack` if they are layers, `pictogram` if they are counts, a `figure` if they are parts of one thing |
+| three or four headline numbers | one `hero_figure` or `stat`, and the chart that proves it |
 
-```json
-{"type": "comparison", "vs": "vs",
- "left":  {"label": "Before", "headline": "Slow", "points": ["Manual triage"]},
- "right": {"label": "After",  "headline": "Fast", "points": ["Owner at triage"]}}
-```
+## There is no glossary block
 
-Deliberately asymmetric: the right side takes the accent tint, because it is the
-one you are arguing for. If you are genuinely neutral between the two, use a
-`matrix` instead, the styling here is not neutral and pretending otherwise
-misleads.
+There used to be a `definitions` block: a grid of bold terms over one-line
+glosses. It was deleted because it read as filler on every page it reached,
+set apart from the chart whose words it explained. `definitions`, `glossary`,
+`terms`, `vocabulary` and their spellings are refused by the build with the
+reason, and the linter fails a page (`glossary`, an error) that rebuilds it
+from other parts: a table with a Definition or Meaning column, a `<dl>`, a
+section or block titled as a glossary, or more than four "Term: gloss" lines in
+`footnotes`.
 
-## `definitions`: shared vocabulary
+A term the reader lacks goes, in order of preference:
 
-```json
-{"type": "definitions", "items": [{"term": "Churn", "text": "Customers who leave."}]}
-```
-
-In `argument` mode, put this **before** the argument that depends on the terms,
-not in an appendix. The reader already has the concepts and is being handed the
-document's shorthand for them.
-
-**In `lesson` mode the opposite holds, and this entry is the one an agent reads
-at step 6, so it says so here rather than only in `teaching.md`.** A reader who
-does not have the concept cannot learn it from a definition list: a glossary
-placed before the lesson is the back of a textbook printed at the front. Each
-term is introduced by being *drawn*, at the rung that teaches it, and
-`definitions` goes last as a place to look things up again. It is the fallback,
-never the destination. `anti-patterns.md` lists "a glossary before the lesson"
-as a named failure for exactly this reason.
-→ [teaching.md](../teaching.md) · [../anti-patterns.md](../anti-patterns.md)
+1. **Drawn**, in the figure at the rung that teaches it.
+2. **Named in words on the mark that carries it**: a scorecard criterion reads
+   "Prices match ours", not "Rate parity"; an axis says "listings synced
+   without errors", not "Sync health".
+3. **Glossed in `footnotes`**, when it is used once and only to read one label.
+→ [../anti-patterns.md](../anti-patterns.md)
 
 ## `footnotes`: sources, method, and terms
 
@@ -204,10 +194,10 @@ assertions.
 **It is also the right home for a term the document uses once.** `footnotes` is
 exempt from the word budget, so a gloss here is free, and free is what a
 one-off term is worth: expanding an acronym inline costs label space on every
-mark that carries it. Use `definitions` when the reader needs the term to follow
-the argument at all, and put it before the argument; use a footnote when they
-need it only to read one label. Neither is an appendix for vocabulary you could
-not be bothered to explain.
+mark that carries it. Use a footnote when the reader needs a term only to read
+one label; when they need it to follow the argument at all, it belongs on the
+page, drawn or in words. Four term glosses is the cap: past that the footnotes
+are a glossary in smaller type, and the linter fails the page.
 
 ## `image`: `divider`, `spacer`, `raw`
 

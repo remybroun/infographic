@@ -98,13 +98,13 @@ means this table; it is not repeated, so that it stays one edit.
 | a sequence that changes hands | "first they do A, then we do B" | `swimlane` |
 | things resting on things | "the edge handles X, the app handles Y" | `stack`, `pyramid` |
 | things containing things | "each region owns four teams" | `tree` |
-| a comparison of two framings | "before, we…; now, we…" | `comparison` |
+| a comparison of two framings | "before, we…; now, we…" | `dumbbell` or `slope` when measured, a before/after `figure` when the difference is a shape |
 | options weighed against criteria | "five options against fifteen criteria" | `scorecard`, `matrix` |
 | one score against a ceiling | "it scored 66 out of 75" | `gauge`, `meter` |
 | one number that is the finding | "the whole thing is 2.5×" | `hero_figure`, `stat` |
-| several short parallel facts | "the states are draft, pending, live" | `chips` |
-| vocabulary the reader lacks | "a *bucket* is…" | `definitions` |
-| a rule and its failure mode | "always X; never Y" | `checklist` |
+| several states a thing moves through | "the states are draft, pending, live" | `process`, each arrow the event that moves it |
+| vocabulary the reader lacks | "a *bucket* is…" | the figure that draws a bucket, or the word on the mark; never a glossary |
+| a rule and its failure mode | "always X; never Y" | a `figure` of the failure happening, or one `callout` |
 | a quantity, share, or change | "X is bigger / fell / is made of" | the quantity, part and change families |
 | something the reader already owns | "it works a bit like a hotel" | `analogy` |
 | parts that accumulate | "then you also need a second one, because…" | `progressive` |
@@ -146,7 +146,7 @@ small font.
   period. Descriptive, never rhetorical.
 - **Subtitles** state the conclusion, once, in one plain line, and are
   deleted when there is no conclusion to state.
-- **Labels** sit on marks: axis names, chip text, node names, step titles.
+- **Labels** sit on marks: axis names, node names, step titles.
 - **Indicators** are the small values beside a mark: a delta, a share, a count,
   a status word.
 
@@ -167,7 +167,7 @@ Rewrite, never truncate. These are the four moves that actually work:
 - **Move the number into the graphic.** If the sentence exists to carry a
   figure, the figure belongs on the mark and the sentence disappears.
 - **Split one detail into two labels.** A twelve-word step detail is often two
-  six-word chips.
+  six-word labels on two marks.
 - **Cut the justification.** Documents explain *what*, not *why we are allowed
   to say it*. If the caveat is load-bearing, it belongs in `footnotes`, which is
   exempt from the budget for exactly this reason.

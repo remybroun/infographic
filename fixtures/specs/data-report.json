@@ -14,42 +14,7 @@
       "tone": "panel",
       "kicker": "Half-year review",
       "title": "Support ticket volume and total handling hours, H1 against H2",
-      "subtitle": "Fewer tickets arrived, but each one took longer to close, so total handling hours were flat.",
-      "stats": [
-        {
-          "label": "Tickets received",
-          "value": 18420,
-          "compact": true,
-          "delta": -14.2,
-          "delta_period": "vs H2",
-          "up_is_good": false
-        },
-        {
-          "label": "Median time to close",
-          "value": 31,
-          "unit": "h",
-          "compact": false,
-          "delta": 22.0,
-          "delta_period": "vs H2",
-          "up_is_good": false
-        },
-        {
-          "label": "Total handling hours",
-          "value": 9310,
-          "compact": true,
-          "delta": 0.8,
-          "delta_period": "vs H2",
-          "up_is_good": false
-        },
-        {
-          "label": "First-contact resolution",
-          "value": 61,
-          "unit": "%",
-          "compact": false,
-          "delta": -9.0,
-          "delta_period": "vs H2"
-        }
-      ]
+      "subtitle": "Fewer tickets arrived, but each one took longer to close, so total handling hours were flat."
     },
     {
       "type": "section",

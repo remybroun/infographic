@@ -213,46 +213,30 @@
     },
     {
       "id": "who-owns-data",
-      "type": "checklist",
-      "title": "Where the real data lives, and what a site may do with it",
-      "do_title": "Always",
-      "dont_title": "Never",
-      "do": [
-        "Bookings are made in RentOS itself",
-        "Prices come from one source of truth",
-        "Double bookings are prevented centrally",
-        "Every site records which template it uses"
-      ],
-      "dont": [
-        "A second place to pay",
-        "Its own booking rules",
-        "Free-form code written by a company",
-        "Its own copy of the property data"
-      ],
-      "note": "The site shows RentOS data. It is never a second source of truth."
-    },
-    {
-      "type": "definitions",
-      "title": "The words the team uses for the same things",
-      "items": [
+      "type": "stack",
+      "title": "Where the real data lives, and what a site may only read",
+      "layers": [
         {
-          "term": "Tenant",
-          "text": "One company's site, keyed by website_id and provider_id."
+          "label": "Company site",
+          "meta": "Reads, never writes",
+          "items": [
+            "Shows prices",
+            "Links to booking",
+            "Records its template"
+          ]
         },
         {
-          "term": "Host header",
-          "text": "The web address, as the program actually receives it."
-        },
-        {
-          "term": "ACME / SNI",
-          "text": "How thousands of addresses share a handful of machines."
-        },
-        {
-          "term": "Read model",
-          "text": "Data the site reads from RentOS and never writes."
+          "label": "RentOS",
+          "meta": "The only place data is written",
+          "items": [
+            "Bookings",
+            "Prices",
+            "Double-booking guard",
+            "Property data"
+          ]
         }
       ],
-      "note": "Kept last on purpose: the page teaches in words, this maps them back."
+      "note": "The site shows RentOS data. It is never a second source of truth."
     },
     {
       "type": "footnotes",
@@ -260,7 +244,11 @@
       "items": [
         "The claim that most visits stop at the edge is a design target for the full-page cache, not a figure observed in production.",
         "The planning target agreed for the first two years is 500 or more company sites.",
-        "This document explains what the thing is. The choice between the five candidate designs, and the scores behind it, is a separate document written for the team that has to build it."
+        "This document explains what the thing is. The choice between the five candidate designs, and the scores behind it, is a separate document written for the team that has to build it.",
+        "Tenant: one company's site, keyed by website_id and provider_id.",
+        "Host header: the web address, as the program actually receives it.",
+        "ACME / SNI: how thousands of addresses share a handful of machines.",
+        "Read model: data the site reads from RentOS and never writes."
       ]
     }
   ]

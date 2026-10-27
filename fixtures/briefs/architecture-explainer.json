@@ -88,8 +88,8 @@
       "teaches": [
         "source of truth"
       ],
-      "form": "checklist",
-      "shows": "what a site may do and what it may not, each line marked, the boundary between them visible at a glance"
+      "form": "stack",
+      "shows": "the company site sitting on RentOS, every write in the lower layer and only reads in the upper one"
     }
   ]
 }

@@ -236,8 +236,6 @@ body {
   color: var(--ig-muted);
 }
 
-.ig-hero .ig-kpi { margin-top: 26px; }
-
 /* ------------------------------------------------------------- section ---- */
 
 .ig-section-head {
@@ -378,30 +376,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 
 /* --------------------------------------------------------------- stats ---- */
 
-.ig-kpi {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(var(--ig-kpi-n, 4), minmax(0, 1fr));
-  gap: 0;
-}
-.ig-kpi > li {
-  padding: 2px 20px;
-  border-left: 1px solid var(--ig-border);
-  min-width: 0;
-}
-.ig-kpi > li:first-child { padding-left: 0; border-left: 0; }
-
-/* Stacked: the divider becomes horizontal, because a left rule between rows
-   would point the wrong way. */
-.ig-kpi-stacked > li {
-  padding: 11px 0;
-  border-left: 0;
-  border-top: 1px solid var(--ig-border);
-}
-.ig-kpi-stacked > li:first-child { padding-top: 0; border-top: 0; }
-
 .ig-stat-label {
   margin: 0 0 7px;
   font-size: calc(var(--ig-body-size) * 0.82);
@@ -411,7 +385,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
      value down and break the baseline the row is read along. */
   min-height: calc(var(--ig-body-size) * 0.82 * 1.62 * 2);
 }
-.ig-kpi-stacked .ig-stat-label { min-height: 0; }
 .ig-stat-value {
   margin: 0;
   /* Deliberately NOT overflow-wrap: a figure that will not fit is shrunk by
@@ -433,8 +406,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 .ig-delta-period { color: var(--ig-muted); }
 .ig-stat-note { margin: 7px 0 0; font-size: calc(var(--ig-body-size) * 0.78); color: var(--ig-muted); }
 .ig-spark { margin-top: 9px; max-width: 130px; }
-
-.ig-kpi-compact .ig-stat-value { font-size: calc(var(--ig-body-size) * 1.85); }
 
 .ig-hero-figure { padding: 2px 0; }
 .ig-hero-figure-value {
@@ -539,211 +510,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
   .ig-table-toggle > *:not(summary) { display: table !important; }
 }
 .ig-tables-hidden .ig-table-toggle { display: none; }
-
-/* ----------------------------------------------------------- checklist ---- */
-
-.ig-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.ig-check { padding: 15px 17px; border-radius: calc(var(--ig-radius) * 2.5); background: var(--ig-sunken); }
-.ig-check-do   { background: var(--ig-good-wash); }
-.ig-check-dont { background: var(--ig-danger-wash); }
-.ig-check-title {
-  margin: 0 0 9px;
-  font-size: calc(var(--ig-body-size) * 0.8);
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-.ig-check-do   .ig-check-title { color: var(--ig-good); }
-.ig-check-dont .ig-check-title { color: var(--ig-danger-text); }
-.ig-check ul { list-style: none; margin: 0; padding: 0; font-size: calc(var(--ig-body-size) * 0.92); }
-.ig-check li { display: flex; gap: 9px; margin-bottom: 7px; color: var(--ig-secondary); }
-.ig-check li span:first-child { font-weight: 700; flex: none; }
-.ig-check-do   li span:first-child { color: var(--ig-good); }
-.ig-check-dont li span:first-child { color: var(--ig-danger-text); }
-
-/* --------------------------------------------------------- definitions ---- */
-
-.ig-definitions { margin: 0; display: grid; gap: 0; }
-.ig-def {
-  display: grid;
-  grid-template-columns: minmax(120px, 24%) 1fr;
-  gap: 18px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--ig-hairline);
-  break-inside: avoid;
-}
-.ig-def:last-child { border-bottom: 0; }
-.ig-def dt { font-weight: 600; color: var(--ig-ink); font-size: calc(var(--ig-body-size) * 0.95); }
-.ig-def dd { margin: 0; color: var(--ig-secondary); font-size: calc(var(--ig-body-size) * 0.95); }
-
-/* The graphic-density form: a vocabulary laid out side by side rather than a
-   stack of term-and-sentence rows. The column count is set in Python from the
-   block's real width, because CSS cannot see how wide a grid column is.
-
-   Each entry is a rule and two lines of type, not a card. A box drawn around a
-   single sentence costs a fill, a radius and four corners to say something the
-   white space between columns already says, and the accent bar it hangs from
-   turns a term into a label shouting for attention it does not need. The rule
-   sits on each entry rather than spanning the block so that the form survives
-   wrapping to a second row, where a single spanning rule would leave the lower
-   row floating. */
-.ig-definitions-grid {
-  grid-template-columns: repeat(var(--ig-def-n, 3), minmax(0, 1fr));
-  column-gap: 22px;
-  row-gap: 15px;
-}
-.ig-definitions-grid .ig-def {
-  display: block;
-  min-width: 0;
-  padding: 9px 0 0;
-  border-bottom: 0;
-  border-top: 1px solid var(--ig-ink);
-}
-.ig-definitions-grid .ig-def dt {
-  font-size: calc(var(--ig-body-size) * 0.95);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--ig-ink);
-  margin-bottom: 2px;
-  text-wrap: pretty;
-}
-.ig-definitions-grid .ig-def dd {
-  font-size: calc(var(--ig-body-size) * 0.88);
-  line-height: 1.5;
-  text-wrap: pretty;
-}
-/* A block title sits 2px off its content, which is right when the content
-   starts with type and wrong when it starts with a rule: at 2px the first two
-   rules read as a broken underline of the heading. Margins collapse, so this
-   one value covers the title, the sub, and the pair. */
-.ig-block-title + .ig-definitions-grid,
-.ig-block-sub + .ig-definitions-grid { margin-top: 13px; }
-
-/* --------------------------------------------------------------- chips ---- */
-
-/* The replacement for a bullet list. A chip that needs a sentence is not a
-   chip, which is the point: the form refuses the adjective. */
-.ig-chips {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(var(--ig-chip-n, 4), minmax(0, 1fr));
-  gap: 9px;
-}
-/* One surface for every chip, and the tone lives in the mark alone.
-   The earlier form said "danger" three times over: a red tab, a red wash and a
-   red disc. Three channels for one fact is not emphasis, it is noise, and a
-   grid of differently painted pills stops being a grid you can scan. The mark
-   keeps the state off hue alone, which is the promise the catalog makes. */
-.ig-chip {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 8px;
-  padding: 10px 13px;
-  border-radius: calc(var(--ig-radius) * 2);
-  background: var(--ig-sunken);
-  break-inside: avoid;
-}
-.ig-chip-label {
-  font-size: calc(var(--ig-body-size) * 0.88);
-  font-weight: 600;
-  color: var(--ig-ink);
-}
-.ig-chip-value {
-  margin-left: auto;
-  font-size: calc(var(--ig-body-size) * 0.92);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--ig-ink);
-}
-.ig-chip-note {
-  flex-basis: 100%;
-  font-size: calc(var(--ig-body-size) * 0.76);
-  color: var(--ig-muted);
-}
-/* The mark is the drawing, never a badge containing one. A glyph reversed out
-   of a 15px disc is a notification dot: it reads as chrome, it repeats the
-   colour the glyph already carries, and at this size the disc is the thing the
-   eye lands on rather than the shape inside it. So the colour moves onto the
-   mark, which means every tone has to name a value that survives as small
-   text: `--ig-warn`, an amber built to work as a fill, would sit at 1.6:1. */
-   Typed, the mark also sits on the label's baseline, because the chip aligns
-   its line on the baseline and an inline-block hands its own last baseline up
-   to that. A disc had to be centred instead, which is why the tick used to
-   float below the word it belonged to. */
-.ig-chip-icon {
-  flex: none;
-  width: 14px;
-  display: inline-block;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--ig-muted);
-}
-/* A pictogram sits where the tone mark would, drawn rather than typed. An SVG
-   has no baseline worth aligning to, so this one is centred on the line. It is
-   declared BEFORE the tones because it matches at the same specificity they
-   do: any later rule would quietly repaint a toned pictogram. */
-.ig-chip-icon.ig-chip-pic {
-  width: 17px;
-  height: 17px;
-  align-self: center;
-  color: var(--ig-secondary);
-  fill: currentColor;
-}
-.ig-chip-good   .ig-chip-icon { color: var(--ig-good); }
-.ig-chip-warn   .ig-chip-icon { color: var(--ig-warn-text); }
-.ig-chip-danger .ig-chip-icon { color: var(--ig-danger-text); }
-.ig-chip-accent .ig-chip-icon { color: var(--ig-accent-text); }
-/* The one chip that carries a border pays for it out of its own padding, so
-   its label sits on the same line as the filled chips beside it. */
-.ig-chip-mute   { background: transparent; border: 1px solid var(--ig-hairline); padding: 9px 12px; }
-.ig-chip-mute .ig-chip-label { color: var(--ig-secondary); font-weight: 500; }
-
-/* ---------------------------------------------------------- comparison ---- */
-
-.ig-compare {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  align-items: stretch;
-}
-.ig-compare-side { padding: 17px 19px; border-radius: calc(var(--ig-radius) * 2.5); }
-.ig-compare-left  { background: var(--ig-sunken); }
-.ig-compare-right { background: var(--ig-accent-wash); }
-.ig-compare-label {
-  margin: 0 0 8px;
-  font-size: calc(var(--ig-body-size) * 0.76);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ig-muted);
-}
-.ig-compare-right .ig-compare-label { color: var(--ig-accent-text); }
-.ig-compare-headline {
-  margin: 0 0 11px;
-  font-size: calc(var(--ig-body-size) * 1.16);
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--ig-ink);
-  text-wrap: balance;
-}
-.ig-compare-side ul {
-  margin: 0; padding-left: 1.05em;
-  font-size: calc(var(--ig-body-size) * 0.9);
-  color: var(--ig-secondary);
-}
-.ig-compare-side li { margin-bottom: 5px; }
-.ig-compare-vs {
-  align-self: center;
-  font-size: calc(var(--ig-body-size) * 0.78);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ig-muted);
-}
 
 /* analogy: two stages, and one exploded-drawing numbering across both.
 
@@ -943,24 +709,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 }
 .ig-graphic-first .ig-hero-lede { max-width: 56ch; }
 
-/* The do/don't columns become two chip stacks: same information, no sentences,
-   and the ✓/✕ carries the polarity so colour is never the only channel. */
-.ig-graphic-first .ig-check li {
-  align-items: center;
-  padding: 7px 9px;
-  margin-bottom: 5px;
-  border-radius: var(--ig-radius);
-  background: var(--ig-card);
-  font-size: calc(var(--ig-body-size) * 0.86);
-}
-.ig-graphic-first .ig-compare-side ul { font-size: calc(var(--ig-body-size) * 0.88); }
-
-@media print {
-  /* Nothing here is decoration, so nothing here is allowed to be cropped. */
-  .ig-graphic-first .ig-chips,
-  .ig-graphic-first .ig-definitions-grid { break-inside: avoid; }
-}
-
 /* ------------------------------------------------------- the drawing kit ---- */
 
 /* Everything an authored `figure` needs, so hand-drawing is not from-scratch
@@ -1134,9 +882,6 @@ a { color: var(--ig-accent-text); text-underline-offset: 2px; }
 .ig-bleed-dark .ig-stat-label { color: var(--ig-axis); }
 /* A vocabulary is a rule and two weights of ink, so on the inverted field it is
    a rule and two weights of nothing unless it is told otherwise. */
-.ig-bleed-dark .ig-def { border-color: var(--ig-axis); }
-.ig-bleed-dark .ig-def dt { color: var(--ig-page); }
-.ig-bleed-dark .ig-def dd { color: var(--ig-border); }
 
 /* The accessibility twin has to survive the dark field too, or the values are
    reachable in theory and invisible in practice. */

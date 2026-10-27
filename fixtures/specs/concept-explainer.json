@@ -112,30 +112,26 @@
       "lede": "Time enters the formula as an exponent. Contributions enter it as a multiplier. Exponents win."
     },
     {
-      "type": "comparison",
+      "type": "dumbbell",
       "span": 12,
-      "left": {
-        "label": "Saver A",
-        "headline": "Pays in for 10 years, then stops",
-        "points": [
-          "£5,000 a year from age 25 to 35",
-          "£50,000 contributed in total",
-          "Nothing added after 35",
-          "£602,000 at age 65"
-        ]
-      },
-      "right": {
-        "label": "Saver B",
-        "headline": "Pays in for 30 years, and never stops",
-        "points": [
-          "£5,000 a year from age 35 to 65",
-          "£150,000 contributed in total",
-          "Three times the contributions",
-          "£540,000 at age 65"
-        ]
-      },
-      "vs": "vs",
-      "note": "Saver A contributes a third as much and still finishes ahead."
+      "title": "What each saver put in, and what it became at 65",
+      "from_label": "Paid in",
+      "to_label": "At 65",
+      "currency": "£",
+      "compact": true,
+      "items": [
+        {
+          "label": "Saver A, 10 years from 25",
+          "from": 50000,
+          "to": 602000
+        },
+        {
+          "label": "Saver B, 30 years from 35",
+          "from": 150000,
+          "to": 540000
+        }
+      ],
+      "note": "A third of the contributions, ten years earlier, and the larger pot."
     },
     {
       "type": "bar",
@@ -218,47 +214,6 @@
       "note": "One percent a year removes roughly a quarter of the balance."
     },
     {
-      "type": "checklist",
-      "span": 12,
-      "do_title": "What moves the outcome",
-      "dont_title": "What barely does",
-      "do": [
-        "Starting earlier, even with less",
-        "Never interrupting the compounding",
-        "Cutting annual percentage fees",
-        "Re-investing every distribution"
-      ],
-      "dont": [
-        "Timing the first deposit to the month",
-        "Chasing an extra 0.2% of headline rate",
-        "Larger contributions started late",
-        "Checking the balance more often"
-      ]
-    },
-    {
-      "type": "definitions",
-      "span": 12,
-      "title": "Terms used here",
-      "items": [
-        {
-          "term": "Principal",
-          "text": "The amount you put in, and the only part you control."
-        },
-        {
-          "term": "Compounding period",
-          "text": "What the pot earns each period, expressed as a rate."
-        },
-        {
-          "term": "Effective annual rate",
-          "text": "What the headline rate actually becomes once compounding frequency is accounted for."
-        },
-        {
-          "term": "Real return",
-          "text": "The return after inflation. Compounding works on the way down too."
-        }
-      ]
-    },
-    {
       "type": "footnotes",
       "span": 12,
       "title": "Method",
@@ -266,7 +221,11 @@
         "All figures assume a constant 7% nominal annual return, compounded annually, with no tax.",
         "Contributions are modelled as made at the end of each year.",
         "Fee scenario applies a flat 1% of balance annually before compounding.",
-        "This is a worked fixture for the infographic skill, not financial advice."
+        "This is a worked fixture for the infographic skill, not financial advice.",
+        "Principal: the amount you put in, and the only part you control.",
+        "Compounding period: what the pot earns each period, expressed as a rate.",
+        "Effective annual rate: what the headline rate actually becomes once compounding frequency is accounted for.",
+        "Real return: the return after inflation. Compounding works on the way down too."
       ]
     }
   ]

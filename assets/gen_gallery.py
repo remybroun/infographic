@@ -166,7 +166,7 @@ def page(*blocks):
     every sheet but the last is full, and GALLERY.md names what is on each.
 
     ORDER WITHIN A GROUP IS BY RENDERED HEIGHT, shortest first. A row is as tall
-    as its tallest block, so pairing a 444px definitions list with a 137px stat
+    as its tallest block, so pairing a 444px block with a 137px stat
     buys 307px of blank page, and eight such pairs cost 1,400px, an entire sheet
     of nothing. The heights are not guessable from the payload, so they are
     measured: `python3 assets/measure_blocks.py assets/gallery_spec.json` prints
@@ -533,7 +533,7 @@ def spines_figure():
 
 
 def aliases():
-    """The chip grid, on its own because it fills a sheet.
+    """The alias table, on its own because it fills a sheet.
 
     Split in two halves rather than drawn as one block. A single grid was 911px
     when there were 60 aliases and 1,171px at 67, and `break-inside: avoid`
@@ -545,47 +545,17 @@ def aliases():
     names = sorted(registry.ALIASES)
     half = -(-len(names) // 2)
     return page(*[
-        {"type": "chips", "span": 12, "frame": "card",
+        {"type": "table", "span": 12, "frame": "card",
          "title": ("Every alias, so a spec can be written in ordinary words"
                    if not part_index else "Aliases, continued"),
-         "items": [{"label": a, "value": registry.ALIASES[a]} for a in chunk]}
+         "columns": ["Alias", "Block"],
+         "rows": [[a, registry.ALIASES[a]] for a in chunk]}
         for part_index, chunk in enumerate((names[:half], names[half:]))
     ])
 
 
 def editorial():
     return page(
-        # Span 12, not 6. At half width this stacks four terms vertically and
-        # runs to 444px, which beside the 137px stat left 307px of blank page,
-        # the single worst void in the document. Full width lays the terms out
-        # side by side instead, and the block gets shorter as it gets wider.
-        {"type": "definitions", "span": 12, "frame": "card",
-         "title": "Four words this repository uses in a particular way",
-         "items": [
-             {"term": "Spine", "text": "One argument over the facts. Write three, choose one."},
-             {"term": "Scene", "text": "An image the document lives or dies by."},
-             {"term": "Twin", "text": "The table beside a chart, holding every value."},
-             {"term": "Budget", "text": "Words allowed per field and per page."}]},
-        {"type": "comparison", "span": 12, "frame": "card",
-         "title": "The outer two densities, and what each refuses",
-         "left": {"label": "Report", "headline": "900 words a page",
-                  "points": ["Body prose allowed", "Opt in explicitly",
-                             "For real prose documents"]},
-         "right": {"label": "Graphic", "headline": "150 words a page",
-                   "points": ["Body prose refused", "The default",
-                              "A breach fails the build"]},
-         "note": "Lesson sits between them at 260: prose still refused, room to teach from zero."},
-        # Span 12, not 6. At half width the do and don't columns are each about
-        # 90px, and every item wrapped to one word a line. A checklist is read in
-        # phrases; it needs the full measure.
-        {"type": "checklist", "span": 12, "frame": "card",
-         "title": "What to check before handing a document over",
-         "do": ["Cover the graphics, then read what is left",
-                "Name every number the page leads with",
-                "Look at the render, not the linter"],
-         "dont": ["Open the previous version first",
-                  "Fill a stat row because the top looks empty",
-                  "Let an identifier stand in for a sentence"]},
         # `compact: false`, because the block otherwise renders 2,086 as "2.1K"
         # and the exactness is the entire point of the number.
         {"type": "stat", "span": 6, "frame": "card", "compact": False,

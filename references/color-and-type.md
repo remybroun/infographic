@@ -132,7 +132,7 @@ colour hides the next real failure.
 | Quote | display | `quote` |
 | Block title | theme's choice, sans by default | every block's `title`, and `callout` |
 | Everything else | sans | body, labels, tables, charts |
-| **Figures** | **sans, always** | `stat`, `kpi`, `hero_figure` |
+| **Figures** | **sans, always** | `stat`, `hero_figure` |
 
 **The hero figure is sans, never the display face.** A serif or display number
 reads as off-brand decoration rather than as data. This holds even when the theme

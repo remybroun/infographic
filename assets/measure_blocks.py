@@ -11,7 +11,7 @@ out of text wrapping, legend rows, category counts and the theme's type scale.
 
 Chrome runs the injected script before `--dump-dom` serializes, so these are real
 layout numbers. Adding up SVG `height` attributes would miss every block with an
-HTML body: definitions, comparison, checklist, callout, chips.
+HTML body: callout, analogy.
 """
 from __future__ import annotations
 

@@ -37,23 +37,21 @@ argument spine.
 2. **Scale, and only when a number is itself the finding.** `hero_figure` for
    the one number the document is about; `stat` when a single current value is
    the whole message. **This is not a step, and it is listed second only because
-   that is where it lands when it is earned.** A `kpi` row of four labelled
-   integers is the cheapest block in the catalog to write: it looks like a
-   summary, needs no argument, and gets added by reflex. If a chart further down
-   explains any of those numbers properly, the tile is that fact with its
-   denominator and its comparison removed, printed first. Cut it. Four numbers
-   cannot each be the finding. `leading-numbers` measures this and warns, and it
-   fired on two of the five shipped fixtures, which is how the habit spread.
+   that is where it lands when it is earned.** There is no row of four number
+   tiles: it looked like a summary, needed no argument, and got added by
+   reflex, so the block was deleted. If a chart further down explains a number
+   properly, a tile above it is that fact with its denominator and its
+   comparison removed, printed first. Four numbers cannot each be the finding.
 3. **Mechanism.** `process`, `cycle`, `tree`, or one chart with its sentence.
    *How* the thing works. Reports often skip straight to 4.
 4. **Evidence.** The charts. Each one supports one sentence you have already
    written.
-5. **Tension.** `comparison`, `diverging`, `matrix`, `callout`. Where the obvious
+5. **Tension.** `diverging`, `dumbbell`, `matrix`, `callout`. Where the obvious
    reading is wrong, or where the options genuinely conflict. **An argument with
    no tension reads as marketing.** In a lesson the same job is done by
    the thing the reader already
    wrongly believes rather than a rival position.
-6. **Implication.** `checklist`, `callout`, or a closing `prose` block. What
+6. **Implication.** `callout`, or a closing `prose` block. What
    follows for the reader.
 7. **Method.** `footnotes`. Sources, period, exclusions, what not to conclude.
 

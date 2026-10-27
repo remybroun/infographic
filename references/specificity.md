@@ -60,7 +60,7 @@ vaguest:
 ```
 
 Specific is nearly always **shorter**. When it genuinely is not, the fact wins
-and something else on the page is cut: a chip, a note, a whole block. Never the
+and something else on the page is cut: a label, a note, a whole block. Never the
 name.
 
 ## What the reader actually lacks
@@ -77,8 +77,8 @@ silhouette.
 ## What is legitimately demoted
 
 Machine identifiers, and only those: `delist_deadline`, `PmsFieldSchema`,
-`config/pms.php`. Those are lookup keys, they belong in the table twin or the
-closing `definitions`, and a page whose labels are column names is the failure
+`config/pms.php`. Those are lookup keys, they belong in the table twin or in
+`footnotes`, and a page whose labels are column names is the failure
 `undefined-vocabulary` was written to catch.
 
 The name of a product, a system, a company, a place, a release or a person is

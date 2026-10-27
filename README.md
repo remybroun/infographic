@@ -13,7 +13,7 @@
 <a href="https://github.com/remybroun/infographic/actions/workflows/selftest.yml"><img src="https://github.com/remybroun/infographic/actions/workflows/selftest.yml/badge.svg" alt="selftest"></a>
 <a href="SKILL.md"><img src="https://img.shields.io/badge/version-3.3.1-B66346" alt="version 3.3.1"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/python-3.12%2B-B66346" alt="Python 3.12+"></a>
-<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-56-B66346" alt="56 block types"></a>
+<a href="GALLERY.md"><img src="https://img.shields.io/badge/block%20types-51-B66346" alt="51 block types"></a>
 <a href="#requirements"><img src="https://img.shields.io/badge/dependencies-0-B66346" alt="dependencies 0"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-B66346" alt="license MIT"></a>
 <a href="branding/"><img src="https://img.shields.io/badge/branding-iris-B66346" alt="branding"></a>
@@ -76,9 +76,9 @@ taste under time pressure always chooses "one more clarifying sentence".
 
 ## The vocabulary it draws with
 
-![Six labelled groups, each showing three miniature specimens: bars, lollipops and heatmaps for quantity; lines, slopes and dumbbells for change; rings, waffles and share bars for part-to-whole; chains, trees and venns for structure; layers, lanes and chips for diagram; tiles, callouts and rules for editorial.](assets/forms.png)
+![Six labelled groups, each showing three miniature specimens: bars, lollipops and heatmaps for quantity; lines, slopes and dumbbells for change; rings, waffles and share bars for part-to-whole; chains, trees and venns for structure; layers, lanes and scorecards for diagram; big figures, callouts and rules for editorial.](assets/forms.png)
 
-56 block types across seven families, plus 60 aliases so a spec can be written in
+51 block types across seven families, plus 52 aliases so a spec can be written in
 ordinary words (`pie` → `donut`, `waffle` → `unit`, `2x2` → `quadrant`,
 `flow` → `process`, `2x2` → `quadrant`).
 
@@ -188,11 +188,12 @@ have:
 | At most three hand-drawn figures | Version 2 fixed the word count and hand-drew everything, losing all consistency |
 | Colour literals refused in a drawing | Hand-drawn figures are where computed colour slips first |
 | Authored tables count toward the budget | A section retyped as three tables passed as clean; the cells were exempt |
-| Identifiers counted, definitions required | A page carried 30 identifiers and no definitions block, and passed |
+| Identifiers counted, and no glossary allowed to excuse them | A page carried 30 identifiers and passed; then pages answered jargon with a grid of terms, and the block was deleted |
 | Graphic forms compared against the last version | A regeneration came back 93% identical, with every step performed honestly |
-| A `kpi` row is measured against the document | Four numbers led a page, and all four were explained better further down |
+| No text in boxes counted as a picture | `checklist`, `comparison`, `chips` and `kpi` drew nothing and were counted as graphics, so pages of ticked sentences, bullet panels, pills and number tiles passed as graphic-first. All four are deleted and refused by name |
 | `invert` without `bleed` | It flips the ink but paints no ground, so a drawing renders light-on-light |
 | A term used before the rung that teaches it | An explainer opened on a score and a glossary, and taught nobody anything, while passing every check above |
+| No glossary, in any form | A grid of bold terms over one-line glosses read as filler on every page it reached. The block is gone, and a table of terms, a `<dl>` or a section asking what the names mean fails the build |
 
 The pattern is worth stating plainly, because it recurs:
 
@@ -285,7 +286,7 @@ references/           one file per decision; load the one that owns it
   scenes.md             deciding what gets drawn by hand
   anti-patterns.md      check every document against this before shipping
   teaching.md           the ladder, and the mode that enforces it
-  catalog/              the 56 block types, by family
+  catalog/              the 51 block types, by family
 scripts/
   ig.py                 the CLI
   build.py              spec → HTML
