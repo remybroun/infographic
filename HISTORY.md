@@ -304,3 +304,102 @@ sharpens at once; hedged sourcing as an integrity rule, because "studies show"
 is a citation's shape with the citation removed; and synonym cycling named in
 `teaching.md`, because `forward-reference` tracks a term and never the four
 words a document renames it to afterwards.
+
+## v3.7: the skeleton that was read as the plan
+
+Nine versions of "improvise", and the documents kept arriving in one shape:
+a comparison of the subject with something familiar, then the mechanism, then
+the limits. The last one to ship was an options-strategy explainer that opened
+on an insurance analogy for a reader who had asked what the strategy *was*. The
+prose said the opposite in six places. `SKILL.md` said "the document is
+improvised for its subject", "the catalog is the library it borrows from, never
+the plan", and "custom HTML is not a fallback, it is the medium". None of it
+moved anything, and the reason is that **the instruction was prose and the
+default was a file**.
+
+`brief.py`'s `STARTER` shipped three sections already written: `what-it-is`,
+viewpoint `beside-something-the-reader-owns`; `how-it-works`; `what-it-is-not`.
+It was written to illustrate the schema and it was read as the design, every
+time, because a skeleton with slots gets filled and never replaced. Its first
+section is a side-by-side comparison, so every document's first section was a
+side-by-side comparison. `fixtures/briefs/architecture-explainer.json`, the one
+worked example built from a brief, opened on an `analogy` too, and `SKILL.md`
+advertised that as the thing to copy.
+
+Three more defaults pointed the same way and nothing measured any of them:
+
+- **The establishing shot was advice.** "A document whose subject can be drawn
+  opens on a drawing of the subject" was written down and never checked, so the
+  opener was whatever the catalog offered first for an unfamiliar subject, which
+  is two columns comparing it with something else. That teaches the comparison
+  and never the subject.
+- **The figure cap had no floor.** `MAX_FIGURES = 3` and nothing underneath it.
+  A catalog block costs one line and trips no check; a figure costs a viewpoint,
+  an `alt`, an `encodes`, a colour whitelist and a rejection in writing. So the
+  document that drew nothing was the risk-free document, and the flagship
+  fixture proved it: **eight sections, one drawing.** v2 had already found this
+  once and answered it with a warning, and a warning cleared by an eight-word
+  sentence is not a cost.
+- **The one table that "decides everything" had no drawing in it.**
+  `graphic-first.md`'s sentence-kind lookup maps fifteen kinds of sentence onto
+  catalog blocks and not one onto `figure`. A lookup answers in a second and a
+  question about what a thing looks like takes a minute, so the lookup won every
+  time, and a mind map, a route, a map of anything, or an object with a body had
+  nowhere on it to land.
+
+**Produced:** a starter with no sections in it at all. `ig.py brief --new`
+writes `meta` and an empty `sections`, and prints the section shape plus eight
+orders a document could take, none of them a default. Anything printed has to
+be retyped, and retyping is where a decision happens.
+
+**Also produced:** `meta.spine` and `meta.spine_rejected`, both required, which
+turns "name a second spine before you commit to the first" from advice into the
+file's own precondition; `brief-opens-on-a-block`, which refuses a first section
+that is not drawn unless `meta.opens_on` says in writing that the subject has no
+picturable body; `brief-nothing-drawn`, the floor the cap never had, cleared
+only by naming in `meta.scenes` what the catalog carried completely; a cap that
+scales with the document (three, or half its sections) because a flat three on a
+twelve-section scroll reads as *draw three and paste nine*; and three rows at
+the bottom of the sentence-kind table that resolve to `figure` and to nothing
+else, because the catalog is 56 shapes and the world is not.
+
+**Also produced:** the reference fixture redrawn. `architecture-explainer` now
+opens on two drawings, one fanning in and one fanning out, and the `analogy`
+that used to come first is gone. The teaching family did not lose a rule; it
+lost the worked example that was being copied as an opening move.
+
+**Found by the first run under these rules**, a Sonnet agent explaining what a
+datacenter is. It opened on a drawn cutaway of the building and wrote a spine
+nothing in the starter could have suggested, which is the change working. It
+also hit two defects the skill had been carrying:
+
+- **`sketch` dragged the whole document's brief onto one block.** `cmd_sketch`
+  strips `ladder` and `mode` from its stub spec with a comment explaining that
+  they are claims about a document and one block is not one; `brief` is the same
+  kind of claim and was not on the list. With no spec path on a stub, it
+  resolved against the working directory, so it either failed to find the brief
+  or found it and re-derived the entire ladder onto the single block, printing a
+  rung-by-rung wall of `which no block has`. The command advertised as "the
+  block alone, in two seconds" was the command the run stopped using.
+- **`stat` rounded a measured value to nothing.** `"value": 1.09` for a PUE
+  reached the page as `1`, because the plain path defaulted to zero decimals.
+  `fmt_compact` had already been fixed once for this exact class of failure (an
+  author's 8,231 shown as "8.2K"). **Produced:** `svg.natural_decimals`, so a
+  number prints at the precision it was written with, and rounding is something
+  an author asks for rather than something that happens to them.
+
+**And the third defect from the same run, reported by the reader rather than a
+check: the page arrived chaptered `01` to `11`.** `editorial.md` has carried
+"numbers only when the sequence is information the reader needs" since v1, and
+the code sample printed directly beneath that sentence numbered its own section.
+Five of the six fixtures numbered every section too. A model copies the example,
+not the paragraph above it, which is the same failure as the starter brief and
+the same fix: **the rule was prose and the default was a file.** Eleven numbered
+headings with a rule over each is a textbook contents page standing in front of
+a document whose whole claim is that it is drawn.
+
+**Produced:** `numbered-throughout`, which fires when a document of four or more
+sections numbers all of them; `number` gone from the doc example and from every
+fixture, so what gets copied is the unnumbered form; and the rule rewritten to
+say where the ordinals actually belong.
+

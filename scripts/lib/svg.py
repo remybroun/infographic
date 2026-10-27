@@ -175,6 +175,24 @@ def fmt_plain(value, decimals: int = 0, currency: str = "", unit: str = "") -> s
     return f"{currency}{v:,.{decimals}f}{unit}"
 
 
+def natural_decimals(value, cap: int = 4) -> int:
+    """How many decimals a number needs to survive being printed.
+
+    `stat` defaulted to zero, so an author's measured 1.09 rendered as "1": a
+    fact replaced by a rounder one nobody asked for, silently, which is the
+    exact failure `fmt_compact` had already been fixed for once. Rounding is a
+    decision and it is made by writing `decimals`, never by leaving it out.
+    """
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return 0
+    if v == int(v):
+        return 0
+    text = f"{round(v, cap):f}".rstrip("0")
+    return min(cap, len(text.partition(".")[2]))
+
+
 def fmt_delta(value, decimals: int = 1, unit: str = "%") -> str:
     try:
         v = float(value)

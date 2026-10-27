@@ -21,37 +21,8 @@
     },
     {
       "type": "section",
-      "number": "01",
       "title": "Why one program instead of one copy per company?",
       "lede": "Start with what the whole thing is, before any of its parts."
-    },
-    {
-      "id": "one-or-many",
-      "type": "analogy",
-      "title": "One shared application, the way one hotel holds many rooms",
-      "known": {
-        "label": "A hotel",
-        "glyph": "building"
-      },
-      "new": {
-        "label": "One shared application",
-        "glyph": "server"
-      },
-      "pairs": [
-        {
-          "known": "One building, one staff",
-          "new": "One program, running once"
-        },
-        {
-          "known": "Many rooms, one key each",
-          "new": "Many company sites, one address each"
-        },
-        {
-          "known": "The desk knows whose room is whose",
-          "new": "Something must know whose site is whose"
-        }
-      ],
-      "note": "Unlike a hotel, no company can ever see inside another company's site."
     },
     {
       "type": "figure",
@@ -64,8 +35,17 @@
       "id": "three-hundred-sites"
     },
     {
+      "id": "one-or-many",
+      "type": "figure",
+      "span": 12,
+      "title": "One fix, deployed once, live on every site the same hour",
+      "viewbox": "0 0 640 152",
+      "alt": "A box marked one fix feeds an arrow into a single box marked deployed once. From that box, lines fan out to a grid of twelve small company sites, all reached in the same hour.",
+      "encodes": "concept",
+      "svg": "<rect class=\"ig-fig-node\" x=\"8\" y=\"42\" width=\"120\" height=\"44\" rx=\"6\"/><text class=\"ig-fig-kicker\" x=\"68\" y=\"69\" text-anchor=\"middle\">ONE FIX</text><line class=\"ig-fig-edge-strong\" x1=\"128\" y1=\"64\" x2=\"196\" y2=\"64\" marker-end=\"url(#ig-arrow)\"/><rect class=\"ig-fig-node-strong\" x=\"200\" y=\"34\" width=\"152\" height=\"60\" rx=\"8\"/><text class=\"ig-fig-kicker\" x=\"276\" y=\"60\" text-anchor=\"middle\">DEPLOYED</text><text class=\"ig-fig-kicker\" x=\"276\" y=\"80\" text-anchor=\"middle\">ONCE</text><line class=\"ig-fig-edge\" x1=\"352\" y1=\"52\" x2=\"396\" y2=\"38\"/><line class=\"ig-fig-edge\" x1=\"352\" y1=\"60\" x2=\"396\" y2=\"74\"/><line class=\"ig-fig-edge\" x1=\"352\" y1=\"68\" x2=\"396\" y2=\"110\"/><rect class=\"ig-fig-field\" x=\"404\" y=\"26\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"460\" y=\"26\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"516\" y=\"26\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"572\" y=\"26\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"404\" y=\"62\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"460\" y=\"62\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"516\" y=\"62\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"572\" y=\"62\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"404\" y=\"98\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"460\" y=\"98\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"516\" y=\"98\" width=\"46\" height=\"26\" rx=\"3\"/><rect class=\"ig-fig-field\" x=\"572\" y=\"98\" width=\"46\" height=\"26\" rx=\"3\"/><text class=\"ig-fig-mute ig-fig-s\" x=\"404\" y=\"146\">every company site, the same hour</text>"
+    },
+    {
       "type": "section",
-      "number": "02",
       "title": "How does one program know whose site to show?",
       "lede": "The answer is the only thing a visitor actually types."
     },
@@ -107,7 +87,6 @@
     },
     {
       "type": "section",
-      "number": "03",
       "title": "Who actually answers, when everyone arrives at once?"
     },
     {
@@ -181,7 +160,6 @@
     },
     {
       "type": "section",
-      "number": "04",
       "title": "How is a new company's site switched on?"
     },
     {
@@ -231,7 +209,6 @@
     },
     {
       "type": "section",
-      "number": "05",
       "title": "What the site is never allowed to do"
     },
     {

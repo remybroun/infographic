@@ -53,7 +53,6 @@
     },
     {
       "type": "section",
-      "number": "01",
       "title": "Which categories account for the decline",
       "lede": "The decline is concentrated in two categories, both of which shipped self-serve flows in March."
     },
@@ -146,7 +145,6 @@
     },
     {
       "type": "section",
-      "number": "02",
       "title": "Why handling time per ticket rose",
       "lede": "The categories that declined were the fastest to handle, so the remaining mix is slower."
     },
@@ -281,7 +279,6 @@
     },
     {
       "type": "section",
-      "number": "03",
       "title": "Three options against staffing constraints",
       "lede": "Three options, scored against what we can actually staff this quarter."
     },

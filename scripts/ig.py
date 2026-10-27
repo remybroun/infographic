@@ -330,11 +330,18 @@ def cmd_sketch(args):
         if args.span:
             block["span"] = args.span
         mini = {"meta": dict(meta), "blocks": [block]}
-        # `ladder` and `mode` go the same way `supersedes` does: they are claims
-        # about a whole document, and one block drawn alone is not one. A sketch
-        # that failed the ladder check would be reporting a fault in a document
-        # the author never asked to build.
-        for key in ("footer_left", "footer_right", "supersedes", "ladder", "mode"):
+        # `ladder`, `mode` and `brief` go the same way `supersedes` does: they
+        # are claims about a whole document, and one block drawn alone is not
+        # one. A sketch that failed the ladder check would be reporting a fault
+        # in a document the author never asked to build. `brief` was missed for
+        # a version and cost more than the other two together: it is resolved
+        # against the working directory (there is no spec path on a stub spec),
+        # so it either could not be found at all or was found and re-derived the
+        # whole ladder onto the single block, printing a rung-by-rung wall of
+        # "which no block has". Either way the one command meant to draw a block
+        # in two seconds was the one command an author stopped using.
+        for key in ("footer_left", "footer_right", "supersedes", "ladder",
+                    "mode", "brief"):
             mini["meta"].pop(key, None)
 
         doc = build_mod.Document(mini, args.theme, args.page)
@@ -620,9 +627,8 @@ def cmd_brief(args):
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(brief_mod.STARTER, fh, indent=2, ensure_ascii=False)
             fh.write("\n")
-        print(f"  wrote {path}\n\n  Fill it in before anything is built. The "
-              f"reader first: it decides which\n  words are allowed to appear "
-              f"at all. Then check it:\n\n    ig.py brief {args.brief}")
+        print(f"  wrote {path}\n")
+        print(brief_mod.STARTER_NOTE.replace("{path}", args.brief))
         return 0
 
     if not os.path.isfile(path):

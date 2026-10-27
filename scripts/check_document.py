@@ -241,6 +241,24 @@ def check(html_path: str, pdf_path: str = None):
                 "ask what shape the rows are: options against criteria are a "
                 "`matrix`, a sequence is a `process`, counts are a `bar`")
 
+        # `editorial.md` has said "numbers only when the sequence is
+        # information the reader needs" since v1, and every worked example in
+        # the repo numbered every section anyway, including the code sample
+        # directly under the rule. Prose lost to a file again: a model copies
+        # the example, not the paragraph above it. Eleven numbered chapters with
+        # a rule over each is a textbook contents page, and it is the first
+        # thing a reader sees about a document that is supposed to be drawn.
+        heads = re.findall(r'<div class="ig-section-head">(.*?)</div>', body,
+                           re.S)
+        numbered = [h for h in heads if "ig-section-number" in h]
+        if len(heads) >= 4 and len(numbered) == len(heads):
+            add("warn", "numbered-throughout",
+                f"all {len(heads)} sections carry a number",
+                "numbering every section because it looks tidy is grammar you "
+                "did not choose. Ordinals are information when the reader has "
+                "to follow them in order and useless otherwise; if the sections "
+                "could be read in any order, drop `number` and keep the titles")
+
         # The one finding here that fires on what is NOT on the page.
         #
         # Every other pressure in this skill points one way. The figure cap is a

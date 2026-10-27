@@ -845,7 +845,11 @@ def test_brief():
     print("\nthe brief, the design checked as an artifact")
 
     good = {"meta": {"reader": "a curious stranger", "mode": "lesson",
-                     "contradicts": "they think it is a gearbox"},
+                     "contradicts": "they think it is a gearbox",
+                     "spine": "one bearing, held still and then turned, until "
+                              "the teeth are the obvious answer",
+                     "spine_rejected": "history of the patent first, which "
+                                       "dates a thing nobody can picture yet"},
             "sections": [
                 {"id": "a", "asks": "What is it?", "teaches": ["gear bearing"],
                  "form": "figure", "rank": 1, "view": "beside-a-ball-bearing",
@@ -945,6 +949,71 @@ def test_brief():
     check("a brief with no reader is refused",
           any("meta.reader is empty" in e for e in errors), errors)
 
+    # -- the shape of the document, not just its parts -----------------------
+    # Three faults that no check could see, and that produced the same document
+    # every time: an order nobody chose, an opener that is a chart of a subject
+    # the reader has not met, and a page that drew nothing because drawing was
+    # the only thing on the page that cost anything.
+    driftless = json.loads(json.dumps(good))
+    driftless["meta"]["spine"] = ""
+    errors, _ = br.audit(driftless, registry)
+    check("a brief that names no spine is refused",
+          any("meta.spine is empty" in e for e in errors), errors)
+
+    unopposed = json.loads(json.dumps(good))
+    del unopposed["meta"]["spine_rejected"]
+    errors, _ = br.audit(unopposed, registry)
+    check("and one that never rejected a second spine is refused",
+          any("meta.spine_rejected" in e for e in errors), errors)
+
+    charted = json.loads(json.dumps(good))
+    charted["sections"][0] = {"id": "a", "asks": "What is it like?",
+                              "teaches": ["gear bearing"], "form": "comparison",
+                              "shows": "two columns, bearing beside gearbox"}
+    charted["sections"][1]["rank"] = 1
+    errors, _ = br.audit(charted, registry)
+    check("a document that opens on a block rather than the subject is refused",
+          any("brief-opens-on-a-block" in e for e in errors), errors)
+    check("and the refusal names the comparison it keeps being",
+          any("two columns comparing it" in e for e in errors), errors)
+
+    excused_open = json.loads(json.dumps(charted))
+    excused_open["meta"]["opens_on"] = ("the subject is a licensing rule and "
+                                        "has no body anyone could draw")
+    errors, _ = br.audit(excused_open, registry)
+    check("a written reason opens it on the claim instead",
+          not any("brief-opens-on-a-block" in e for e in errors), errors)
+
+    # The cap had no counterpart for four versions, so nothing drawn was the
+    # risk-free document and the risk-free document shipped every time.
+    undrawn = json.loads(json.dumps(good))
+    for section in undrawn["sections"]:
+        section["form"] = "callout"
+        section.pop("rank", None)
+        section.pop("view", None)
+        section.pop("instead_of", None)
+        section.pop("shows", None)
+    undrawn["meta"]["opens_on"] = ("the subject is a licensing rule and has no "
+                                   "body anyone could draw")
+    errors, _ = br.audit(undrawn, registry)
+    check("a brief that draws nothing at all is refused",
+          any("brief-nothing-drawn" in e for e in errors), errors)
+    check("and the refusal says the form was chosen before the subject",
+          any("chosen\n      before its subject" in e for e in errors), errors)
+
+    declared = json.loads(json.dumps(undrawn))
+    declared["meta"]["scenes"] = ("every claim here is a value compared with "
+                                  "another value, which bar carries whole")
+    errors, _ = br.audit(declared, registry)
+    check("naming what the catalog carried instead clears it",
+          not any("brief-nothing-drawn" in e for e in errors), errors)
+
+    # The cap is a ranking exercise, so it scales with how much there is to
+    # rank. Flat at three, a twelve-section scroll reads as draw three, paste
+    # nine.
+    check("the cap is three for a short document", br.figure_cap(3) == 3)
+    check("and half the sections for a long one", br.figure_cap(12) == 6)
+
     # -- the ladder, derived rather than authored ---------------------------
     rungs = br.to_ladder(good)
     check("the ladder comes out in the brief's order",
@@ -1003,6 +1072,82 @@ def test_brief():
     _errors, warnings = br.against(matched, extra, registry)
     check("a block the brief never named is warned about",
           any("brief-unbriefed" in w for w in warnings), warnings)
+
+
+def test_section_numbering():
+    """Numbering every section is grammar nobody chose.
+
+    `editorial.md` had the rule from v1 and the code sample directly beneath it
+    numbered its own section, as did five of six fixtures. A model copies the
+    example and not the paragraph above it, so every document arrived chaptered
+    01..11 with a rule over each: a textbook contents page in front of a
+    document whose whole claim is that it is drawn.
+    """
+    import check_document as cd
+    from build import Document
+
+    print("\nsection numbering, which nobody asked for")
+
+    def rendered(count, numbered):
+        blocks = []
+        for n in range(count):
+            head = {"type": "section", "title": f"What does part {n} do?"}
+            if numbered:
+                head["number"] = f"{n + 1:02d}"
+            blocks.append(head)
+            blocks.append({"type": "callout", "text": f"Part {n} does a thing."})
+        spec = {"meta": {"title": "A document with parts"}, "blocks": blocks}
+        tmp = os.path.join(SKILL, "examples", "out", "_numbering_probe.html")
+        os.makedirs(os.path.dirname(tmp), exist_ok=True)
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(Document(spec).render())
+        return {f["code"] for f in cd.check(tmp)}
+
+    codes = rendered(5, True)
+    check("a document that numbers every section is warned about",
+          "numbered-throughout" in codes, sorted(codes))
+
+    codes = rendered(5, False)
+    check("and one that numbers none of them is not",
+          "numbered-throughout" not in codes, sorted(codes))
+
+    # Three sections is a shape, not a contents page.
+    codes = rendered(3, True)
+    check("a short document may still number its sections",
+          "numbered-throughout" not in codes, sorted(codes))
+
+
+def test_number_defaults():
+    """A number an author measured has to reach the page as they measured it.
+
+    Found by a Sonnet run on a datacenter explainer: `"value": 1.09` for a PUE
+    rendered as "1". `stat` fell through to `fmt_plain(value, 0)`, and zero
+    decimals on a fractional value is not a format, it is a rounding decision
+    made silently on the author's behalf. `fmt_compact` had already been fixed
+    for the same class of failure (8,231 shown as "8.2K").
+    """
+    from lib import svg
+    from lib import blocks_editorial as ed
+
+    print("\nnumbers, printed as they were measured")
+
+    check("a fractional value keeps its precision", svg.natural_decimals(1.09) == 2)
+    check("a whole number stays whole", svg.natural_decimals(415) == 0)
+    check("a float that is whole stays whole", svg.natural_decimals(1.0) == 0)
+    check("precision is capped", svg.natural_decimals(1.23456789) == 4)
+    check("a non-number is left alone", svg.natural_decimals("n/a") == 0)
+
+    context = ctx()
+    html = ed.stat({"type": "stat", "label": "Fleet PUE", "value": 1.09}, context)
+    check("a stat renders 1.09 as 1.09, not 1", "1.09" in html, html[:200])
+    html = ed.stat({"type": "stat", "label": "Racks", "value": 415}, context)
+    check("and a whole number without a decimal point", "415" in html
+          and "415." not in html, html[:200])
+    # An explicit `decimals` is still a decision the author is allowed to make.
+    html = ed.stat({"type": "stat", "label": "Fleet PUE", "value": 1.09,
+                    "decimals": 0}, context)
+    check("an explicit decimals still rounds", ">1<" in html.replace(" ", "")
+          or "1</" in html, html[:200])
 
 
 def test_lesson_density():
@@ -2016,6 +2161,8 @@ def main():
     test_derivation()
     test_ladder()
     test_brief()
+    test_section_numbering()
+    test_number_defaults()
     test_lesson_density()
     test_leading_numbers()
     test_pictograms()

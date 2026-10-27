@@ -155,8 +155,9 @@ def stat(b: dict, ctx: Ctx) -> str:
         # figure the reader can cite beats a figure that fits.
         text = svg.fmt_compact(value, int(b.get("decimals", 1)), b.get("currency", ""),
                                b.get("unit", "")) if b.get("compact", False) \
-            else svg.fmt_plain(value, int(b.get("decimals", 0)), b.get("currency", ""),
-                               b.get("unit", ""))
+            else svg.fmt_plain(value,
+                               int(b.get("decimals", svg.natural_decimals(value))),
+                               b.get("currency", ""), b.get("unit", ""))
     else:
         text = str(value if value is not None else ", ")
     spark = ""

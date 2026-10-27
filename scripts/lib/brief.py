@@ -58,7 +58,8 @@ from . import density
 ASK_WORDS = 16          # a section question, not a summary of the section
 TERM_WORDS = 4          # a term is a name the reader learns, not a description
 SHOWS_WORDS = 40        # a picture described to whoever draws it
-MAX_FIGURES = 3         # the ranking exercise, made mandatory
+MIN_FIGURES = 2         # the floor: nothing drawn is the failure, not the safe option
+MAX_FIGURES = 3         # the ranking exercise, made mandatory; the cap's own floor
 ECHO_RATIO = 0.7        # how much of a brief note may resurface as page copy
 
 # The page's furniture: blocks that carry no claim of their own, so they need no
@@ -67,6 +68,29 @@ ECHO_RATIO = 0.7        # how much of a brief note may resurface as page copy
 # sentence between two rungs, and a glossary or a method note is reference
 # material a reader reaches for rather than reads.
 FURNITURE = {"hero", "section", "bridge", "definitions", "footnotes"}
+
+# An escape hatch is a sentence, never a flag, and it is the same length
+# everywhere: long enough that writing it is a decision. `build.py` uses the
+# same figure for `meta.scenes`.
+ESCAPE_WORDS = 8
+
+
+def _written(meta: dict, key: str) -> bool:
+    """True when `meta[key]` holds a real written reason rather than a
+    placeholder or a shrug. Every hard rule below can be overridden by one, and
+    by nothing else."""
+    text = str(meta.get(key) or "").strip()
+    return "<" not in text and density.words(text) >= ESCAPE_WORDS
+
+
+def figure_cap(count: int) -> int:
+    """How many drawings a document of `count` sections may carry.
+
+    Three was flat, and on a twelve-section scroll a flat three reads as "draw
+    three things and paste nine". The cap is a ranking exercise, so it scales
+    with how much there is to rank: half the sections, never fewer than three.
+    """
+    return max(MAX_FIGURES, (count + 1) // 2)
 
 
 def load(path: str) -> dict:
@@ -133,6 +157,23 @@ def audit(brief: dict, registry) -> tuple:
             "contradicts anything the reader believes reads as marketing. Name "
             "the belief here, and the section that takes it on gets to earn its "
             "place.")
+    # The starter file used to ship three filled-in sections and every document
+    # built from it came out in their order, opening on the same side-by-side
+    # comparison. A skeleton with slots in it gets filled, never replaced. So
+    # the starter ships no sections at all, and the order is a field the author
+    # has to write, against an alternative they had to reject in writing.
+    if not _written(meta, "spine"):
+        errors.append(
+            "meta.spine is empty or unwritten. Name the order THIS subject has "
+            "to be met in,\n      in one line. Not the order of the source, "
+            "and not what-it-is / how-it-works /\n      what-it-is-not, which "
+            "is the shape every document takes when nobody chose one.")
+    if not _written(meta, "spine_rejected"):
+        errors.append(
+            "meta.spine_rejected is empty or unwritten. Name the second spine "
+            "you considered\n      and why it lost, in one line. Deciding is "
+            "the job; an order arrived at by\n      default is the one this "
+            "skill keeps shipping.")
     if mode == "argument" and not str(meta.get("claim", "")).strip():
         errors.append(
             "meta.claim is empty and the mode is 'argument'. One sentence the "
@@ -258,23 +299,66 @@ def audit(brief: dict, registry) -> tuple:
                     f"is a name the reader\n      has to learn, not a "
                     f"description of one (cap {TERM_WORDS}).")
 
+    # -- the establishing shot, checked rather than recommended ---------------
+    # The rule was already written down: a document whose subject can be drawn
+    # opens on a drawing of the subject. Nothing checked it, so the opener was
+    # whatever the catalog offered first, and what the catalog offers first for
+    # a subject the reader has never met is a two-column comparison.
+    # The page's furniture is not the opening: a `hero` is the title, and a
+    # `section` opener is a heading. The rule is about the first thing that
+    # carries a claim, which is the first thing a reader has to understand.
+    opener = next((r for r in rows
+                   if registry.resolve(r.get("form"))[0] not in FURNITURE),
+                  None)
+    if opener is not None and not is_figure(opener) \
+            and not _written(meta, "opens_on"):
+        errors.append(
+            f'brief-opens-on-a-block: the first section ("{opener.get("id")}") '
+            f'is `{opener.get("form")}`.\n'
+            f"      A reader who has not met the subject meets a chart of it "
+            f"instead, and the\n      commonest thing to put there is two "
+            f"columns comparing it with something else,\n      which teaches "
+            f"the comparison and never the subject. Open on the subject "
+            f"itself,\n      drawn, wide rather than tall. If it genuinely has "
+            f"no picturable body, say so\n      in `meta.opens_on` "
+            f"({ESCAPE_WORDS} words or more) and open on the claim.")
+
     # -- the figures, as a ranking rather than a queue -----------------------
-    if len(figures) > MAX_FIGURES:
+    cap = figure_cap(len(rows))
+    if len(figures) > cap:
         named = ", ".join(label for _i, label, _s in figures)
         errors.append(
-            f"{len(figures)} figures, and the cap is {MAX_FIGURES}: {named}.\n"
+            f"{len(figures)} figures, and the cap is {cap}: {named}.\n"
             f"      The cap is a ranking exercise, not a budget. Which "
-            f"{MAX_FIGURES} images does this\n      document live or die by? "
+            f"{cap} images does this\n      document live or die by? "
             f"The rest go on rails. Rank them and cut from\n      the bottom, "
             f"not from whichever came fourth in writing order.")
+
+    # The cap had no counterpart, so nothing drawn was always the cheap option:
+    # a catalog block costs one line and risks nothing, a figure costs a
+    # viewpoint, an `alt`, an `encodes` and a rejection in writing. The
+    # risk-free document was the one that drew nothing, and it shipped every
+    # time, which is why every subject came out looking like the last one.
+    if len(rows) >= MIN_FIGURES + 1 and len(figures) < MIN_FIGURES \
+            and not _written(meta, "scenes"):
+        errors.append(
+            f"brief-nothing-drawn: {len(figures)} of {len(rows)} sections is "
+            f"drawn, and the floor is {MIN_FIGURES}.\n"
+            f"      A page assembled entirely from catalog shapes is a page "
+            f"whose form was chosen\n      before its subject was, and it "
+            f"arrives looking like every other one. Draw the\n      two images "
+            f"this document lives or dies by.\n"
+            f"      If the catalog really did carry every claim completely, "
+            f"name what it carried\n      in `meta.scenes` ({ESCAPE_WORDS} "
+            f"words or more). → references/scenes.md")
 
     ranks = {}
     for _index, label, section in figures:
         rank = section.get("rank")
-        if not isinstance(rank, int) or not 1 <= rank <= MAX_FIGURES:
+        if not isinstance(rank, int) or not 1 <= rank <= cap:
             errors.append(
                 f"{label}: a figure needs `rank`, an integer 1 to "
-                f"{MAX_FIGURES}.\n      Ranking is what makes the cap a "
+                f"{cap}.\n      Ranking is what makes the cap a "
                 f"judgement instead of an arrival order.")
         elif rank in ranks:
             errors.append(f"{label}: rank {rank} is already held by "
@@ -438,6 +522,17 @@ def against(brief: dict, spec: dict, registry) -> tuple:
 
 # ------------------------------------------------------------------ starter --
 
+# The starter used to ship three filled-in sections: `what-it-is` (viewpoint
+# "beside-something-the-reader-owns"), `how-it-works`, `what-it-is-not`. It was
+# written as an illustration of the schema and it was read as the plan, every
+# time, because a skeleton with slots in it gets filled rather than replaced.
+# Nine documents in a row opened on the same side-by-side comparison of the
+# subject with something familiar, and no amount of "improvise" in SKILL.md
+# moved it, because the instruction was prose and the template was a file.
+#
+# So the starter ships no sections. The schema is printed instead, once, as
+# text, next to eight orders a document could take, none of which is a default.
+
 STARTER = {
     "meta": {
         "reader": "who reads this, and what do they already know",
@@ -445,46 +540,48 @@ STARTER = {
         "page": "scroll",
         "theme": "default",
         "contradicts": "what the reader believes that this page takes on",
+        "spine": "<the order this subject has to be met in, one line>",
+        "spine_rejected": "<the other order you considered, and why it lost>",
         "source": "out/ledger.json",
     },
-    "sections": [
-        {
-            "id": "what-it-is",
-            "asks": "What is <the subject, by name>?",
-            "teaches": ["<term>"],
-            "form": "figure",
-            "rank": 1,
-            "view": "beside-something-the-reader-owns",
-            "shows": "the subject next to the familiar thing it is closest to",
-            "instead_of": {"block": "analogy",
-                           "because": "the mapping is one image, and a table "
-                                      "asks the reader to imagine it"},
-        },
-        {
-            "id": "how-it-works",
-            "asks": "How does <the subject> <do the thing it is for>?",
-            "teaches": [],
-            "form": "figure",
-            "rank": 2,
-            "view": "one-part-enlarged",
-            "shows": "the moment the mechanism actually happens, filling the frame",
-            "instead_of": {"block": "progressive",
-                           "because": "the claim is one contact, not an "
-                                      "accumulation of parts"},
-        },
-        {
-            "id": "what-it-is-not",
-            "asks": "What does <the subject> not do?",
-            "teaches": [],
-            "form": "figure",
-            "rank": 3,
-            "view": "the-case-that-breaks-it",
-            "shows": "the thing a reader assumes happens, drawn, and then the "
-                     "same frame showing what happens instead",
-            "instead_of": {"block": "comparison",
-                           "because": "a comparison argues between two "
-                                      "positions someone holds on purpose, and "
-                                      "this is one position and a fact"},
-        },
-    ],
+    "sections": [],
 }
+
+
+# Printed by `ig.py brief --new`, never written into the file. Anything that
+# lands in the file gets filled in; anything printed has to be retyped, and
+# retyping is where a decision happens.
+STARTER_NOTE = """\
+  `sections` is empty on purpose, and the brief will refuse itself until you
+  write it. It used to arrive with three sections already in it and every
+  document came out in their order, because a skeleton with slots gets filled,
+  not replaced.
+
+  Write `meta.spine` first: the order THIS subject has to be met in. Eight that
+  are not the default, so that none of them is:
+
+    the loop           it runs forever; open on the cycle, not on a first step
+    the money          follow one unit of the quantity from where it enters
+    the failure        open on the case that breaks, then on what stops it
+    the map            everything at once, laid out in space, then one route
+    one instance       one named example end to end, then the general rule
+    the clock          one day, one release, one request, in real time
+    the cast           the actors first, then what passes between them
+    the wrong picture  what the reader already draws in their head, redrawn
+
+  Then one entry per section, in the order the reader meets them:
+
+    {"id": "...", "asks": "...?", "teaches": ["..."],
+     "form": "figure", "rank": 1,
+     "view": "the-viewpoint-it-is-drawn-from",
+     "shows": "what is on screen, and what the eye lands on first",
+     "instead_of": {"block": "the catalog block it beat",
+                    "because": "what that block could not show"}}
+
+  `form` is a catalog block type or `figure` for something drawn. The first
+  section is drawn: the reader meets the subject before they meet a chart of
+  it. At least two sections are drawn, and at most half of them.
+
+  The reader comes first; it decides which words may appear at all. Then:
+
+    ig.py brief {path}"""

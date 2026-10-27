@@ -80,6 +80,15 @@ yet. This has not changed and is still the most important step.
 **2. Ask what kind of thing the sentence is.** Not what the data looks like:
 what the sentence *is*. This is the step that decides everything.
 
+**Ask what it looks like before you ask which row it is on.** The table is a
+lookup and a lookup answers in a second, which is how it beats a question that
+takes a minute, and it is why documents on unrelated subjects arrive built out
+of the same eight shapes. So the first question is not on it: close your eyes
+and see the thing. An object, from one viewpoint, with parts a reader could put
+a finger on. If that picture exists, the answer is `figure` and the table is
+never opened. A row is right only when you can finish the sentence "`<block>`
+carries this **completely**, because ___".
+
 This is the table. Everywhere else in the skill that says **draw the paragraph**
 means this table; it is not repeated, so that it stays one edit.
 
@@ -100,7 +109,15 @@ means this table; it is not repeated, so that it stays one edit.
 | something the reader already owns | "it works a bit like a hotel" | `analogy` |
 | parts that accumulate | "then you also need a second one, because…" | `progressive` |
 | the hand-off between two rungs | "so far we have seen A; now B" | `bridge`, lesson density only |
+| a thing with a body | "it is a box with three inlets and one drain" | `figure`, drawn from a viewpoint |
+| a web related in more than one direction | "everything here touches everything, and this is the route through it" | `figure`: the catalog has no map or mind map, and never will |
+| something the reader has to *picture* | "imagine what is left when it stops" | `figure` |
 
+The last three rows have no block in them, and that is the point: the catalog is
+56 shapes and the world is not. **A subject whose every sentence lands in the
+upper rows is a subject nobody looked at**, because the rows above are relations
+between things a reader already accepts, and a document made only of those never
+shows them anything.
 **3. Write the label, not the explanation.** The title says, literally and
 specifically, what the reader is looking at. The subtitle states the finding in
 one flat sentence. Nothing else is needed, because the graphic is already showing

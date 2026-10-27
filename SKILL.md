@@ -1,7 +1,7 @@
 ---
 name: infographic
 description: "Turn text, a document, or a topic into a graphic-first explainer: an imaginative schoolbook-style HTML page where full-page drawings, diagrams and legends carry the ideas and the text is titles only (a print-ready PDF only when asked). Use for an infographic, visual explainer, one-pager, data poster, concept or architecture diagram, or chart-driven report, and whenever the ask is to visualize or explain something visually. Not for interactive dashboards or slide decks."
-version: 3.6.0
+version: 3.7.0
 user-invocable: true
 argument-hint: "[source file, or the topic to explain] [--theme default|iris|rentos|mono] [--page a4|a3|slide|scroll]"
 allowed-tools:
@@ -129,7 +129,12 @@ choosing forms, which is the only moment they can change a decision.
 - **The design of the document is a file, written before anything is built.**
   `brief.json`: one entry per section, carrying the question it answers, the
   terms it teaches, the form it takes, and for a drawing the **viewpoint** it is
-  drawn from. `ig.py brief` checks it, `ig.py brief --order <id>` turns one
+  drawn from. **`ig.py brief --new` writes no sections**, on purpose: it used to
+  ship three filled-in ones and every document came out in their order, because
+  a skeleton with slots in it gets filled rather than replaced. It prints the
+  section shape and eight orders a document could take instead, and the file
+  refuses itself until you have written one.
+  `ig.py brief` checks it, `ig.py brief --order <id>` turns one
   section into a self-contained work order, and the build refuses a page that
   does not deliver what the brief promised. Steps 2 to 6 used to have no
   artifact at all, which is how the same decision got made thirteen times in one
@@ -146,10 +151,13 @@ choosing forms, which is the only moment they can change a decision.
   verbatim** in lesson mode, so it is written as page copy from the start: it
   names the subject, in the reader's words. "What is the thing being fixed?" is
   the starter file, unedited, and the build refuses it.
-- **Name a second spine before you commit to the first.** One line each, and
-  the images each would live on. Then choose, build it, and say in one line why
-  that one. Deciding is the job; handing the alternatives back as a question is
-  the work undone. **A revision is not a regeneration:** "fix this figure",
+- **Name a second spine before you commit to the first.** `meta.spine` is the
+  order this subject has to be met in, and `meta.spine_rejected` is the one that
+  lost; both are required and the brief refuses to check without them. One line
+  each, and the images each would live on. Then choose, build it, and say in one
+  line why that one. Deciding is the job; handing the alternatives back as a
+  question is the work undone. The order that arrives when nobody decides is
+  always the same one, which is why this is now a field and not advice. **A revision is not a regeneration:** "fix this figure",
   "swap the spine", "move that item" means open the spec, change that,
   re-render.
 - **Draw the idea, not the nearest available shape.** If naming the closest
@@ -158,11 +166,16 @@ choosing forms, which is the only moment they can change a decision.
   <type>` to see what it can actually do: finish the sentence "`<block>` carries
   this **completely**, because ___". Cannot finish it? The scene gets drawn.
   → [scenes.md](references/scenes.md)
-- **At most three authored figures in block mode.** Not a budget, a ranking
-  exercise: which two or three images does this document live or die by? A
-  document of five or more blocks that authored nothing is a linter warning,
-  cleared by one sentence in `meta.scenes` naming what the catalog carried
-  instead.
+- **At least two authored figures, and at most half the sections.** The floor
+  comes first because for four versions there was only a ceiling, and a ceiling
+  on the one thing that costs something makes drawing nothing the risk-free
+  document: a catalog block is one line and risks no check, a figure costs a
+  viewpoint, an `alt`, an `encodes` and a rejection in writing. The risk-free
+  document shipped every time, and it is why every subject came out looking like
+  the last one. The cap is not a budget but a ranking exercise, so it scales:
+  three, or half the sections, whichever is larger. Drawing nothing is refused
+  at the brief, cleared only by naming in `meta.scenes` what the catalog carried
+  completely instead.
 - **A figure keeps every guarantee.** `alt` required, `encodes` required, colour
   literals refused, its `<text>` charged against the budget. It is not `raw`
   with a nicer name.
@@ -293,10 +306,13 @@ vertical air. → [continuous.md](references/continuous.md)
 
 Any document whose subject can be drawn opens on an **establishing shot**: a
 title saying exactly what the document is about and one full-width custom
-drawing of the subject itself, wide rather than tall. When the subject is a
-concept with no picturable body, do not force one; open on the claim instead.
-In `lesson` mode this shot is the first thing to reach for when the reader may
-not be able to picture the subject.
+drawing of the subject itself, wide rather than tall. **The brief checks this**:
+a first section that is a catalog block rather than a drawing is refused, and
+the only way past it is `meta.opens_on`, a written sentence saying the subject
+has no picturable body. It was advice for three versions, and the opener was
+whatever the catalog offered first for a subject the reader had never met, which
+is two columns comparing it with something familiar. That teaches the
+comparison and never the subject.
 → [teaching.md](references/teaching.md#the-establishing-shot)
 
 | `meta.density` | Words / page | Body prose | `bridge` |
@@ -331,8 +347,11 @@ compliance. `python3 scripts/ig.py selftest --render` builds all six.
   mode. Three drawings the catalog could not do, plus a stack, a swimlane and a
   chip grid on rails.
 - **`architecture-explainer.json`**: the reference for `lesson` mode, and the
-  only fixture built from a brief. An `analogy` before any mechanism, a
-  `progressive`, one figure, glossary last. Read
+  only fixture built from a brief. Two drawings first, one fanning in and one
+  fanning out, then the mechanism: a `progressive`, a `stack`, a `swimlane`,
+  glossary last. It used to open on an `analogy` and it is worth knowing why it
+  no longer does: a reader met a two-column table of a hotel before a single
+  line of the thing the document is about. Read
   `fixtures/briefs/architecture-explainer.json` first: it is the document.
 - `concept-explainer.json`: A4 explainer, default theme, teaches a concept
 - `data-report.json`: A4 report, rentos theme, findings from data

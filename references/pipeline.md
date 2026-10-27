@@ -110,10 +110,30 @@ analogy decision was reopened thirteen times, a close-up was designed six times
 and shipped nowhere, and the block order the model reasoned its way to was not
 the order it built. None of it survived the turn it was decided in.
 
+**`--new` writes no sections.** It writes `meta` and an empty `sections`, and
+prints the shape of a section next to eight orders a document could take. It
+used to arrive with three sections already written in it — `what-it-is`,
+`how-it-works`, `what-it-is-not` — and every document built from it came out in
+that order, opening on the same side-by-side comparison, because a skeleton with
+slots in it gets filled and never replaced. What is printed has to be retyped,
+and retyping is where a decision happens.
+
 Fill `meta` now, from step 2: the reader, the mode, and in `lesson` mode
 `contradicts`, one line naming what the reader already believes that this page
-has to take on. The sections get filled in over steps 3, 5 and 6, and step 6.5
-checks the whole thing before anything is drawn.
+has to take on. Two more are required and neither is a formality:
+
+- **`spine`** is the order this subject has to be met in, in one line. Not the
+  order the source is in.
+- **`spine_rejected`** is the other order you considered and why it lost. The
+  rule "name a second spine before you commit to the first" was advice for four
+  versions and the first angle won by default every time; it is a field now.
+
+The sections get filled in over steps 3, 5 and 6, and step 6.5 checks the whole
+thing before anything is drawn. Three things it checks that nothing used to:
+the first section is **drawn** (or `meta.opens_on` says in writing why the
+subject has no picturable body), **at least two** sections are drawn (or
+`meta.scenes` names what the catalog carried completely instead), and at most
+half of them are.
 
 **In `lesson` mode, write the questions and the order now.** One section per
 question a reader has to get answered, in the order they have to be answered,

@@ -167,7 +167,10 @@ difference is not decoration: it inverts the first two beats.
    See [the establishing shot](#the-establishing-shot) below. `analogy` comes
    after it, not instead of it: an analogy says what the thing is *like*, and a
    reader who has not yet seen the thing has nothing to hang the likeness on.
-   This is principle 1 of the skill, and it is the beat that gets skipped.
+   This is principle 1 of the skill, it is the beat that gets skipped, and as of
+   v3.7 the brief refuses a document whose first section is not drawn. The
+   override is `meta.opens_on`, a written sentence saying the subject has no
+   picturable body.
 3. **Why it exists.** What was true before this thing, and what was wrong with
    it. A subject with no motivation is a set of facts to memorise.
 4. **The rungs.** One per section, in dependency order, each with its picture.

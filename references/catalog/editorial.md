@@ -39,14 +39,18 @@ by acquisition channel, 2024 to 2026". See
 ## `section`: a new argument begins
 
 ```json
-{"type": "section", "number": "01",
+{"type": "section",
  "title": "How interest is calculated in each method",
  "lede": "Simple interest applies the rate to the original balance; compound applies it to the running one."}
 ```
 
 **Numbers only when the sequence is information the reader needs.** Numbering
 every section because it looks tidy is grammar you did not choose. If the
-sections could be read in any order, drop `number`.
+sections could be read in any order, drop `number`, which is why it is absent
+from the example above and from every fixture in the repo. Ordinals are for a
+reader who has to follow them in order; on anything else they turn a drawn page
+into a textbook contents list, and eleven of them with a rule over each is what
+that looks like. `numbered-throughout` measures it.
 
 **Section titles are literal too**, and they are where the slogan register creeps
 back in first, because a one-word title feels clean. "The mechanism", "The guard",

@@ -24,7 +24,6 @@
     },
     {
       "type": "section",
-      "number": "01",
       "title": "How one period of compounding is calculated",
       "lede": "Simple interest adds. Compound interest multiplies. Everything else follows from that one difference."
     },
@@ -109,7 +108,6 @@
     },
     {
       "type": "section",
-      "number": "02",
       "title": "The effect of starting age on the final balance",
       "lede": "Time enters the formula as an exponent. Contributions enter it as a multiplier. Exponents win."
     },
@@ -189,7 +187,6 @@
     },
     {
       "type": "section",
-      "number": "03",
       "title": "How an annual fee reduces the final balance",
       "lede": "The same exponent that builds the balance also magnifies anything subtracted every year."
     },

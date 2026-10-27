@@ -69,7 +69,6 @@
     },
     {
       "type": "section",
-      "number": "01",
       "title": "The nine steps of a booking, in order",
       "lede": "Nine steps, three of which involve a human waiting for another human."
     },
@@ -157,7 +156,6 @@
     },
     {
       "type": "section",
-      "number": "02",
       "title": "Which steps lose the most volume",
       "lede": "Two of the five steps account for most of the loss.",
       "break": "before"
@@ -303,7 +301,6 @@
     },
     {
       "type": "section",
-      "number": "03",
       "title": "How listings are distributed across operator sizes",
       "lede": "Supply is far more concentrated than the number of operators suggests."
     },
